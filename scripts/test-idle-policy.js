@@ -3,7 +3,7 @@ const fs = require("fs")
 const path = require("path")
 const vm = require("vm")
 
-const file = path.resolve(__dirname, "../services/idlePolicy.js")
+const file = path.resolve(__dirname, "../services/power/idlePolicy.js")
 const src = fs.readFileSync(file, "utf8").replace(/^\.pragma library\s*/, "")
 const ctx = {}
 vm.runInNewContext(src, ctx)
@@ -25,7 +25,7 @@ assert(!ctx.commandUsesDrmPowerOff(resume), "resume must not call niri power-on-
 assert(off.includes("brightness sleepBegin"), "off still marks brightness asleep")
 assert(resume.includes("brightness restoreAfterWake"), "resume restores brightness")
 
-const idleQml = fs.readFileSync(path.resolve(__dirname, "../services/Idle.qml"), "utf8")
+const idleQml = fs.readFileSync(path.resolve(__dirname, "../services/power/Idle.qml"), "utf8")
 assert(!idleQml.includes("power-off-monitors"), "Idle.qml must not invoke niri power-off-monitors")
 assert(!idleQml.includes("power-on-monitors"), "Idle.qml must not invoke niri power-on-monitors")
 assert(idleQml.includes("IdlePolicy.niriOffCommand"), "Idle.qml uses idlePolicy for niri off")

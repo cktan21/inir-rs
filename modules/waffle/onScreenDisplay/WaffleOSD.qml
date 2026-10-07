@@ -111,7 +111,7 @@ Scope {
     }
 
     // Media OSD is triggered via IPC only (not on every track change)
-    // See services/MprisController.qml IpcHandler
+    // See services/media/MprisController.qml IpcHandler
 
     Connections {
         target: KeyboardIndicators

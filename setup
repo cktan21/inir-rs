@@ -2212,7 +2212,7 @@ run_update_simulated() {
     sleep 1
     tui_check_ok "scripts/inir         (current)"
     tui_check_ok "modules/bar          (3 files updated)"
-    tui_check_ok "services/Audio.qml   (current)"
+    tui_check_ok "services/media/Audio.qml (current)"
     tui_check_ok "translations/es.json (current)"
     sleep 1
     tui_success "Synced 1247 files (12 modified, 3 added)"

@@ -3,7 +3,7 @@ const fs = require("fs")
 const path = require("path")
 const vm = require("vm")
 
-const file = path.resolve(__dirname, "../services/brightnessPolicy.js")
+const file = path.resolve(__dirname, "../services/display/brightnessPolicy.js")
 const src = fs.readFileSync(file, "utf8").replace(/^\.pragma library\s*/, "")
 const ctx = {}
 vm.runInNewContext(src, ctx)
@@ -61,11 +61,11 @@ assert(repeatedCycle.join(",") === "HDMI-A-1", "a repeated sleep in the same cyc
 const afterWakeSuccess = ctx.removeOutputName(["HDMI-A-1", "DP-1"], "HDMI-A-1")
 assert(afterWakeSuccess.join(",") === "DP-1", "successful wake removes only the output that actually came back")
 
-const idleQml = fs.readFileSync(path.resolve(__dirname, "../services/Idle.qml"), "utf8")
+const idleQml = fs.readFileSync(path.resolve(__dirname, "../services/power/Idle.qml"), "utf8")
 assert(!idleQml.includes("idle-blank"), "Idle.qml must not paint a fake overlay")
 assert(!idleQml.includes("WlrLayershell"), "Idle.qml must not keep a blank layer")
 
-const brightnessQml = fs.readFileSync(path.resolve(__dirname, "../services/Brightness.qml"), "utf8")
+const brightnessQml = fs.readFileSync(path.resolve(__dirname, "../services/display/Brightness.qml"), "utf8")
 assert(brightnessQml.includes("sleepCommandQueue"), "sleepBegin uses one serialized niri queue")
 assert(brightnessQml.includes("_enqueueNiri"), "niri ipc is queued, not fire-and-forget")
 assert(!/sleepBegin[\s\S]{0,800}execDetached/.test(brightnessQml), "sleepBegin must not execDetached niri")

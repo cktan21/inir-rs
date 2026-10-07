@@ -39,6 +39,12 @@ class DistributionTests(unittest.TestCase):
                          'scripts/setup/spotify.sh', 'scripts/setup/_scan.sh',
                          'scripts/lib/ipc-registry.sh', 'scripts/colors/opencode/theme_generator.py',
                          'modules/panel/tools/control.qml', 'modules/Live.qml',
+                         'services/qmldir', 'services/network/Network.qml',
+                         'services/network/Vpn.qml', 'services/network/BluetoothStatus.qml',
+                         'services/compositor/NiriService.qml', 'services/display/Brightness.qml',
+                         'services/display/brightnessPolicy.js', 'services/media/Audio.qml',
+                         'services/power/Idle.qml', 'services/power/idlePolicy.js',
+                         'services/system/ResourceUsage.qml',
                          'assets/images/mascot/manifest.json', 'translations/en_US.json']
         for name in self.required:
             self.put(name, 'runtime fixture\n')
@@ -47,6 +53,7 @@ class DistributionTests(unittest.TestCase):
                           'scripts/node_modules/example.js', 'scripts/release.sh',
                           'sdata/dist-arch/inir-deps/pkg/staged-helper',
                           'scripts/orbit-visual-audit.sh', 'scripts/lib/generate-ipc-registry.py',
+                          'scripts/test-service-layout.py',
                           'scripts/quickshell-webengine/PKGBUILD', 'translations/tools/tool.py',
                           'translations/l10n/README.md', 'assets/images/mascot/inir-mascot-local.png',
                           'assets/images/mascot/frames/frame.png', 'assets/images/mascot/PROMPTS.md']

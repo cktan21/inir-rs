@@ -10,6 +10,7 @@ import Quickshell.Services.Pipewire
 import qs
 import qs.modules.common
 import qs.modules.common.functions
+import qs.services
 import qs.services.deferred
 
 Singleton {

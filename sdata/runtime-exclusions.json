@@ -94,6 +94,7 @@
     "scripts/test-mascot-pack-flow.sh",
     "scripts/test-detect-sensors.py",
     "scripts/test-runtime-payload.py",
+    "scripts/test-service-layout.py",
     "scripts/orbit-visual-audit.sh",
     "scripts/lib/generate-ipc-registry.py",
     "scripts/quickshell-webengine",

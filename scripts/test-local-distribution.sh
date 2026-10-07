@@ -22,6 +22,9 @@ bash -n \
     "$runtime_root/sdata/subcmd-install/"*.sh \
     "$runtime_root/sdata/migrations/"*.sh
 
+step "service module layout"
+python3 -B "$runtime_root/scripts/test-service-layout.py"
+
 step "session tray ordering"
 service_unit="$runtime_root/assets/systemd/inir.service"
 if ! grep -qx 'Type=dbus' "$service_unit" \
@@ -100,7 +103,7 @@ fi
 
 step "suspend lock handshake"
 lock_owner="$runtime_root/modules/lock/Lock.qml"
-idle_owner="$runtime_root/services/Idle.qml"
+idle_owner="$runtime_root/services/power/Idle.qml"
 if ! grep -Fq 'function prepareSleep(): string' "$lock_owner" \
         || ! grep -Fq 'return lock.secure ? "secure" : "locking";' "$lock_owner"; then
     printf 'FAIL: lock before-sleep path does not expose compositor-confirmed secure state\n' >&2
@@ -1254,7 +1257,7 @@ fi
 step "release polish guards"
 config_qml="$runtime_root/modules/common/Config.qml"
 game_mode_qml="$runtime_root/services/GameMode.qml"
-niri_service_qml="$runtime_root/services/NiriService.qml"
+niri_service_qml="$runtime_root/services/compositor/NiriService.qml"
 screen_corners_qml="$runtime_root/modules/screenCorners/ScreenCorners.qml"
 dock_apps_qml="$runtime_root/modules/dock/DockApps.qml"
 dock_app_button_qml="$runtime_root/modules/dock/DockAppButton.qml"
@@ -1483,7 +1486,7 @@ if ! grep -Fq 'bool cardEdgeMode = ubuf.presentationMode > 1.5 && ubuf.presentat
     exit 1
 fi
 
-nightlight_service="$runtime_root/services/Hyprsunset.qml"
+nightlight_service="$runtime_root/services/display/Hyprsunset.qml"
 if ! grep -Fq 'inir-wlsunset.service' "$nightlight_service" \
         || grep -Fq 'Quickshell.execDetached(["/usr/bin/wlsunset"' "$nightlight_service"; then
     printf 'FAIL: Niri night light can regress to leaking wlsunset inside inir.service\n' >&2
