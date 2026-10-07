@@ -100,6 +100,6 @@ Idle timeouts are handled by swayidle, configured through Settings or IPC:
 - **Lock**: lock the session after inactivity (default: 10 minutes)
 - **Suspend**: suspend the system after inactivity (default: off)
 
-Idle timeouts are configured in Settings (backed by `services/Idle.qml`); there is no `inir idle` CLI command.
+Idle timeouts are configured in Settings (backed by `services/power/Idle.qml`); there is no `inir idle` CLI command. The implementation remains available as `Idle` through `qs.services`; the file consolidation does not change session or idle behavior.
 
 Fullscreen video players and presentations automatically inhibit idle via the idle-inhibit Wayland protocol.

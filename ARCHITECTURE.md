@@ -105,14 +105,16 @@ modules/                      # UI module directories
 │   └── [13 more subdirs]
 └── [more modules]
 
-services/                     # Runtime singletons (+ services/deferred/)
-├── qmldir                    # Service module registration
-├── Audio.qml                 # PipeWire volume, mute, per-app mixer
-├── NiriService.qml           # Niri compositor IPC
-├── CompositorService.qml     # Compositor detection (Niri vs Hyprland)
-├── Network.qml               # NetworkManager integration
+services/                     # Public qs.services API; domain-organized implementations
+├── qmldir                    # Stable public singleton/type registration
+├── network/                  # Network, Vpn, BluetoothStatus; WifiAccessPoint submodule
+├── compositor/               # CompositorService, NiriService, DankSocket, HyprlandData, NiriAnimationPresets
+├── display/                  # Brightness, Hyprsunset, brightnessPolicy.js
+├── media/                    # Audio, MprisController
+├── power/                    # Battery, Idle, PowerProfilePersistence, idlePolicy.js
+├── system/                   # ResourceUsage, SystemInfo, MemoryPressureService
+├── deferred/                 # Existing deferred-service module
 ├── Weather.qml               # Weather polling + privacy-aware location
-├── BluetoothStatus.qml       # BlueZ device management
 ├── Translation.qml           # i18n string lookup
 ├── DevNavigation.qml         # Session-only semantic UI navigation + dev IPC
 └── [more services]
@@ -142,6 +144,14 @@ distro/arch/                  # Arch PKGBUILDs (dependency manifests)
 assets/                       # Icons, wallpapers, systemd unit, desktop entry
 docs/                         # User documentation
 ```
+
+The service domain folders organize implementation files, not new public QML modules.
+Consumers still import `qs.services`; `services/qmldir` retains the existing names,
+versions, and singleton/type declarations while pointing to the relocated files.
+The existing `qs.services.network` module continues to expose only `WifiAccessPoint`.
+This consolidation adds no Rust dependency and changes no config, Settings, or service behavior.
+See [Backend Consolidation and Rust Migration Gates](docs/RUST_BACKEND_MIGRATION.md)
+for the initial scope and proposed follow-up gates.
 
 ## Config System
 

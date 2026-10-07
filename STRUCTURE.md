@@ -42,14 +42,16 @@ inir/
 │   │   ├── overlay/
 │   │   └── sidebarRight/
 │   └── [more modules]
-├── services/                     # Runtime singletons (+ services/deferred/)
-│   ├── qmldir                    # Service module registration
-│   ├── Audio.qml                 # PipeWire volume, mute, per-app mixer
-│   ├── NiriService.qml           # Niri compositor IPC
-│   ├── CompositorService.qml     # Compositor detection (Niri vs Hyprland)
-│   ├── Network.qml               # NetworkManager integration
+├── services/                     # Public qs.services API; domain-organized implementations
+│   ├── qmldir                    # Stable public singleton/type registration
+│   ├── network/                  # Network, Vpn, BluetoothStatus; WifiAccessPoint submodule
+│   ├── compositor/               # CompositorService, NiriService, DankSocket, HyprlandData, NiriAnimationPresets
+│   ├── display/                  # Brightness, Hyprsunset, brightnessPolicy.js
+│   ├── media/                    # Audio, MprisController
+│   ├── power/                    # Battery, Idle, PowerProfilePersistence, idlePolicy.js
+│   ├── system/                   # ResourceUsage, SystemInfo, MemoryPressureService
+│   ├── deferred/                 # Existing deferred-service module
 │   ├── Weather.qml               # Weather polling + privacy-aware location
-│   ├── BluetoothStatus.qml       # BlueZ device management
 │   ├── Translation.qml           # i18n string lookup
 │   ├── DevNavigation.qml         # Session-only semantic UI navigation + dev IPC
 │   ├── DesktopItems.qml          # Desktop item persistence + undo (desktop-items.json)
@@ -112,9 +114,12 @@ inir/
 - Key files: `modules/barM3/M3Bar.qml`, `modules/barM3/M3Palette.qml`
 
 **services/:**
-- Purpose: Runtime singletons providing backend functionality (audio, network, compositor IPC, theming, etc.)
-- Contains: QML singleton services, qmldir for module registration, deferred/ subdirectory for lazy-loaded services
+
+- Purpose: Shared runtime services and helper types (audio, network, compositor IPC, theming, etc.)
+- Contains: Domain-organized implementations in `network/`, `compositor/`, `display/`, `media/`, `power/`, and `system/`, plus remaining root services and the existing `deferred/` module
+- Public API: Keep importing `qs.services`; `services/qmldir` preserves names, versions, and singleton/type declarations. Domain folders are not new public modules; `qs.services.network` still exports only `WifiAccessPoint`
 - Key files: `services/qmldir`, `services/DevNavigation.qml`, `services/GlobalActions.qml`
+- Scope: File consolidation only; no Rust dependency or config/Settings behavior change. See [migration gates](docs/RUST_BACKEND_MIGRATION.md)
 
 **scripts/:**
 - Purpose: Shell/fish/python helper scripts for theming, CLI, and automation
@@ -171,9 +176,11 @@ inir/
 - `modules/waffle/looks/Looks.qml`: Waffle visual tokens
 - `services/DevNavigation.qml`: Session-only semantic UI navigation + dev IPC
 - `services/GlobalActions.qml`: Global keybind and action handling
-- `services/CompositorService.qml`: Compositor detection (Niri vs Hyprland)
+- `services/compositor/CompositorService.qml`: Compositor detection (Niri vs Hyprland)
 
 **Tests:**
+
+- `scripts/test-service-layout.py`: Service registration, relocation, and policy-helper layout guard (`python3 -B scripts/test-service-layout.py`)
 - `scripts/test-local-distribution.sh`: Local distribution test script
 - Co-located test files are not present in this repo
 
@@ -194,7 +201,7 @@ inir/
 ## Where to Add New Code
 
 **New QML component:** `modules/common/widgets/` for shared widgets, `modules/[module-name]/` for module-specific components
-**New service:** `services/` as a top-level `PascalCase.qml` singleton, register in `services/qmldir`
+**New service:** Place the implementation in the matching `services/<domain>/` folder (or at the root when no domain fits), and register its public name in `services/qmldir`; do not create a new public domain module
 **New module directory:** Scaffold and register it through the owning family loader and Config contract
 **New script:** `scripts/[category]/` following existing category conventions (colors/, inir/, lib/, etc.)
 **New migration:** `sdata/migrations/` with next sequential number (check `ls sdata/migrations/` for current maximum)

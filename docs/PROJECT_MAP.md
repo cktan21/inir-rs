@@ -171,6 +171,15 @@ This is the runtime integration layer.
 - updates and system state
 - AI and external integrations
 
+Implementations are grouped under `services/network/`, `services/compositor/`,
+`services/display/`, `services/media/`, `services/power/`, and `services/system/`.
+These folders are implementation organization, not new public modules:
+`services/qmldir` preserves the existing `qs.services` names, versions, and
+singleton/type declarations. The existing `qs.services.network` module still
+exposes only `WifiAccessPoint`; root services and `services/deferred/` remain.
+The initial consolidation adds no Rust dependency or config/Settings behavior change.
+See [Backend Consolidation and Rust Migration Gates](RUST_BACKEND_MIGRATION.md).
+
 A service change usually has broader blast radius than a local module change because services are shared consumers of system APIs and shared producers of runtime state.
 
 ### `scripts/`
@@ -380,12 +389,12 @@ Some important examples from the verified service surface are:
 
 - `ThemeService.qml`
 - `Wallpapers.qml`
-- `NiriService.qml`
-- `CompositorService.qml`
-- `Audio.qml`
+- `services/compositor/NiriService.qml`
+- `services/compositor/CompositorService.qml`
+- `services/media/Audio.qml`
 - `Notifications.qml`
-- `Network.qml`
-- `MprisController.qml`
+- `services/network/Network.qml`
+- `services/media/MprisController.qml`
 - `ShellUpdates.qml`
 - `Translation.qml`
 - `FirstRunExperience.qml`
@@ -427,7 +436,7 @@ This means wallpaper changes affect:
 - per-monitor behavior
 - thumbnail and cache generation
 
-### `NiriService.qml`
+### `services/compositor/NiriService.qml`
 
 This service is the authoritative runtime bridge to Niri.
 
@@ -701,7 +710,7 @@ Use this section as a routing index.
 - `services/qmldir`
 - `services/ThemeService.qml`
 - `services/Wallpapers.qml`
-- `services/NiriService.qml`
+- `services/compositor/NiriService.qml`
 - `services/FirstRunExperience.qml`
 
 ### Settings and onboarding
