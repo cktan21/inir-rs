@@ -1117,7 +1117,7 @@ if ! ${quiet:-false}; then
 
   # Critical QML files
   _VERIFY_ERRORS=0
-  for _crit_file in "shell.qml" "GlobalStates.qml" "modules/common/Config.qml" \
+  for _crit_file in "shell.qml" "modules/common/GlobalStates.qml" "modules/common/Config.qml" \
                     "modules/common/Appearance.qml" "services/compositor/NiriService.qml"; do
     if [[ -f "${II_TARGET:-${XDG_CONFIG_HOME}/quickshell/inir}/${_crit_file}" ]]; then
       tui_verify_ok "${_crit_file}"

@@ -14,3 +14,5 @@ singleton SidebarGeometry 1.0 SidebarGeometry.qml
 singleton StylePresets 1.0 StylePresets.qml
 singleton ThemePresets 1.0 ThemePresets.qml
 ToastManager 1.0 ToastManager.qml
+FamilyTransitionOverlay 1.0 FamilyTransitionOverlay.qml
+singleton GlobalStates 1.0 GlobalStates.qml

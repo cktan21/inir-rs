@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import qs.modules.common
+import qs.modules.settings
 import qs.services
 import QtQuick
 import Quickshell
@@ -114,34 +115,33 @@ Singleton {
     readonly property bool settingsNativeDialogOpen:
         Object.keys(root._settingsNativeDialogs).length > 0
 
-    function openSettingsPage(index: int, section): void {
+    function openSettingsPage(page, section): void {
         const requestedSection = String(section ?? "")
-        const isWaffle = Config.options?.panelFamily === "waffle"
-            && Config.options?.waffles?.settings?.useMaterialStyle !== true
-        if (isWaffle) {
-            Quickshell.execDetached([Quickshell.shellPath("scripts/inir"),
-                "waffle-settings-window"])
-        } else if (Config.options?.panelFamily === "iris" || (Config.options?.settingsUi?.overlayMode ?? false)) {
-            root.settingsOverlayRequestedPage = index
+        let resolvedPage = -1
+        if (typeof page === "string") {
+            resolvedPage = SettingsPageRegistry.indexForKey(page)
+        } else if (typeof page === "number") {
+            resolvedPage = page
+        }
+        if (Config.options?.panelFamily === "iris" || (Config.options?.settingsUi?.overlayMode ?? false)) {
+            root.settingsOverlayRequestedPage = resolvedPage
             root.settingsOverlayRequestedSection = requestedSection
             if (root.settingsOverlayOpen) root.settingsRaiseRequest++
             root.settingsOverlayOpen = true
         } else {
-            const args = ["/usr/bin/env", `QS_SETTINGS_PAGE=${index}`]
+            const args = ["/usr/bin/env"]
+            if (resolvedPage >= 0)
+                args.push(`QS_SETTINGS_PAGE=${resolvedPage}`)
             if (requestedSection.length > 0)
                 args.push(`QS_SETTINGS_SECTION=${requestedSection}`)
             args.push(Quickshell.shellPath("scripts/inir"), "settings-window")
             Quickshell.execDetached(args)
+            root.settingsOverlayOpen = false
         }
     }
 
     function openSettings(): void {
-        const isWaffle = Config.options?.panelFamily === "waffle"
-            && Config.options?.waffles?.settings?.useMaterialStyle !== true
-        if (isWaffle) {
-            Quickshell.execDetached([Quickshell.shellPath("scripts/inir"),
-                "waffle-settings-window"])
-        } else if (Config.options?.panelFamily === "iris" || (Config.options?.settingsUi?.overlayMode ?? false)) {
+        if (Config.options?.panelFamily === "iris" || (Config.options?.settingsUi?.overlayMode ?? false)) {
             if (root.settingsOverlayOpen) root.settingsRaiseRequest++
             root.settingsOverlayOpen = true
         } else {
@@ -151,12 +151,7 @@ Singleton {
     }
 
     function toggleSettings(): void {
-        const isWaffle = Config.options?.panelFamily === "waffle"
-            && Config.options?.waffles?.settings?.useMaterialStyle !== true
-        if (isWaffle) {
-            Quickshell.execDetached([Quickshell.shellPath("scripts/inir"),
-                "waffle-settings-window", "--toggle"])
-        } else if (Config.options?.panelFamily === "iris" || (Config.options?.settingsUi?.overlayMode ?? false)) {
+        if (Config.options?.panelFamily === "iris" || (Config.options?.settingsUi?.overlayMode ?? false)) {
             if (root.settingsOverlayOpen && root.settingsWindowBehind) root.settingsRaiseRequest++
             else root.settingsOverlayOpen = !root.settingsOverlayOpen
         } else {

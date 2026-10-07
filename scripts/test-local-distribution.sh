@@ -20,7 +20,11 @@ bash -n \
     "$runtime_root/scripts/inir" \
     "$runtime_root/sdata/lib/"*.sh \
     "$runtime_root/sdata/subcmd-install/"*.sh \
-    "$runtime_root/sdata/migrations/"*.sh
+    "$runtime_root/sdata/migrations/"*.sh \
+    "$runtime_root/scripts/colors/"*.sh \
+    "$runtime_root/scripts/colors/lib/"*.sh \
+    "$runtime_root/scripts/colors/modules/"*.sh \
+    "$runtime_root/scripts/colors/random/"*.sh
 
 step "service module layout"
 python3 -B "$runtime_root/scripts/test-service-layout.py"
@@ -451,7 +455,7 @@ root = pathlib.Path(sys.argv[1])
 with (root / "defaults/config.json").open(encoding="utf-8") as handle:
     config = json.load(handle)
 schema = (root / "modules/common/Config.qml").read_text(encoding="utf-8")
-wizard = (root / "welcome.qml").read_text(encoding="utf-8")
+wizard = (root / "modules/welcome/WelcomeApp.qml").read_text(encoding="utf-8")
 iris_background = (root / "modules/iris/background/IrisBackground.qml").read_text(encoding="utf-8")
 iris_panels = (root / "modules/iris/ShellIrisPanelsImpl.qml").read_text(encoding="utf-8")
 bar_settings = (root / "modules/settings/BarConfig.qml").read_text(encoding="utf-8")

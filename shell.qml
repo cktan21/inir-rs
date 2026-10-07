@@ -857,7 +857,7 @@ ShellRoot {
             && (Config.options?.panelFamily ?? "ii") === "ii"
         loading: enabled
         activeAsync: enabled
-        source: "ShellIiPanels.qml"
+        source: "modules/ii/ShellIiPanels.qml"
     }
 
     LazyLoader {
@@ -872,7 +872,7 @@ ShellRoot {
             && (Config.options?.panelFamily ?? "ii") === "waffle"
         loading: enabled
         activeAsync: enabled
-        source: "ShellWafflePanels.qml"
+        source: "modules/waffle/ShellWafflePanels.qml"
     }
 
     LazyLoader {
@@ -887,7 +887,7 @@ ShellRoot {
             && (Config.options?.panelFamily ?? "ii") === "iris"
         loading: enabled
         activeAsync: enabled
-        source: "ShellIrisPanels.qml"
+        source: "modules/iris/ShellIrisPanels.qml"
     }
 
     // Close confirmation dialog (always loaded, handles IPC)
@@ -1030,7 +1030,7 @@ ShellRoot {
     Loader {
         active: Config.ready
             && (GlobalStates.familyTransitionActive || root._transitionInProgress)
-        source: "FamilyTransitionOverlay.qml"
+        source: "modules/common/FamilyTransitionOverlay.qml"
         onLoaded: {
             item.exitComplete.connect(root.applyPendingFamily)
             item.enterComplete.connect(root.finishFamilyTransition)

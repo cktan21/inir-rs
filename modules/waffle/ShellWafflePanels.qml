@@ -6,6 +6,6 @@ Item {
     LazyLoader {
         loading: GlobalStates.deferredPanelsReady
         activeAsync: GlobalStates.deferredPanelsReady
-        source: "modules/iris/ShellIrisPanelsImpl.qml"
+        source: "ShellWafflePanelsImpl.qml"
     }
 }

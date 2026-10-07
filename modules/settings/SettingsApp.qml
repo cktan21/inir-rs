@@ -396,8 +396,16 @@ ApplicationWindow {
         Quickshell.watchFiles = false
         Config.readWriteDelay = 0 // Settings app always only sets one var at a time so delay isn't needed
 
-        const startPage = parseInt(Quickshell.env("QS_SETTINGS_PAGE"));
-        if (!isNaN(startPage)) root._requestedStartPage = startPage;
+        const envPage = Quickshell.env("QS_SETTINGS_PAGE");
+        if (envPage) {
+            const parsed = parseInt(envPage);
+            if (!isNaN(parsed)) {
+                root._requestedStartPage = parsed;
+            } else {
+                const byKey = SettingsPageRegistry.indexForKey(envPage);
+                if (byKey >= 0) root._requestedStartPage = byKey;
+            }
+        }
 
         root._requestedStartSection = Quickshell.env("QS_SETTINGS_SECTION") || ""
         root.initializeNavigation()

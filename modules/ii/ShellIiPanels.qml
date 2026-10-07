@@ -6,6 +6,6 @@ Item {
     LazyLoader {
         loading: GlobalStates.deferredPanelsReady
         activeAsync: GlobalStates.deferredPanelsReady
-        source: "modules/waffle/ShellWafflePanelsImpl.qml"
+        source: "ShellIiPanelsImpl.qml"
     }
 }
