@@ -11,8 +11,7 @@ import qs.modules.common.widgets
 import qs.modules.common.functions
 
 /**
- * Dedicated Mascot settings page (ii family). Waffle mirror:
- * modules/waffle/settings/pages/WMascotPage.qml — keep both in sync.
+ * Dedicated Mascot settings page, shared by every family.
  *
  * How this page is built:
  * - Registered in SettingsPageRegistry.qml: pages[] entry (this file's

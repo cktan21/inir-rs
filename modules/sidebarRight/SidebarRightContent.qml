@@ -35,7 +35,7 @@ Item {
 
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 10
-    property string settingsQmlPath: Quickshell.shellPath("settings.qml")
+    property string settingsQmlPath: Quickshell.shellPath("modules/settings/SettingsApp.qml")
     property int screenWidth: 1920
     property int screenHeight: 1080
     property var panelScreen: null

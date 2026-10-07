@@ -28,6 +28,7 @@ singleton FirstRunExperience 1.0 FirstRunExperience.qml
 singleton FontSyncService 1.0 FontSyncService.qml
 singleton GameMode 1.0 GameMode.qml
 singleton GlobalActions 1.0 GlobalActions.qml
+singleton Hotspot 1.0 network/Hotspot.qml
 HyprlandData 1.0 compositor/HyprlandData.qml
 singleton Hyprsunset 1.0 display/Hyprsunset.qml
 singleton IconThemeService 1.0 IconThemeService.qml

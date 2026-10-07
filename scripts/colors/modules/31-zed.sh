@@ -32,7 +32,7 @@ resolve_go_bin() {
 
 needs_rebuild() {
   [[ ! -x "$ZED_THEMEGEN_BIN" ]] && return 0
-  for src in "$ZED_THEMEGEN_SRC" "$REPO_ROOT/scripts/colors/themegencommon/common.go" "$REPO_ROOT/go.mod"; do
+  for src in "$ZED_THEMEGEN_SRC" "$REPO_ROOT/scripts/colors/themegencommon/common.go" "$REPO_ROOT/scripts/colors/go.mod"; do
     [[ -f "$src" && "$src" -nt "$ZED_THEMEGEN_BIN" ]] && return 0
   done
   return 1

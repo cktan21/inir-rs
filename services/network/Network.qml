@@ -140,6 +140,194 @@ Singleton {
         })
     }
 
+    // ── Connection-profile metadata and secrets ──
+    // Surfaces that drive their own list from Quickshell.Networking still need
+    // NetworkManager's view of which SSIDs are secured and which already have a
+    // saved profile; neither is exposed by the native API.
+
+    // SSID -> security string ("WPA2", "" or "--" for open).
+    property var wifiSecurityByName: ({})
+    // SSID -> true for every saved 802-11-wireless profile.
+    property var knownWifiProfiles: ({})
+
+    // Saved secret for the profile a surface last asked about. `revealedProfileResolved`
+    // separates "not read yet" from "read and empty", so an open profile can say so
+    // instead of looking like it is still loading.
+    property string revealedProfileSsid: ""
+    property string revealedProfilePassword: ""
+    property bool revealedProfileResolved: false
+
+    readonly property bool connectingWithPassword: connectWithPasswordProc.running
+    signal connectWithPasswordFinished(string ssid, bool ok)
+
+    function refreshProfileMetadata(): void {
+        wifiSecurityProc.running = true;
+        wifiProfileProc.running = true;
+    }
+
+    /** Forces a fresh scan without waiting on the full `nmcli dev wifi list` parse. */
+    function rescanWifiDevice(): void {
+        deviceRescanProc.running = true;
+    }
+
+    function isSsidSecured(ssid: string): bool {
+        const sec = root.wifiSecurityByName[ssid];
+        return sec !== undefined && sec !== "" && sec !== "--";
+    }
+
+    /**
+     * Drops the saved profile for `ssid`. The SSID travels as its own argv
+     * element so an odd character can neither break nor inject the command.
+     */
+    function forgetProfile(ssid: string): void {
+        if (forgetProfileProc.running || !ssid.length)
+            return;
+        forgetProfileProc.command = ["nmcli", "connection", "delete", "id", ssid];
+        forgetProfileProc.running = true;
+    }
+
+    /**
+     * Reads one saved profile's PSK on demand, or clears the held secret if the
+     * same SSID is asked for twice. NetworkManager lets the owning user read
+     * their own saved secret, so this runs unprivileged.
+     */
+    function revealProfilePassword(ssid: string): void {
+        if (!ssid.length)
+            return;
+        if (root.revealedProfileSsid === ssid) {
+            root.hideProfilePassword();
+            return;
+        }
+        root.revealedProfileSsid = ssid;
+        root.revealedProfilePassword = "";
+        root.revealedProfileResolved = false;
+        revealProfileProc.command = ["nmcli", "-s", "-g", "802-11-wireless-security.psk",
+            "connection", "show", "id", ssid];
+        revealProfileProc.running = true;
+    }
+
+    function hideProfilePassword(): void {
+        root.revealedProfileSsid = "";
+        root.revealedProfilePassword = "";
+        root.revealedProfileResolved = false;
+    }
+
+    /**
+     * Connects via `nmcli --ask`, feeding the password through stdin so the
+     * secret never reaches the process command line (`/proc/<pid>/cmdline` stays
+     * world-readable for the whole attempt).
+     *
+     * A failed attempt still leaves a profile named after the SSID behind. Unless
+     * the SSID was already known, it is deleted: otherwise the network counts as
+     * saved on the next click and fails silently from then on.
+     */
+    function connectWithPassword(ssid: string, password: string): void {
+        if (connectWithPasswordProc.running || !password.length)
+            return;
+        root._passwordAttemptSsid = ssid;
+        root._passwordAttemptWasKnown = root.knownWifiProfiles[ssid] === true;
+        root._pendingPassword = password;
+        connectWithPasswordProc.command = ["nmcli", "--ask", "dev", "wifi", "connect", ssid];
+        connectWithPasswordProc.running = true;
+    }
+
+    property string _pendingPassword: ""
+    property string _passwordAttemptSsid: ""
+    property bool _passwordAttemptWasKnown: false
+
+    /** Splits one `nmcli -t` line at its last unescaped colon and unescapes the head. */
+    function _splitTerse(line: string): var {
+        for (let k = line.length - 1; k >= 0; k--) {
+            if (line[k] === ":" && (k === 0 || line[k - 1] !== "\\"))
+                return { head: line.slice(0, k).replace(/\\:/g, ":"), tail: line.slice(k + 1) };
+        }
+        return null;
+    }
+
+    Process {
+        id: deviceRescanProc
+        command: ["nmcli", "dev", "wifi", "rescan"]
+    }
+
+    Process {
+        id: wifiSecurityProc
+        command: ["nmcli", "-t", "-f", "SSID,SECURITY", "dev", "wifi", "list"]
+        stdout: StdioCollector {
+            id: wifiSecurityCollector
+            onStreamFinished: {
+                const map = {};
+                for (const line of wifiSecurityCollector.text.split("\n")) {
+                    if (!line.length)
+                        continue;
+                    const parts = root._splitTerse(line);
+                    if (parts && parts.head.length)
+                        map[parts.head] = parts.tail;
+                }
+                root.wifiSecurityByName = map;
+            }
+        }
+    }
+
+    Process {
+        id: wifiProfileProc
+        command: ["nmcli", "-t", "-f", "NAME,TYPE", "connection", "show"]
+        stdout: StdioCollector {
+            id: wifiProfileCollector
+            onStreamFinished: {
+                const set = {};
+                for (const line of wifiProfileCollector.text.split("\n")) {
+                    const parts = root._splitTerse(line);
+                    if (parts && parts.head.length && parts.tail === "802-11-wireless")
+                        set[parts.head] = true;
+                }
+                root.knownWifiProfiles = set;
+            }
+        }
+    }
+
+    Process {
+        id: forgetProfileProc
+        onExited: root.refreshProfileMetadata()
+    }
+
+    Process {
+        id: revealProfileProc
+        stdout: StdioCollector {
+            id: revealProfileCollector
+            onStreamFinished: {
+                root.revealedProfilePassword = revealProfileCollector.text.replace(/\n+$/, "");
+                root.revealedProfileResolved = true;
+            }
+        }
+    }
+
+    Process {
+        id: connectWithPasswordProc
+        stdinEnabled: true
+        stdout: StdioCollector {}
+        stderr: StdioCollector {}
+        onStarted: {
+            connectWithPasswordProc.write(root._pendingPassword + "\n");
+            root._pendingPassword = "";
+        }
+        onExited: exitCode => {
+            const ssid = root._passwordAttemptSsid;
+            const ok = exitCode === 0;
+            if (!ok && !root._passwordAttemptWasKnown && ssid.length) {
+                failedAttemptCleanupProc.command = ["nmcli", "connection", "delete", "id", ssid];
+                failedAttemptCleanupProc.running = true;
+            }
+            root.connectWithPasswordFinished(ssid, ok);
+            if (ok)
+                root.refreshProfileMetadata();
+        }
+    }
+
+    Process {
+        id: failedAttemptCleanupProc
+        onExited: root.refreshProfileMetadata()
+    }
+
     Process {
         id: enableWifiProc
     }

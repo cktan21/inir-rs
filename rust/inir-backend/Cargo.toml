@@ -1,0 +1,19 @@
+[package]
+name = "inir-backend"
+version = "0.1.0"
+edition = "2021"
+description = "CXX-Qt contract for the qs.services backend boundary"
+publish = false
+
+[lib]
+# Gate 1 of docs/plans/RUST_BACKEND_MIGRATION.md wants a dynamic QML plugin, so
+# the contract is shaped as a cdylib from the start rather than retrofitted.
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cxx = "1.0"
+cxx-qt = "0.10"
+cxx-qt-lib = "0.10"
+
+[build-dependencies]
+cxx-qt-build = "0.10"

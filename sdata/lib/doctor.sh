@@ -297,7 +297,7 @@ check_critical_files() {
         doctor_runtime_dir_or_fail "Critical files"
         return 0
     fi
-    local critical=("shell.qml" "GlobalStates.qml" "modules/common/Config.qml" "services/compositor/NiriService.qml")
+    local critical=("shell.qml" "modules/common/GlobalStates.qml" "modules/common/Config.qml" "services/compositor/NiriService.qml")
     local missing=0
     
     for file in "${critical[@]}"; do

@@ -19,6 +19,42 @@ Singleton {
     readonly property int activeDeviceCount: Bluetooth.defaultAdapter?.devices.values.filter(device => device.connected).length ?? 0
     readonly property bool connected: Bluetooth.devices.values.some(d => d.connected)
 
+    // Address of the device currently going through the pairing flow, empty when
+    // idle. Connecting and disconnecting a known device go through the Quickshell
+    // BluetoothDevice object instead and need nothing here.
+    property string pairingAddress: ""
+    signal pairFinished(string address, bool ok)
+
+    /**
+     * Pairs, trusts and connects an unpaired device in one pass.
+     *
+     * BlueZ exposes no single "pair and use" call, and pairing without trusting
+     * leaves a device that disconnects for good on the next power cycle. Both
+     * pair and connect get a 30s timeout because an unresponsive device
+     * otherwise leaves bluetoothctl waiting indefinitely. The address travels as
+     * a positional argument so it cannot break or inject the command.
+     */
+    function pairDevice(address: string): void {
+        if (pairProc.running || !address.length)
+            return;
+        root.pairingAddress = address;
+        pairProc.command = ["sh", "-c",
+            'timeout 30 bluetoothctl pair "$1" && bluetoothctl trust "$1" && timeout 30 bluetoothctl connect "$1"',
+            "sh", address];
+        pairProc.running = true;
+    }
+
+    Process {
+        id: pairProc
+        stdout: StdioCollector {}
+        stderr: StdioCollector {}
+        onExited: exitCode => {
+            const address = root.pairingAddress;
+            root.pairingAddress = "";
+            root.pairFinished(address, exitCode === 0);
+        }
+    }
+
     // Material Symbol icon for the currently-active device, or generic bluetooth
     // states when no device is connected. Uses BluetoothDevice.icon (XDG icon
     // name like "audio-headset", "input-keyboard") to pick a device-specific

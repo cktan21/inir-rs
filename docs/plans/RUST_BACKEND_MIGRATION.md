@@ -1,15 +1,35 @@
 # Backend Consolidation and Rust Migration Gates
 
-## Current scope: behavior-preserving file consolidation
+## Status: UI consolidation and the service boundary have landed; Rust is still gated
 
-This change organizes existing QML implementations; it does **not** introduce Rust,
-replace system integrations, or change config, Settings, startup, or service behavior.
-`services/qmldir` retains the public `qs.services` names, versions, and singleton/type
-registrations. Consumers keep their existing imports and APIs.
+This file tracks the acceptance gates for a *possible* native/Rust backend. The
+groundwork those gates depend on now lives in a sibling plan,
+[`UI_CONSOLIDATION_AND_BACKEND_BOUNDARY.md`](UI_CONSOLIDATION_AND_BACKEND_BOUNDARY.md).
+Its Step 1 (collapse the `ii`/`iris`/`waffle` shells into a shared core and one
+Settings app) and the start of its Step 2 (route layouts through `qs.services.*`)
+have landed on `refactor/ui-consolidation-backend-boundary`:
+
+- **Shared system UI has a single owner each:** `modules/lock/`, `modules/polkit/`,
+  `modules/onScreenDisplay/`, `modules/regionSelector/`, `modules/sessionScreen/`.
+  The per-family duplicates under `modules/iris/` and `modules/waffle/` are gone;
+  the three families keep only their visual layout presets.
+- **Settings is one application:** Waffle's standalone client is folded in
+  (`modules/settings/WaffleConfig.qml`) and the root monoliths (`settings.qml`,
+  `welcome.qml`, `waffleSettings.qml`) moved under `modules/`.
+- **The network stack moved behind the service boundary:** Wi-Fi, pairing, VPN, and
+  the hotspot now run inside `services/network/`, and the pill UI calls `qs.services`
+  instead of spawning `nmcli`/`bluetoothctl` itself.
+
+That last point means this branch is **no longer purely behavior-preserving** for
+network: process ownership moved from the UI into the services (new `Hotspot` service,
+Wi-Fi/pairing logic relocated). It still does **not** introduce Rust or replace the
+Quickshell system integrations. `services/qmldir` retains the public `qs.services`
+names, versions, and singleton/type registrations, and consumers keep their existing
+imports and APIs.
 
 | Implementation directory | Relocated files |
 |---|---|
-| `services/network/` | `Network.qml`, `Vpn.qml`, `BluetoothStatus.qml` |
+| `services/network/` | `Network.qml`, `Vpn.qml`, `BluetoothStatus.qml`, `Hotspot.qml` |
 | `services/compositor/` | `CompositorService.qml`, `NiriService.qml`, `DankSocket.qml`, `HyprlandData.qml`, `NiriAnimationPresets.qml` |
 | `services/display/` | `Brightness.qml`, `Hyprsunset.qml`, `brightnessPolicy.js` |
 | `services/media/` | `Audio.qml`, `MprisController.qml` |
@@ -18,16 +38,25 @@ registrations. Consumers keep their existing imports and APIs.
 
 These domain folders are **not new public modules**. The existing
 `qs.services.network` module continues to expose only `WifiAccessPoint` through
-`services/network/qmldir`; `qs.services.deferred` remains unchanged.
+`services/network/qmldir` (the `Network`, `Vpn`, `BluetoothStatus`, and `Hotspot`
+singletons are registered as `qs.services` through `services/qmldir`);
+`qs.services.deferred` remains unchanged.
 Relative helper imports, registrations, tests, and path references must follow moves.
-Do not combine this cleanup with polling changes, API redesign, config migration,
-or removal of authentication, platform, or command fallbacks.
+Network has already crossed the UI→service boundary; for the remaining domains, do not
+combine file moves with polling changes, API redesign, config migration, or removal of
+authentication, platform, or command fallbacks.
 
-Layout guard:
+Layout and boundary guards:
 
 ```bash
 python3 -B scripts/test-service-layout.py
+python3 -B scripts/test-backend-boundary.py
 ```
+
+`test-backend-boundary.py` fails if any file under `modules/` spawns a system command
+(`nmcli`, `wpctl`, `brightnessctl`, `bluetoothctl`, ...), and asserts that
+`services/` still owns the `Process` calls — the exact coupling a future compiled
+backend must not have to unpick again.
 
 ## Assessment: verified evidence versus proposed work
 
@@ -38,7 +67,10 @@ python3 -B scripts/test-service-layout.py
   arbitrary new root build directories. A native backend needs a new build contract.
 - **Verified:** Quickshell provides several integrations already used here, including
   native Networking in `modules/pill/LinkWifi.qml` and `modules/pill/PillLink.qml`.
-  `services/network/Network.qml` and parts of the pill UI still use `nmcli`.
+  The `nmcli` calls now live only inside `services/network/` (`Network.qml`, `Vpn.qml`,
+  `Hotspot.qml`); the pill UI reaches them through `qs.services`. This moved the NM
+  client behind the boundary but did **not** evaluate Quickshell-native parity — that
+  decision is still Gate 2.
 - **Verified:** config already has typed QML properties, persistence safeguards,
   dynamic data, and multiple process consumers; replacing it is not just adding Serde.
 - **Inference:** selective Rust extraction may improve correctness or performance.
@@ -63,14 +95,14 @@ a Polkit agent does not itself grant the shell permission to write sysfs.
 
 ## Revised sequencing: acceptance gates, not a mandatory rewrite
 
-| Gate | Exit condition |
-|---|---|
-| 0. Baseline + file consolidation | Stable public API/layout; record reproducible measurements before behavior changes |
-| 1. Native bridge spike | Installed dynamic plugin, async updates, incremental models, teardown, and fallback work in Quickshell |
-| 2. Network consolidation | Compare both existing paths; establish native capability coverage and fallback ownership |
-| 3. One justified Rust domain | Profiling or a functional gap selects the domain; preserve adapters and public behavior |
-| 4. Typed config reader, then writer | Shadow validation and fixtures pass before persistence ownership changes |
-| 5. Settings consolidation | Stable page IDs and compatibility mappings precede taxonomy changes |
+| Gate | Status | Exit condition |
+|---|---|---|
+| 0. Baseline + file consolidation | File/UI consolidation done; baseline measurements still to record | Stable public API/layout; record reproducible measurements before behavior changes |
+| 1. Native bridge spike | Not started | Installed dynamic plugin, async updates, incremental models, teardown, and fallback work in Quickshell |
+| 2. Network consolidation | UI→service boundary enforced; native-vs-`nmcli` parity comparison still pending | Compare both existing paths; establish native capability coverage and fallback ownership |
+| 3. One justified Rust domain | Not started | Profiling or a functional gap selects the domain; preserve adapters and public behavior |
+| 4. Typed config reader, then writer | Not started (Waffle keys still to fold into one schema — Step 2.3) | Shadow validation and fixtures pass before persistence ownership changes |
+| 5. Settings consolidation | One Settings app landed; stable page IDs still pending (persistence is index-based) | Stable page IDs and compatibility mappings precede taxonomy changes |
 
 Frontend lifetime/rendering improvements and measurements can proceed independently.
 Resource sampling or a pure Niri event reducer are candidates, not guaranteed wins.
@@ -125,8 +157,11 @@ read-only typed subsection and golden fixtures, not an immediate format replacem
 ## Settings and comparison safety
 
 `modules/settings/SettingsPageRegistry.qml` stores arrangements by numeric index;
-`settings.qml` persists the current page, and `shell.qml` exposes index-based IPC.
-Introduce stable page IDs and legacy-index mappings before reorganizing pages.
+`modules/settings/SettingsApp.qml` persists the current page by index
+(`Persistent.states.settings.iiPage`), and `shell.qml` exposes index-based IPC.
+Waffle's settings are now folded into this one app (`modules/settings/WaffleConfig.qml`),
+but the identifiers are still numeric; introduce stable page IDs and legacy-index
+mappings before reorganizing pages.
 Preserve search, translations, deep links, and family-specific routes. Reuse the
 metadata in `modules/iris/settings/IrisOptions.qml`; generic rows must retain bundled
 updates and special actions such as family transitions and Niri config writes.

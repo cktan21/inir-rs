@@ -14,7 +14,7 @@ import qs.modules.common.functions
 import qs.modules.common.widgets
 import qs.modules.background.widgets
 import qs.modules.background.widgets.instrument
-import qs.modules.iris.lock
+import qs.modules.lock.iris
 import qs.modules.iris.style
 import qs.modules.iris.frame
 import qs.modules.iris.components

@@ -1,3 +1,4 @@
 module qs.modules.polkit
 PolkitContent 1.0 PolkitContent.qml
 Polkit 1.0 Polkit.qml
+IrisPolkitContent 1.0 IrisPolkitContent.qml
