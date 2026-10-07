@@ -29,6 +29,9 @@ bash -n \
 step "service module layout"
 python3 -B "$runtime_root/scripts/test-service-layout.py"
 
+step "backend boundary"
+python3 -B "$runtime_root/scripts/test-backend-boundary.py"
+
 step "session tray ordering"
 service_unit="$runtime_root/assets/systemd/inir.service"
 if ! grep -qx 'Type=dbus' "$service_unit" \
