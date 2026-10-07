@@ -3,8 +3,6 @@ import qs
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.common.widgets
-import qs.modules.waffle.regionSelector as WaffleRegion
-import qs.modules.iris.regionSelector as IrisRegion
 import qs.modules.iris.style
 import qs.services
 import QtQuick
@@ -707,7 +705,7 @@ PanelWindow {
 
                 Component {
                     id: irisControls
-                    IrisRegion.IrisOptionsToolbar {
+                    IrisOptionsToolbar {
                         action: root.action
                         selectionMode: root.selectionMode
                         onActionChanged: root.action = action
@@ -768,7 +766,7 @@ PanelWindow {
                 // Waffle (Windows 11) controls
                 Component {
                     id: waffleControls
-                    WaffleRegion.WOptionsToolbar {
+                    WOptionsToolbar {
                         action: root.action
                         selectionMode: root.selectionMode
                         onActionChanged: root.action = action

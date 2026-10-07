@@ -135,8 +135,8 @@ if ! grep -Fq 'Lock IPC was unavailable before sleep and no fallback could secur
 fi
 for lock_surface in \
         "$runtime_root/modules/lock/LockSurface.qml" \
-        "$runtime_root/modules/waffle/lock/WaffleLockSurface.qml" \
-        "$runtime_root/modules/waffle/lock/WaffleLockSurfaceSafe.qml"; do
+        "$runtime_root/modules/lock/waffle/WaffleLockSurface.qml" \
+        "$runtime_root/modules/lock/waffle/WaffleLockSurfaceSafe.qml"; do
     if grep -Fq 'readonly property int imgStatus: avatarImage.status' "$lock_surface"; then
         printf 'FAIL: lock avatar retry still mutates its source from a synchronous status binding: %s\n' "$lock_surface" >&2
         exit 1

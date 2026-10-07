@@ -34,7 +34,7 @@ const lockQml = fs.readFileSync(path.resolve(__dirname, "../modules/lock/Lock.qm
 assert(!lockQml.includes("Brightness.sleepBegin"), "lock activate must not power displays down")
 assert(!/power-off-monitors/.test(lockQml), "Lock.qml must not invoke niri power-off-monitors")
 
-for (const rel of ["../modules/lock/LockSurface.qml", "../modules/waffle/lock/WaffleLockSurface.qml"]) {
+for (const rel of ["../modules/lock/LockSurface.qml", "../modules/lock/waffle/WaffleLockSurface.qml"]) {
     const src = fs.readFileSync(path.resolve(__dirname, rel), "utf8")
     assert(!src.includes("z: 9999"), `${rel} must not paint a fake lock overlay`)
     assert(src.includes("Brightness.restoreAfterWake"), `${rel} restores power on input`)

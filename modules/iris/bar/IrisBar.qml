@@ -15,7 +15,7 @@ import qs.modules.iris.control
 import qs.modules.iris.field
 import qs.modules.iris.frame
 import qs.modules.iris.stage
-import qs.modules.iris.lock
+import qs.modules.lock.iris
 import qs.modules.iris.widgets
 import qs.modules.iris.dock
 import qs.modules.iris.edit

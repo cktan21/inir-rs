@@ -5,8 +5,8 @@ import qs.services.deferred
 import qs.modules.common
 import qs.modules.common.functions
 import qs.modules.lock
-import qs.modules.waffle.lock
-import qs.modules.iris.lock
+import qs.modules.lock.waffle
+import qs.modules.lock.iris
 import qs.modules.iris.style
 import QtQuick
 import Quickshell

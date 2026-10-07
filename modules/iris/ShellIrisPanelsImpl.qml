@@ -13,7 +13,7 @@ import qs.modules.iris.style
 import qs.modules.iris.pieces
 import qs.modules.iris.settings
 import qs.modules.iris.studio
-import qs.modules.iris.lock
+import qs.modules.lock.iris
 import qs.modules.iris.sidebar
 import qs.modules.iris.orbit
 import qs.modules.iris.osk

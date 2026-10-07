@@ -3,6 +3,8 @@ module qs.modules.regionSelector
 AnnotationEditor 1.0 AnnotationEditor.qml
 CircleSelectionDetails 1.0 CircleSelectionDetails.qml
 OptionsToolbar 1.0 OptionsToolbar.qml
+IrisOptionsToolbar 1.0 IrisOptionsToolbar.qml
+WOptionsToolbar 1.0 WOptionsToolbar.qml
 RectCornersSelectionDetails 1.0 RectCornersSelectionDetails.qml
 singleton RegionFunctions 1.0 RegionFunctions.qml
 RegionSelection 1.0 RegionSelection.qml

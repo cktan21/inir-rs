@@ -96,7 +96,7 @@ Users can disable any panel from Settings without touching config files.
 |--------|----------|-------------|
 | `waffle/notificationPopup/` | `wNotificationPopup` | Notification popups (Fluent style). |
 | `waffle/onScreenDisplay/` | `wOnScreenDisplay` | Volume/brightness OSD (Fluent style). |
-| `lock/` + `waffle/lock/` presentation | `wLock` | Shared lock owner with Waffle-specific surface presentation. |
+| `lock/` + `lock/waffle/` presentation | `wLock` | Shared lock owner with Waffle-specific surface presentation. |
 | `polkit/` + Waffle presentation | `wPolkit` | Shared PolicyKit owner rendered for Waffle. |
 | `sessionScreen/` + Waffle presentation | `wSessionScreen` | Shared session owner rendered for Waffle. |
 
