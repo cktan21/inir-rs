@@ -6,9 +6,9 @@ import qs
 import qs.services
 import qs.modules.common
 import qs.modules.iris.notificationPopup
-import qs.modules.iris.onScreenDisplay
-import qs.modules.iris.session
-import qs.modules.iris.polkit
+import qs.modules.onScreenDisplay
+import qs.modules.sessionScreen
+import qs.modules.polkit
 import qs.modules.iris.style
 import qs.modules.iris.pieces
 import qs.modules.iris.settings
@@ -26,9 +26,7 @@ Item {
     component PanelLoader: LazyLoader {
         required property string identifier
         property bool extraCondition: true
-        readonly property bool enabledPanel: Config.ready && IrisGate.official
-            && (Config.options?.enabledPanels ?? []).includes(identifier)
-            && extraCondition
+        readonly property bool enabledPanel: Config.ready && IrisGate.official && (Config.options?.enabledPanels ?? []).includes(identifier) && extraCondition
         loading: enabledPanel
         activeAsync: enabledPanel
     }
@@ -36,9 +34,7 @@ Item {
     component DeferredPanelLoader: LazyLoader {
         required property string identifier
         property bool extraCondition: true
-        readonly property bool enabledPanel: Config.ready && IrisGate.official
-            && (Config.options?.enabledPanels ?? []).includes(identifier)
-            && extraCondition
+        readonly property bool enabledPanel: Config.ready && IrisGate.official && (Config.options?.enabledPanels ?? []).includes(identifier) && extraCondition
         loading: enabledPanel && GlobalStates.shellEntryReady
         activeAsync: enabledPanel && GlobalStates.deferredPanelsReady
     }
@@ -55,16 +51,14 @@ Item {
             interval: loader.closeGraceMs
             onTriggered: loader.resident = loader.open
         }
-        readonly property bool enabledPanel: Config.ready && IrisGate.official
-            && (!requireEnabledPanel || (Config.options?.enabledPanels ?? []).includes(identifier))
-            && extraCondition
+        readonly property bool enabledPanel: Config.ready && IrisGate.official && (!requireEnabledPanel || (Config.options?.enabledPanels ?? []).includes(identifier)) && extraCondition
 
         onOpenChanged: {
             if (open) {
-                closeGrace.stop()
-                resident = true
+                closeGrace.stop();
+                resident = true;
             } else {
-                closeGrace.restart()
+                closeGrace.restart();
             }
         }
 
@@ -82,11 +76,15 @@ Item {
 
     LazyLoader {
         active: IrisGate.official
-        component: IrisSidebarEdge { side: "left" }
+        component: IrisSidebarEdge {
+            side: "left"
+        }
     }
     LazyLoader {
         active: IrisGate.official
-        component: IrisSidebarEdge { side: "right" }
+        component: IrisSidebarEdge {
+            side: "right"
+        }
     }
 
     OnDemandPanelLoader {
@@ -95,7 +93,9 @@ Item {
         open: GlobalStates.sidebarLeftOpen
         extraCondition: Config.options?.iris?.sidebars?.left?.enable ?? true
         closeGraceMs: IrisStyle.settleDuration + 80
-        component: IrisSidebar { side: "left" }
+        component: IrisSidebar {
+            side: "left"
+        }
     }
 
     OnDemandPanelLoader {
@@ -104,17 +104,16 @@ Item {
         open: GlobalStates.sidebarRightOpen
         extraCondition: Config.options?.iris?.sidebars?.right?.enable ?? true
         closeGraceMs: IrisStyle.settleDuration + 80
-        component: IrisSidebar { side: "right" }
+        component: IrisSidebar {
+            side: "right"
+        }
     }
 
     OnDemandPanelLoader {
         identifier: "irisNotificationPopup"
         open: (Notifications.popupList?.length ?? 0) > 0
         closeGraceMs: IrisStyle.settleDuration * 2 + 160
-        extraCondition: (Config.options?.iris?.modules?.notificationPopup ?? true)
-            && (!(Config.options?.enabledPanels ?? []).includes("irisBar")
-                || (CompositorService.isNiri && GameMode.hasFullscreenOnOutput(GlobalStates.focusedScreen?.name ?? "") && !NiriService.inOverview
-                    && (Config.options?.iris?.notifications?.fullscreen ?? true)))
+        extraCondition: (Config.options?.iris?.modules?.notificationPopup ?? true) && (!(Config.options?.enabledPanels ?? []).includes("irisBar") || (CompositorService.isNiri && GameMode.hasFullscreenOnOutput(GlobalStates.focusedScreen?.name ?? "") && !NiriService.inOverview && (Config.options?.iris?.notifications?.fullscreen ?? true)))
         component: IrisNotificationPopup {}
     }
 
@@ -144,35 +143,26 @@ Item {
     }
 
     LazyLoader {
-        activeAsync: Config.ready && IrisGate.official && GlobalStates.deferredPanelsReady
-            && CompositorService.isNiri
-            && (Config.options?.background?.backdrop?.enable ?? false)
+        activeAsync: Config.ready && IrisGate.official && GlobalStates.deferredPanelsReady && CompositorService.isNiri && (Config.options?.background?.backdrop?.enable ?? false)
         source: "../background/Backdrop.qml"
     }
 
     LazyLoader {
-        activeAsync: Config.ready && IrisGate.official && GlobalStates.deferredPanelsReady
-            && (Config.options?.enabledPanels ?? []).includes("irisBackground")
-            && (Config.options?.iris?.modules?.desktopWidgets ?? true)
+        activeAsync: Config.ready && IrisGate.official && GlobalStates.deferredPanelsReady && (Config.options?.enabledPanels ?? []).includes("irisBackground") && (Config.options?.iris?.modules?.desktopWidgets ?? true)
         component: Background {}
     }
 
     PanelLoader {
         identifier: "irisOnScreenDisplay"
-        extraCondition: (Config.options?.iris?.modules?.osd ?? true)
-            && (!GlobalStates.barOpen
-                || (CompositorService.isNiri && GameMode.hasFullscreenOnOutput(GlobalStates.focusedScreen?.name ?? "") && !NiriService.inOverview)
-                || !(Config.options?.enabledPanels ?? []).includes("irisBar")
-                || ((Config.options?.iris?.bar?.screenList ?? []).length > 0
-                    && !(Config.options.iris.bar.screenList).includes(GlobalStates.focusedScreen?.name ?? "")))
-        component: IrisOSD {}
+        extraCondition: (Config.options?.iris?.modules?.osd ?? true) && (!GlobalStates.barOpen || (CompositorService.isNiri && GameMode.hasFullscreenOnOutput(GlobalStates.focusedScreen?.name ?? "") && !NiriService.inOverview) || !(Config.options?.enabledPanels ?? []).includes("irisBar") || ((Config.options?.iris?.bar?.screenList ?? []).length > 0 && !(Config.options.iris.bar.screenList).includes(GlobalStates.focusedScreen?.name ?? "")))
+        component: OnScreenDisplay {}
     }
 
     OnDemandPanelLoader {
         identifier: "irisSessionScreen"
         open: GlobalStates.sessionOpen
         extraCondition: Config.options?.iris?.modules?.sessionScreen ?? true
-        component: IrisSessionScreen {}
+        component: SessionScreen {}
     }
 
     DeferredPanelLoader {
@@ -184,7 +174,7 @@ Item {
     DeferredPanelLoader {
         identifier: "irisPolkit"
         extraCondition: Config.options?.iris?.modules?.polkit ?? true
-        component: IrisPolkit {}
+        component: Polkit {}
     }
 
     OnDemandPanelLoader {
@@ -217,7 +207,6 @@ Item {
         source: "../regionSelector/RegionSelector.qml"
     }
 
-
     OnDemandPanelLoader {
         identifier: "irisLockRehearsal"
         open: GlobalStates.irisLockEdit
@@ -243,8 +232,7 @@ Item {
         identifier: "irisRecordingOsd"
         open: RecorderStatus.isRecording
         requireEnabledPanel: false
-        extraCondition: !(GlobalStates.barOpen
-            && (Config.options?.enabledPanels ?? []).includes("irisBar"))
+        extraCondition: !(GlobalStates.barOpen && (Config.options?.enabledPanels ?? []).includes("irisBar"))
         source: "../recordingOsd/RecordingOsd.qml"
     }
 

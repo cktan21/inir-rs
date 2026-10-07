@@ -1,3 +1,5 @@
 module qs.modules.onScreenDisplay
 OnScreenDisplay 1.0 OnScreenDisplay.qml
+DefaultOSD 1.0 DefaultOSD.qml
+IrisOSD 1.0 IrisOSD.qml
 OsdValueIndicator 1.0 OsdValueIndicator.qml

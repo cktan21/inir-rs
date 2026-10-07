@@ -1,3 +1,5 @@
 module qs.modules.sessionScreen
 SessionActionButton 1.0 SessionActionButton.qml
+DefaultSessionScreen 1.0 DefaultSessionScreen.qml
+IrisSessionScreen 1.0 IrisSessionScreen.qml
 SessionScreen 1.0 SessionScreen.qml

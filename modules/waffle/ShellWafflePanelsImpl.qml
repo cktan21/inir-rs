@@ -24,7 +24,7 @@ import qs.modules.waffle.background as WaffleBackgroundModule
 import qs.modules.waffle.bar as WaffleBarModule
 import qs.modules.waffle.clipboard as WaffleClipboardModule
 import qs.modules.waffle.notificationCenter
-import qs.modules.waffle.onScreenDisplay as WaffleOSDModule
+import qs.modules.onScreenDisplay
 import qs.modules.waffle.startMenu
 import qs.modules.waffle.widgets
 import qs.modules.waffle.backdrop as WaffleBackdropModule
@@ -106,7 +106,7 @@ Item {
     // Core Waffle surfaces (bar/background/backdrop) are owned by the critical
     // startup host so they are not delayed by the rest of this module.
     PanelLoader { identifier: "wNotificationPopup"; component: WaffleNotificationPopupModule.WaffleNotificationPopup {} }
-    PanelLoader { identifier: "wOnScreenDisplay"; component: WaffleOSDModule.WaffleOSD {} }
+    PanelLoader { identifier: "wOnScreenDisplay"; component: OnScreenDisplay {} }
 
     // === Deferred panels ===
     OnDemandPanelLoader { identifier: "wStartMenu"; open: GlobalStates.searchOpen; retainAfterUse: true; component: WaffleStartMenu {} }

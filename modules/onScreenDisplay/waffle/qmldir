@@ -1,4 +1,4 @@
-module qs.modules.waffle.onScreenDisplay
+module qs.modules.onScreenDisplay.waffle
 WaffleOSD 1.0 WaffleOSD.qml
 OSDValue 1.0 OSDValue.qml
 VolumeOSD 1.0 VolumeOSD.qml
