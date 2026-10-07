@@ -722,6 +722,69 @@ ContentPage {
                 checked: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
                 onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showQuickActions", checked)
             }
+
+            SettingsSwitch {
+                visible: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
+                buttonIcon: "folder"
+                text: Translation.tr("Files shortcut")
+                checked: Config.options?.waffles?.widgetsPanel?.showFiles ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showFiles", checked)
+            }
+
+            SettingsSwitch {
+                visible: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
+                buttonIcon: "terminal"
+                text: Translation.tr("Terminal shortcut")
+                checked: Config.options?.waffles?.widgetsPanel?.showTerminal ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showTerminal", checked)
+            }
+
+            SettingsSwitch {
+                visible: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
+                buttonIcon: "settings"
+                text: Translation.tr("Settings shortcut")
+                checked: Config.options?.waffles?.widgetsPanel?.showSettings ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showSettings", checked)
+            }
+
+            SettingsSwitch {
+                visible: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
+                buttonIcon: "wallpaper"
+                text: Translation.tr("Wallpaper shortcut")
+                checked: Config.options?.waffles?.widgetsPanel?.showWallpaper ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showWallpaper", checked)
+            }
+
+            SettingsSwitch {
+                visible: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
+                buttonIcon: "screenshot_monitor"
+                text: Translation.tr("Screenshot shortcut")
+                checked: Config.options?.waffles?.widgetsPanel?.showScreenshot ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showScreenshot", checked)
+            }
+
+            SettingsSwitch {
+                visible: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
+                buttonIcon: "fiber_manual_record"
+                text: Translation.tr("Screen Record shortcut")
+                checked: Config.options?.waffles?.widgetsPanel?.showScreenRecord ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showScreenRecord", checked)
+            }
+
+            SettingsSwitch {
+                visible: Config.options?.waffles?.widgetsPanel?.showQuickActions ?? true
+                buttonIcon: "power_settings_new"
+                text: Translation.tr("Session shortcut")
+                checked: Config.options?.waffles?.widgetsPanel?.showSession ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showSession", checked)
+            }
+
+            SettingsSwitch {
+                buttonIcon: "palette"
+                text: Translation.tr("Color Scheme selector")
+                checked: Config.options?.waffles?.widgetsPanel?.showColorScheme ?? true
+                onCheckedChanged: Config.setNestedValue("waffles.widgetsPanel.showColorScheme", checked)
+            }
         }
     }
 }

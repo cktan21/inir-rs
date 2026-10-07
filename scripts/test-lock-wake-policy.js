@@ -16,7 +16,7 @@ function positionHead(src) {
 }
 
 const ii = fs.readFileSync(path.resolve(__dirname, "../modules/lock/LockSurface.qml"), "utf8")
-const waffle = fs.readFileSync(path.resolve(__dirname, "../modules/waffle/lock/WaffleLockSurface.qml"), "utf8")
+const waffle = fs.readFileSync(path.resolve(__dirname, "../modules/lock/waffle/WaffleLockSurface.qml"), "utf8")
 for (const [name, src] of [["ii", ii], ["waffle", waffle]]) {
     const head = positionHead(src)
     assert(head.includes("restoreAfterWake"), `${name} pointer while asleep must restoreAfterWake`)

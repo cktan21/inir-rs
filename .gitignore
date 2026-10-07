@@ -117,6 +117,10 @@ node_modules/
 *.qmlc
 *.jsc
 
+# Cargo output for the rust/ contract crate. Cargo.lock is kept: the backend
+# plan pins build dependencies, so the lockfile is part of the contract.
+rust/target/
+
 # ── Logs / Debug / Temp ──────────────────────────────────────
 *.log
 *.tmp

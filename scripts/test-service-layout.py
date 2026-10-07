@@ -12,7 +12,7 @@ REGISTRATION = re.compile(
     r"^(?:(singleton)\s+)?([A-Z]\w*)\s+(\d+\.\d+)\s+(\S+\.qml)\s*$", re.M
 )
 DOMAIN_TYPES = {
-    "network": ("Network", "Vpn", "BluetoothStatus"),
+    "network": ("Network", "Vpn", "BluetoothStatus", "Hotspot"),
     "compositor": (
         "CompositorService",
         "NiriService",

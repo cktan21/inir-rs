@@ -20,10 +20,27 @@ bash -n \
     "$runtime_root/scripts/inir" \
     "$runtime_root/sdata/lib/"*.sh \
     "$runtime_root/sdata/subcmd-install/"*.sh \
-    "$runtime_root/sdata/migrations/"*.sh
+    "$runtime_root/sdata/migrations/"*.sh \
+    "$runtime_root/scripts/colors/"*.sh \
+    "$runtime_root/scripts/colors/lib/"*.sh \
+    "$runtime_root/scripts/colors/modules/"*.sh \
+    "$runtime_root/scripts/colors/random/"*.sh
 
 step "service module layout"
 python3 -B "$runtime_root/scripts/test-service-layout.py"
+
+step "backend boundary"
+python3 -B "$runtime_root/scripts/test-backend-boundary.py"
+
+step "rust service contract"
+python3 -B "$runtime_root/scripts/test-rust-contract.py"
+# The contract check above is pure parsing and always runs. Compiling it needs a
+# Rust toolchain, so that stays opt-in rather than a hard requirement for a
+# shell-only checkout.
+if command -v cargo &>/dev/null && [[ "${INIR_BUILD_RUST:-0}" == "1" ]]; then
+    step "rust contract compiles"
+    cargo build --manifest-path "$runtime_root/rust/Cargo.toml" --locked
+fi
 
 step "session tray ordering"
 service_unit="$runtime_root/assets/systemd/inir.service"
@@ -131,8 +148,8 @@ if ! grep -Fq 'Lock IPC was unavailable before sleep and no fallback could secur
 fi
 for lock_surface in \
         "$runtime_root/modules/lock/LockSurface.qml" \
-        "$runtime_root/modules/waffle/lock/WaffleLockSurface.qml" \
-        "$runtime_root/modules/waffle/lock/WaffleLockSurfaceSafe.qml"; do
+        "$runtime_root/modules/lock/waffle/WaffleLockSurface.qml" \
+        "$runtime_root/modules/lock/waffle/WaffleLockSurfaceSafe.qml"; do
     if grep -Fq 'readonly property int imgStatus: avatarImage.status' "$lock_surface"; then
         printf 'FAIL: lock avatar retry still mutates its source from a synchronous status binding: %s\n' "$lock_surface" >&2
         exit 1
@@ -451,7 +468,7 @@ root = pathlib.Path(sys.argv[1])
 with (root / "defaults/config.json").open(encoding="utf-8") as handle:
     config = json.load(handle)
 schema = (root / "modules/common/Config.qml").read_text(encoding="utf-8")
-wizard = (root / "welcome.qml").read_text(encoding="utf-8")
+wizard = (root / "modules/welcome/WelcomeApp.qml").read_text(encoding="utf-8")
 iris_background = (root / "modules/iris/background/IrisBackground.qml").read_text(encoding="utf-8")
 iris_panels = (root / "modules/iris/ShellIrisPanelsImpl.qml").read_text(encoding="utf-8")
 bar_settings = (root / "modules/settings/BarConfig.qml").read_text(encoding="utf-8")
@@ -1268,7 +1285,6 @@ cava_wrapper="$runtime_root/modules/common/widgets/CavaProcess.qml"
 visualizer_layer="$runtime_root/modules/common/widgets/AudioVisualizerLayer.qml"
 pill_music_bars="$runtime_root/modules/pill/MusicBars.qml"
 quick_config="$runtime_root/modules/settings/QuickConfig.qml"
-waffle_general="$runtime_root/modules/waffle/settings/pages/WGeneralPage.qml"
 
 mascot_pack_nix="$runtime_root/nix/mascot-pack.nix"
 mascot_package_nix="$runtime_root/nix/mascot-package.nix"
@@ -1289,7 +1305,7 @@ if ! grep -Fq 'property bool disableVisualizers: true' "$config_qml" \
         || ! grep -Fq '!GameMode.visualizersSuppressed' "$visualizer_layer" \
         || ! grep -Fq 'CavaProcess {' "$pill_music_bars" \
         || ! grep -Fq 'gameMode.disableVisualizers' "$quick_config" \
-        || ! grep -Fq 'gameMode.disableVisualizers' "$waffle_general"; then
+; then
     printf 'FAIL: Game Mode does not suppress shared Cava/render consumers through Settings policy\n' >&2
     exit 1
 fi

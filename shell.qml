@@ -609,7 +609,6 @@ ShellRoot {
     }
 
     // IPC for settings - overlay mode or separate window based on config
-    // Note: waffle family ALWAYS uses its own window (waffleSettings.qml), never the Material overlay
     IpcHandler {
         target: "settings"
         function open(): void {
@@ -622,24 +621,30 @@ ShellRoot {
             Config.setNestedValue("settingsUi.overlayMode", true)
             GlobalStates.settingsOverlayOpen = true
         }
-        function openOverlayAt(index: int): void {
-            if (index >= 0)
-                GlobalStates.settingsOverlayRequestedPage = index
+        function openOverlayAt(target: var): void {
+            const idx = SettingsPageRegistry.indexForKey(target)
+            const resolved = idx >= 0 ? idx : (typeof target === "number" ? target : -1)
+            if (resolved >= 0)
+                GlobalStates.settingsOverlayRequestedPage = resolved
             Config.setNestedValue("settingsUi.overlayMode", true)
             GlobalStates.settingsOverlayOpen = true
         }
-        function openWindowAt(index: int): void {
+        function openWindowAt(target: var): void {
+            const idx = SettingsPageRegistry.indexForKey(target)
+            const resolved = idx >= 0 ? idx : (typeof target === "number" ? target : -1)
             const args = ["/usr/bin/env"]
-            if (index >= 0)
-                args.push(`QS_SETTINGS_PAGE=${index}`)
+            if (resolved >= 0)
+                args.push(`QS_SETTINGS_PAGE=${resolved}`)
             args.push(Quickshell.shellPath("scripts/inir"), "settings-window")
             Quickshell.execDetached(args)
             Config.setNestedValue("settingsUi.overlayMode", false)
             GlobalStates.settingsOverlayOpen = false
         }
-        function setOverlayStyle(style: string, index: int): void {
-            if (index >= 0)
-                GlobalStates.settingsOverlayRequestedPage = index
+        function setOverlayStyle(style: string, target: var): void {
+            const idx = SettingsPageRegistry.indexForKey(target)
+            const resolved = idx >= 0 ? idx : (typeof target === "number" ? target : -1)
+            if (resolved >= 0)
+                GlobalStates.settingsOverlayRequestedPage = resolved
             Config.setNestedValues({
                 "settingsUi.overlayMode": true,
                 "settingsUi.overlayStyle": style
@@ -656,11 +661,11 @@ ShellRoot {
     // none, is loaded.
     IpcHandler {
         target: "settingsNav"
-        function page(index: int): void {
-            GlobalStates.openSettingsPage(index)
+        function page(target: var): void {
+            GlobalStates.openSettingsPage(target)
         }
-        function section(index: int, name: string): void {
-            GlobalStates.openSettingsPage(index, name)
+        function section(target: var, name: string): void {
+            GlobalStates.openSettingsPage(target, name)
         }
         function count(): int { return SettingsPageRegistry.pages.length }
         function current(): int { return GlobalStates.settingsOverlayCurrentPage }
@@ -857,7 +862,7 @@ ShellRoot {
             && (Config.options?.panelFamily ?? "ii") === "ii"
         loading: enabled
         activeAsync: enabled
-        source: "ShellIiPanels.qml"
+        source: "modules/ii/ShellIiPanels.qml"
     }
 
     LazyLoader {
@@ -872,7 +877,7 @@ ShellRoot {
             && (Config.options?.panelFamily ?? "ii") === "waffle"
         loading: enabled
         activeAsync: enabled
-        source: "ShellWafflePanels.qml"
+        source: "modules/waffle/ShellWafflePanels.qml"
     }
 
     LazyLoader {
@@ -887,7 +892,7 @@ ShellRoot {
             && (Config.options?.panelFamily ?? "ii") === "iris"
         loading: enabled
         activeAsync: enabled
-        source: "ShellIrisPanels.qml"
+        source: "modules/iris/ShellIrisPanels.qml"
     }
 
     // Close confirmation dialog (always loaded, handles IPC)
@@ -1030,7 +1035,7 @@ ShellRoot {
     Loader {
         active: Config.ready
             && (GlobalStates.familyTransitionActive || root._transitionInProgress)
-        source: "FamilyTransitionOverlay.qml"
+        source: "modules/common/FamilyTransitionOverlay.qml"
         onLoaded: {
             item.exitComplete.connect(root.applyPendingFamily)
             item.enterComplete.connect(root.finishFamilyTransition)
