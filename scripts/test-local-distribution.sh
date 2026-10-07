@@ -32,6 +32,16 @@ python3 -B "$runtime_root/scripts/test-service-layout.py"
 step "backend boundary"
 python3 -B "$runtime_root/scripts/test-backend-boundary.py"
 
+step "rust service contract"
+python3 -B "$runtime_root/scripts/test-rust-contract.py"
+# The contract check above is pure parsing and always runs. Compiling it needs a
+# Rust toolchain, so that stays opt-in rather than a hard requirement for a
+# shell-only checkout.
+if command -v cargo &>/dev/null && [[ "${INIR_BUILD_RUST:-0}" == "1" ]]; then
+    step "rust contract compiles"
+    cargo build --manifest-path "$runtime_root/rust/Cargo.toml" --locked
+fi
+
 step "session tray ordering"
 service_unit="$runtime_root/assets/systemd/inir.service"
 if ! grep -qx 'Type=dbus' "$service_unit" \
