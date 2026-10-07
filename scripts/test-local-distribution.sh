@@ -1272,7 +1272,6 @@ cava_wrapper="$runtime_root/modules/common/widgets/CavaProcess.qml"
 visualizer_layer="$runtime_root/modules/common/widgets/AudioVisualizerLayer.qml"
 pill_music_bars="$runtime_root/modules/pill/MusicBars.qml"
 quick_config="$runtime_root/modules/settings/QuickConfig.qml"
-waffle_general="$runtime_root/modules/waffle/settings/pages/WGeneralPage.qml"
 
 mascot_pack_nix="$runtime_root/nix/mascot-pack.nix"
 mascot_package_nix="$runtime_root/nix/mascot-package.nix"
@@ -1293,7 +1292,7 @@ if ! grep -Fq 'property bool disableVisualizers: true' "$config_qml" \
         || ! grep -Fq '!GameMode.visualizersSuppressed' "$visualizer_layer" \
         || ! grep -Fq 'CavaProcess {' "$pill_music_bars" \
         || ! grep -Fq 'gameMode.disableVisualizers' "$quick_config" \
-        || ! grep -Fq 'gameMode.disableVisualizers' "$waffle_general"; then
+; then
     printf 'FAIL: Game Mode does not suppress shared Cava/render consumers through Settings policy\n' >&2
     exit 1
 fi

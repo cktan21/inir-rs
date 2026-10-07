@@ -2006,4 +2006,34 @@ Singleton {
         _staticSearchIndex = merged
         return _staticSearchIndex
     }
+    function indexForKey(target): int {
+        if (typeof target === "number") {
+            const num = Math.round(target)
+            return (num >= 0 && num < root.pages.length) ? num : -1
+        }
+        if (typeof target !== "string") return -1
+        const raw = target.trim().toLowerCase()
+        if (!raw) return -1
+        const byKey = root.pages.findIndex(p => (p.key ?? "").toLowerCase() === raw)
+        if (byKey !== -1) return byKey
+        const aliases = {
+            "appearance": "themes",
+            "sound": "system",
+            "audio": "system",
+            "niri": "compositor",
+            "waffle": "waffle-style",
+            "waffles": "waffle-style",
+            "style": "themes",
+            "theme": "themes",
+            "widget": "widgets",
+            "monitor": "monitors",
+            "display": "monitors"
+        }
+        if (aliases[raw]) {
+            const aliasedIndex = root.pages.findIndex(p => (p.key ?? "").toLowerCase() === aliases[raw])
+            if (aliasedIndex !== -1) return aliasedIndex
+        }
+        return root.pages.findIndex(p => (p.name ?? "").toLowerCase() === raw)
+    }
+
 }
