@@ -140,4 +140,103 @@ Singleton {
     }
 
     Component.onCompleted: root.refresh()
+
+    // ── Persistent shared-AP profile ──
+    // The link pill keeps its own always-saved AP profile instead of the one-shot
+    // `nmcli dev wifi hotspot` above: it lets the user edit the name and password
+    // in place and reads both back out of NetworkManager, which needs a profile
+    // that survives being brought down. Kept as a second profile rather than
+    // merged into `connectionName` so existing saved APs keep working.
+    readonly property string apConnectionName: "RicelinHotspot"
+    property bool apActive: false
+    property bool apBusy: false
+    property string apSsid: "Ricelin"
+    property string apPassword: ""
+
+    /**
+     * Brings the shared AP up with `ssid`/`password`, creating the profile on
+     * first use and modifying it afterwards. Values are passed as positional
+     * arguments, never spliced into the shell string, so an odd character can
+     * neither break nor inject the command. Passwords shorter than the WPA2
+     * minimum of 8 characters are rejected.
+     */
+    function applyAp(ssid: string, password: string, iface: string): void {
+        if (root.apBusy || password.length < 8)
+            return;
+        root.apBusy = true;
+        apApplyProc.command = ["sh", "-c",
+            'c="$4"; '
+            + 'if nmcli -t connection show "$c" >/dev/null 2>&1; then '
+            +   'nmcli connection modify "$c" 802-11-wireless.ssid "$1" 802-11-wireless-security.key-mgmt wpa-psk 802-11-wireless-security.psk "$2"; '
+            + 'else '
+            +   'nmcli connection add type wifi ifname "$3" con-name "$c" autoconnect no 802-11-wireless.ssid "$1" 802-11-wireless.mode ap 802-11-wireless-security.key-mgmt wpa-psk 802-11-wireless-security.psk "$2" ipv4.method shared; '
+            + 'fi; '
+            + 'nmcli connection up "$c"',
+            "sh", ssid, password, iface, root.apConnectionName];
+        apApplyProc.running = true;
+    }
+
+    function stopAp(): void {
+        if (root.apBusy)
+            return;
+        root.apBusy = true;
+        apDownProc.running = true;
+    }
+
+    function refreshAp(): void {
+        apStateProc.running = true;
+        apReadProc.running = true;
+    }
+
+    /** Eight characters from an alphabet with no look-alikes, for a first-run AP password. */
+    function generateApPassword(): string {
+        const cs = "abcdefghijkmnpqrstuvwxyz23456789";
+        let s = "";
+        for (let i = 0; i < 8; i++)
+            s += cs.charAt(Math.floor(Math.random() * cs.length));
+        return s;
+    }
+
+    Process {
+        id: apApplyProc
+        onExited: {
+            root.apBusy = false;
+            root.refreshAp();
+        }
+    }
+
+    Process {
+        id: apDownProc
+        command: ["nmcli", "connection", "down", root.apConnectionName]
+        onExited: {
+            root.apBusy = false;
+            root.refreshAp();
+        }
+    }
+
+    Process {
+        id: apStateProc
+        command: ["sh", "-c", "nmcli -t -f NAME connection show --active | grep -qx \"$1\" && echo on || echo off",
+            "sh", root.apConnectionName]
+        stdout: StdioCollector {
+            id: apStateCollector
+            onStreamFinished: root.apActive = apStateCollector.text.trim() === "on"
+        }
+    }
+
+    Process {
+        id: apReadProc
+        command: ["nmcli", "-t", "-s", "-g", "802-11-wireless.ssid,802-11-wireless-security.psk",
+            "connection", "show", root.apConnectionName]
+        stdout: StdioCollector {
+            id: apReadCollector
+            onStreamFinished: {
+                const lines = apReadCollector.text.split("\n");
+                if (lines.length >= 1 && lines[0].length)
+                    root.apSsid = lines[0];
+                if (lines.length >= 2 && lines[1].length)
+                    root.apPassword = lines[1];
+            }
+        }
+    }
 }

@@ -3,17 +3,17 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-import Quickshell.Io
 import Quickshell.Networking
 import qs.modules.common
 import qs.services
 
 /**
  * WLAN drill-in for the link surface: back chevron, wifi enable toggle and the
- * live network list sorted by signal strength. Security and known-profile
- * ground truth come from nmcli; clicking a secured unknown network expands an
- * inline password row that connects through `nmcli dev wifi connect`. The pill
- * body provides the surface material, so this item draws no background.
+ * live network list sorted by signal strength. Security, known-profile ground
+ * truth, saved secrets and the shared AP all come from Network and Hotspot in
+ * qs.services; clicking a secured unknown network expands an inline password
+ * row that connects through them. The pill body provides the surface material,
+ * so this item draws no background.
  */
 Item {
     id: root
@@ -34,10 +34,12 @@ Item {
     readonly property string statusText: !wifiOn ? "Off"
         : (activeNet ? (activeNet.name || "Connected") : "Not connected")
 
-    property var securityMap: ({})
-    property var knownProfiles: ({})
+    // Profile metadata, secrets and the hotspot all live in qs.services; these
+    // read-only aliases keep the bindings below reading as local state.
+    readonly property var securityMap: Network.wifiSecurityByName
+    readonly property var knownProfiles: Network.knownWifiProfiles
     property string expandedSsid: ""
-    property bool connecting: false
+    readonly property bool connecting: Network.connectingWithPassword
     property bool connectFailed: false
     property bool scanning: false
 
@@ -47,16 +49,13 @@ Item {
      * to the row the user asked about and lets `revealResolved` distinguish "not
      * yet read" from "read but empty" so an open profile shows a clear message.
      */
-    property string revealedSsid: ""
-    property string revealedPw: ""
-    property bool revealResolved: false
+    readonly property string revealedSsid: Network.revealedProfileSsid
+    readonly property string revealedPw: Network.revealedProfilePassword
+    readonly property bool revealResolved: Network.revealedProfileResolved
 
-    readonly property string hsCon: "RicelinHotspot"
     readonly property string hsIface: wifiDev ? (wifiDev.name || "wlan0") : "wlan0"
-    property string hsName: "Ricelin"
-    property string hsPw: ""
-    property bool hsActive: false
-    property bool hsBusy: false
+    readonly property bool hsActive: Hotspot.apActive
+    readonly property bool hsBusy: Hotspot.apBusy
     property string hsEdit: ""
     property string hsDraft: ""
 
@@ -66,32 +65,15 @@ Item {
      * the delegate's network object under it on a rescan.
      */
     property string pwDraft: ""
-    property string pendingPw: ""
-    property string attemptSsid: ""
-    property bool attemptWasKnown: false
 
     implicitHeight: hsBlock.y + hsBlock.height
 
     function isSecured(ssid) {
-        var sec = securityMap[ssid];
-        return sec !== undefined && sec !== "" && sec !== "--";
+        return Network.isSsidSecured(ssid);
     }
 
     function refresh() {
-        secProc.running = true;
-        profProc.running = true;
-    }
-
-    /**
-     * Splits one `nmcli -t` line at its last unescaped colon and unescapes the
-     * leading field. Returns null for lines without a field separator.
-     */
-    function splitTerse(line) {
-        for (var k = line.length - 1; k >= 0; k--) {
-            if (line[k] === ":" && (k === 0 || line[k - 1] !== "\\"))
-                return { head: line.slice(0, k).replace(/\\:/g, ":"), tail: line.slice(k + 1) };
-        }
-        return null;
+        Network.refreshProfileMetadata();
     }
 
     /**
@@ -148,65 +130,47 @@ Item {
         refresh();
     }
 
-    /**
-     * Drops the saved connection profile for `ssid`. The SSID is passed as its
-     * own argv element so an odd character can neither break nor inject the
-     * command. The list refreshes once nmcli exits.
-     */
+    /** Drops the saved profile and closes the row; Network refreshes the list. */
     function forgetNetwork(ssid) {
-        if (forgetProc.running || !ssid.length)
-            return;
-        expandedSsid = "";
-        forgetProc.command = ["nmcli", "connection", "delete", "id", ssid];
-        forgetProc.running = true;
-    }
-
-    /**
-     * Reveals the stored password of a saved profile, or hides it again if the
-     * same row is already showing. NetworkManager lets the owning user read their
-     * own saved secret without root, so this runs unprivileged. The SSID is
-     * passed as its own argv element so an odd character can neither break nor
-     * inject the command.
-     */
-    function revealPassword(ssid) {
         if (!ssid.length)
             return;
-        if (revealedSsid === ssid) {
-            hidePassword();
-            return;
-        }
-        revealedSsid = ssid;
-        revealedPw = "";
-        revealResolved = false;
-        revealProc.command = ["nmcli", "-s", "-g", "802-11-wireless-security.psk", "connection", "show", "id", ssid];
-        revealProc.running = true;
+        expandedSsid = "";
+        Network.forgetProfile(ssid);
+    }
+
+    /** Shows the saved password for `ssid`, or hides it if that row already shows it. */
+    function revealPassword(ssid) {
+        Network.revealProfilePassword(ssid);
     }
 
     function hidePassword() {
-        revealedSsid = "";
-        revealedPw = "";
-        revealResolved = false;
+        Network.hideProfilePassword();
     }
 
-    /**
-     * Connects via `nmcli --ask`, feeding the password through stdin so the
-     * secret never appears in the process command line (`/proc/<pid>/cmdline`
-     * is world-readable for the whole connection attempt).
-     */
     function connectWithPassword(ssid, pw) {
-        if (connProc.running || !pw.length)
+        if (!pw.length)
             return;
-        connecting = true;
         connectFailed = false;
-        attemptSsid = ssid;
-        attemptWasKnown = knownProfiles[ssid] === true;
-        pendingPw = pw;
-        connProc.command = ["nmcli", "--ask", "dev", "wifi", "connect", ssid];
-        connProc.running = true;
+        Network.connectWithPassword(ssid, pw);
+    }
+
+    // Network owns the attempt and its cleanup; this only moves the row out of
+    // its asking state, or leaves it up with the failure note showing.
+    Connections {
+        target: Network
+        function onConnectWithPasswordFinished(ssid: string, ok: bool): void {
+            if (ok) {
+                root.expandedSsid = "";
+                root.pwDraft = "";
+                root.connectFailed = false;
+            } else {
+                root.connectFailed = true;
+            }
+        }
     }
 
     /**
-     * Reload pulse: forces a fresh nmcli rescan and spins the control for up to
+     * Reload pulse: forces a fresh rescan and spins the control for up to
      * 10s. The device scanner already runs while the drill-in is open, so the
      * list never empties; this only refreshes results and drives the spinner.
      */
@@ -214,7 +178,7 @@ Item {
         if (!wifiOn)
             return;
         scanning = true;
-        rescanProc.running = true;
+        Network.rescanWifiDevice();
         scanTimer.restart();
     }
 
@@ -253,43 +217,16 @@ Item {
         onTriggered: root.stopScan()
     }
 
-    Process {
-        id: rescanProc
-        command: ["nmcli", "dev", "wifi", "rescan"]
-    }
-
-    /**
-     * Brings the shared AP up with the current name and password, creating the
-     * persistent connection on first use and modifying it on later changes. Name
-     * and password are passed as positional arguments, never spliced into the
-     * shell string, so an odd character cannot break or inject the command.
-     */
     function applyHotspot() {
-        if (hsBusy || hsPw.length < 8)
-            return;
-        hsBusy = true;
-        hsApplyProc.command = ["sh", "-c",
-            'c="' + hsCon + '"; '
-            + 'if nmcli -t connection show "$c" >/dev/null 2>&1; then '
-            +   'nmcli connection modify "$c" 802-11-wireless.ssid "$1" 802-11-wireless-security.key-mgmt wpa-psk 802-11-wireless-security.psk "$2"; '
-            + 'else '
-            +   'nmcli connection add type wifi ifname "$3" con-name "$c" autoconnect no 802-11-wireless.ssid "$1" 802-11-wireless.mode ap 802-11-wireless-security.key-mgmt wpa-psk 802-11-wireless-security.psk "$2" ipv4.method shared; '
-            + 'fi; '
-            + 'nmcli connection up "$c"',
-            "sh", hsName, hsPw, hsIface];
-        hsApplyProc.running = true;
+        Hotspot.applyAp(Hotspot.apSsid, Hotspot.apPassword, hsIface);
     }
 
     function stopHotspot() {
-        if (hsBusy)
-            return;
-        hsBusy = true;
-        hsDownProc.running = true;
+        Hotspot.stopAp();
     }
 
     function refreshHotspot() {
-        hsStateProc.running = true;
-        hsReadProc.running = true;
+        Hotspot.refreshAp();
     }
 
     /**
@@ -300,161 +237,14 @@ Item {
     function commitHotspotEdit() {
         if (hsEdit === "name") {
             if (hsDraft.length)
-                hsName = hsDraft;
+                Hotspot.apSsid = hsDraft;
         } else if (hsEdit === "pw") {
             if (hsDraft.length >= 8)
-                hsPw = hsDraft;
+                Hotspot.apPassword = hsDraft;
         }
         hsEdit = "";
         if (hsActive)
             applyHotspot();
-    }
-
-    /**
-     * Builds an eight-character WPA2 password from an unambiguous alphabet, used
-     * when the hotspot is switched on before a password has been set.
-     */
-    function generatePw() {
-        var cs = "abcdefghijkmnpqrstuvwxyz23456789";
-        var s = "";
-        for (var i = 0; i < 8; i++)
-            s += cs.charAt(Math.floor(Math.random() * cs.length));
-        return s;
-    }
-
-    Process {
-        id: hsApplyProc
-        onExited: {
-            root.hsBusy = false;
-            root.refreshHotspot();
-        }
-    }
-
-    Process {
-        id: hsDownProc
-        command: ["nmcli", "connection", "down", root.hsCon]
-        onExited: {
-            root.hsBusy = false;
-            root.refreshHotspot();
-        }
-    }
-
-    Process {
-        id: hsStateProc
-        command: ["sh", "-c", "nmcli -t -f NAME connection show --active | grep -qx \"$1\" && echo on || echo off", "sh", root.hsCon]
-        stdout: StdioCollector {
-            onStreamFinished: root.hsActive = this.text.trim() === "on"
-        }
-    }
-
-    Process {
-        id: hsReadProc
-        command: ["nmcli", "-t", "-s", "-g", "802-11-wireless.ssid,802-11-wireless-security.psk", "connection", "show", root.hsCon]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                var lines = this.text.split("\n");
-                if (lines.length >= 1 && lines[0].length)
-                    root.hsName = lines[0];
-                if (lines.length >= 2 && lines[1].length)
-                    root.hsPw = lines[1];
-            }
-        }
-    }
-
-    Process {
-        id: secProc
-        command: ["nmcli", "-t", "-f", "SSID,SECURITY", "dev", "wifi", "list"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                var map = {};
-                var lines = this.text.split("\n");
-                for (var i = 0; i < lines.length; i++) {
-                    if (!lines[i].length)
-                        continue;
-                    var parts = root.splitTerse(lines[i]);
-                    if (parts && parts.head.length)
-                        map[parts.head] = parts.tail;
-                }
-                root.securityMap = map;
-            }
-        }
-    }
-
-    Process {
-        id: profProc
-        command: ["nmcli", "-t", "-f", "NAME,TYPE", "connection", "show"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                var set = {};
-                var lines = this.text.split("\n");
-                for (var i = 0; i < lines.length; i++) {
-                    var parts = root.splitTerse(lines[i]);
-                    if (parts && parts.head.length && parts.tail === "802-11-wireless")
-                        set[parts.head] = true;
-                }
-                root.knownProfiles = set;
-            }
-        }
-    }
-
-    Process {
-        id: connProc
-        stdinEnabled: true
-        stdout: StdioCollector {}
-        stderr: StdioCollector {}
-        onStarted: {
-            write(root.pendingPw + "\n");
-            root.pendingPw = "";
-        }
-        onExited: function(exitCode) {
-            root.connecting = false;
-            if (exitCode === 0) {
-                root.expandedSsid = "";
-                root.pwDraft = "";
-                root.connectFailed = false;
-                root.refresh();
-            } else {
-                root.connectFailed = true;
-                if (!root.attemptWasKnown && root.attemptSsid.length) {
-                    cleanupProc.command = ["nmcli", "connection", "delete", "id", root.attemptSsid];
-                    cleanupProc.running = true;
-                }
-            }
-        }
-    }
-
-    /**
-     * A failed `nmcli dev wifi connect` still leaves a connection profile
-     * named after the SSID behind; without deleting it the network would be
-     * treated as known on the next click and silently fail forever.
-     */
-    Process {
-        id: cleanupProc
-        onExited: root.refresh()
-    }
-
-    /**
-     * Drops a saved profile on Forget. The list refreshes on exit so the row
-     * loses its known/connected state and its lock falls back to dim.
-     */
-    Process {
-        id: forgetProc
-        onExited: root.refresh()
-    }
-
-    /**
-     * Reads one saved profile's PSK on demand. The result is held only as long as
-     * the row stays open; an empty result means the profile is open or stores no
-     * recoverable secret, surfaced by the row as a plain note.
-     */
-    Process {
-        id: revealProc
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.revealedPw = this.text.replace(/\n+$/, "");
-                root.revealResolved = true;
-            }
-        }
     }
 
     onNetsChanged: if (active) secRefresh.restart()
@@ -462,7 +252,7 @@ Item {
     Timer {
         id: secRefresh
         interval: 1200
-        onTriggered: if (root.active) secProc.running = true
+        onTriggered: if (root.active) Network.refreshProfileMetadata()
     }
 
     /**
@@ -1125,8 +915,8 @@ Item {
                         if (root.hsActive) {
                             root.stopHotspot();
                         } else {
-                            if (root.hsPw.length < 8)
-                                root.hsPw = root.generatePw();
+                            if (Hotspot.apPassword.length < 8)
+                                Hotspot.apPassword = Hotspot.generateApPassword();
                             root.applyHotspot();
                         }
                     }
@@ -1136,13 +926,13 @@ Item {
             CredRow {
                 field: "name"
                 label: Translation.tr("Network")
-                value: root.hsName
+                value: Hotspot.apSsid
             }
 
             CredRow {
                 field: "pw"
                 label: Translation.tr("Password")
-                value: root.hsPw
+                value: Hotspot.apPassword
                 secret: true
             }
         }

@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import Quickshell.Io
 import Quickshell.Bluetooth
 import qs.modules.common
 import qs.services
@@ -9,9 +8,9 @@ import qs.services
 /**
  * Bluetooth drill-in for the link surface: back chevron, scan with 25s
  * auto-stop, adapter toggle, live device list. Known devices use the
- * Quickshell connect/disconnect calls; unpaired devices run a bluetoothctl
- * pair-trust-connect flow with an inline ember while running and a transient
- * failure line.
+ * Quickshell connect/disconnect calls; unpaired devices go through
+ * BluetoothStatus's pair-trust-connect flow, with an inline ember while running
+ * and a transient failure line.
  */
 Item {
     id: root
@@ -42,7 +41,7 @@ Item {
     })
     readonly property bool discovering: adapter ? adapter.discovering === true : false
 
-    property string pairingAddress: ""
+    readonly property string pairingAddress: BluetoothStatus.pairingAddress
     property string failedAddress: ""
 
     /**
@@ -77,7 +76,7 @@ Item {
     /**
      * Click dispatch for a device row. A connected or paired device toggles
      * the inline confirm row rather than acting at once; an unpaired device
-     * runs the bluetoothctl pair-trust-connect flow.
+     * runs the pair-trust-connect flow in BluetoothStatus.
      */
     function activateDevice(d) {
         if (!d)
@@ -114,14 +113,10 @@ Item {
     }
 
     function pairDevice(d) {
-        if (!d || !d.address || pairProc.running)
+        if (!d || !d.address)
             return;
-        pairingAddress = d.address;
         failedAddress = "";
-        pairProc.command = ["sh", "-c",
-            'timeout 30 bluetoothctl pair "$1" && bluetoothctl trust "$1" && timeout 30 bluetoothctl connect "$1"',
-            "sh", d.address];
-        pairProc.running = true;
+        BluetoothStatus.pairDevice(d.address);
     }
 
     onActiveChanged: {
@@ -147,17 +142,13 @@ Item {
         onTriggered: root.failedAddress = ""
     }
 
-    Process {
-        id: pairProc
-        stdout: StdioCollector {}
-        stderr: StdioCollector {}
-        onExited: function(exitCode) {
-            var addr = root.pairingAddress;
-            root.pairingAddress = "";
-            if (exitCode !== 0) {
-                root.failedAddress = addr;
-                failTimer.restart();
-            }
+    Connections {
+        target: BluetoothStatus
+        function onPairFinished(address: string, ok: bool): void {
+            if (ok)
+                return;
+            root.failedAddress = address;
+            failTimer.restart();
         }
     }
 
