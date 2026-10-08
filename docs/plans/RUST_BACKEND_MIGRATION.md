@@ -4,6 +4,9 @@
 
 This plan defines the architectural migration of iNiR's backend to compiled Rust and the overhaul of its settings system.
 
+Implementation progress and outstanding acceptance checks are recorded in
+[RUST_BACKEND_MIGRATION_STATUS.md](RUST_BACKEND_MIGRATION_STATUS.md).
+
 **The Rust backend rewrite is mandatory.** iNiR's current architecture relies heavily on shell subprocesses (`nmcli`, `cat /sys`, CLI utilities), ad-hoc JavaScript state reducers, and loose QML singletons that generate unnecessary wakeups, CPU churn, and process forks.
 
 The core mission is:

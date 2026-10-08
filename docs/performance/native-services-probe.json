@@ -1,0 +1,78 @@
+{
+  "capturedAt": "2026-10-08T01:33:11.318308+00:00",
+  "mode": "read-only native core probe",
+  "desktop": "Plasma/Wayland; no Quickshell or Niri session",
+  "observations": {
+    "audio": {
+      "defaultSinkObserved": true,
+      "nodes": 5,
+      "status": {
+        "error": "",
+        "ready": true
+      },
+      "volumeNodes": 5
+    },
+    "battery": {
+      "available": false,
+      "percentage": 0.0,
+      "status": {
+        "error": "",
+        "ready": true
+      }
+    },
+    "bluetooth": {
+      "adapters": 1,
+      "devices": 1,
+      "status": {
+        "error": "",
+        "ready": true
+      }
+    },
+    "brightness": {
+      "devices": 0,
+      "status": {
+        "error": "",
+        "ready": true
+      }
+    },
+    "media": {
+      "players": 2,
+      "status": {
+        "error": "",
+        "ready": true
+      }
+    },
+    "network": {
+      "accessPoints": 1,
+      "connectivity": 4,
+      "status": {
+        "error": "",
+        "ready": true
+      }
+    },
+    "niri": {
+      "status": {
+        "error": "NIRI_SOCKET is unset",
+        "ready": false
+      },
+      "windows": 0
+    },
+    "power": {
+      "profile": "performance",
+      "profiles": [
+        "power-saver",
+        "balanced",
+        "performance"
+      ],
+      "status": {
+        "error": "",
+        "ready": true
+      }
+    }
+  },
+  "limits": [
+    "No radio, connection, Bluetooth, power-profile, audio, playback or brightness commands were issued.",
+    "This machine has no battery or backlight device.",
+    "Full Quickshell/Niri parity and cross-layout performance gates remain open."
+  ]
+}
