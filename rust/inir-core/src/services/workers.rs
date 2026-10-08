@@ -17,7 +17,7 @@ pub struct Request {
 
 async fn update(bus: &Connection, domain: &str, events: &mpsc::Sender<Event>) {
     macro_rules! snapshot {
-        ($function:expr, $variant:ident, $state:ty) => {
+        ($function:expr, $variant:ident, $state:ty) => {{
             let start = std::time::Instant::now();
             let result = tokio::time::timeout(Duration::from_secs(8), $function).await;
             let elapsed = start.elapsed();
@@ -33,7 +33,7 @@ async fn update(bus: &Connection, domain: &str, events: &mpsc::Sender<Event>) {
                     Event::$variant(state)
                 }
             }
-        };
+        }};
     }
     let event = match domain {
         "network" => snapshot!(network::snapshot(bus), Network, NetworkState),
