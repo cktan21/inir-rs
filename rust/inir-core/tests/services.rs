@@ -136,6 +136,75 @@ fn niri_focus_close_urgency_and_stale_workspace_updates() {
     assert_eq!(engine.snapshot().windows.len(), 1);
 }
 
+#[derive(Debug, zbus::DBusError)]
+#[zbus(prefix = "org.freedesktop.login1")]
+enum LoginError {
+    NoSessionForPID(String),
+}
+
+struct LoginManager(bool);
+#[zbus::interface(name = "org.freedesktop.login1.Manager")]
+impl LoginManager {
+    #[zbus(name = "GetSessionByPID")]
+    fn get_session_by_pid(&self, _pid: u32) -> Result<OwnedObjectPath, LoginError> {
+        if self.0 {
+            Ok(OwnedObjectPath::try_from("/session/direct").unwrap())
+        } else {
+            Err(LoginError::NoSessionForPID("user service".into()))
+        }
+    }
+    fn get_user(&self, uid: u32) -> OwnedObjectPath {
+        assert_eq!(uid, unsafe { libc::geteuid() });
+        OwnedObjectPath::try_from("/user/current").unwrap()
+    }
+}
+
+struct LoginUser(bool);
+#[zbus::interface(name = "org.freedesktop.login1.User")]
+impl LoginUser {
+    #[zbus(property)]
+    fn display(&self) -> (String, OwnedObjectPath) {
+        if self.0 {
+            (
+                "2".into(),
+                OwnedObjectPath::try_from("/session/display").unwrap(),
+            )
+        } else {
+            (String::new(), OwnedObjectPath::try_from("/").unwrap())
+        }
+    }
+}
+
+#[tokio::test]
+async fn backlight_resolves_display_session_for_user_services() {
+    for (direct, display, expected) in [
+        (true, true, Some("/session/direct")),
+        (false, true, Some("/session/display")),
+        (false, false, None),
+    ] {
+        let (server, client) = UnixStream::pair().unwrap();
+        let builder = zbus::connection::Builder::unix_stream(server)
+            .server(zbus::Guid::generate())
+            .unwrap()
+            .p2p()
+            .serve_at("/org/freedesktop/login1", LoginManager(direct))
+            .unwrap()
+            .serve_at("/user/current", LoginUser(display))
+            .unwrap();
+        let (server, client) = tokio::join!(
+            builder.build(),
+            zbus::connection::Builder::unix_stream(client).p2p().build()
+        );
+        let _server = server.unwrap();
+        let result = brightness::logind_session(&client.unwrap()).await;
+        if let Some(path) = expected {
+            assert_eq!(result.unwrap().as_str(), path);
+        } else {
+            assert!(result.unwrap_err().contains("no display session"));
+        }
+    }
+}
+
 #[tokio::test]
 async fn niri_stream_and_action_use_separate_sockets() {
     let dir = tempfile::tempdir().unwrap();

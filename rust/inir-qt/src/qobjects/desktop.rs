@@ -215,6 +215,7 @@ impl cxx_qt::Initialize for qobject::DesktopServices {
 
 impl qobject::DesktopServices {
     fn apply(mut self: Pin<&mut Self>, state: DesktopState) {
+        let apply_start = std::time::Instant::now();
         let old = self.rust().last.clone();
         if old.network != state.network {
             self.as_mut()
@@ -385,6 +386,12 @@ impl qobject::DesktopServices {
             self.as_mut().set_niri_ready(state.niri.status.ready);
         }
         self.as_mut().rust_mut().last = state;
+        let apply_duration = apply_start.elapsed();
+        if apply_duration.as_micros() > 100 {
+            tracing::warn!(apply_us = apply_duration.as_micros(), "slow apply call on Qt main thread");
+        } else {
+            tracing::debug!(apply_us = apply_duration.as_micros(), "apply call");
+        }
     }
 
     pub fn set_services_active(mut self: Pin<&mut Self>, active: bool) {

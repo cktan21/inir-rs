@@ -622,7 +622,7 @@ ShellRoot {
             Config.setNestedValue("settingsUi.overlayMode", true)
             GlobalStates.settingsOverlayOpen = true
         }
-        function openOverlayAt(target: var): void {
+        function openOverlayAt(target: string): void {
             const idx = SettingsPageRegistry.indexForKey(target)
             const resolved = idx >= 0 ? idx : (typeof target === "number" ? target : -1)
             if (resolved >= 0)
@@ -630,7 +630,7 @@ ShellRoot {
             Config.setNestedValue("settingsUi.overlayMode", true)
             GlobalStates.settingsOverlayOpen = true
         }
-        function openWindowAt(target: var): void {
+        function openWindowAt(target: string): void {
             const idx = SettingsPageRegistry.indexForKey(target)
             const resolved = idx >= 0 ? idx : (typeof target === "number" ? target : -1)
             const args = ["/usr/bin/env"]
@@ -641,7 +641,7 @@ ShellRoot {
             Config.setNestedValue("settingsUi.overlayMode", false)
             GlobalStates.settingsOverlayOpen = false
         }
-        function setOverlayStyle(style: string, target: var): void {
+        function setOverlayStyle(style: string, target: string): void {
             const idx = SettingsPageRegistry.indexForKey(target)
             const resolved = idx >= 0 ? idx : (typeof target === "number" ? target : -1)
             if (resolved >= 0)
@@ -662,10 +662,10 @@ ShellRoot {
     // none, is loaded.
     IpcHandler {
         target: "settingsNav"
-        function page(target: var): void {
+        function page(target: string): void {
             GlobalStates.openSettingsPage(target)
         }
-        function section(target: var, name: string): void {
+        function section(target: string, name: string): void {
             GlobalStates.openSettingsPage(target, name)
         }
         function count(): int { return SettingsPageRegistry.pages.length }

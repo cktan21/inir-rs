@@ -1648,6 +1648,8 @@ apply_niri_app_environment() {
         value="$(_niri_app_environment_value "$name" "$cfg")"
         [[ -n "$value" ]] && export "${name}=${value}"
     done
+    # Missing optional variables must not abort startup under set -e.
+    return 0
 }
 
 apply_gpu_policy() {

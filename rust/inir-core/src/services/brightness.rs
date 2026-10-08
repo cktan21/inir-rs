@@ -65,6 +65,53 @@ pub fn target(root: &Path, device: &str, value: f64) -> io::Result<(std::path::P
     ))
 }
 
+pub async fn logind_session(
+    bus: &zbus::Connection,
+) -> Result<zbus::zvariant::OwnedObjectPath, String> {
+    let manager = super::dbus::proxy(
+        bus,
+        "org.freedesktop.login1",
+        "/org/freedesktop/login1",
+        "org.freedesktop.login1.Manager",
+    )
+    .await
+    .map_err(|e| e.to_string())?;
+    match manager
+        .call("GetSessionByPID", &(std::process::id(),))
+        .await
+    {
+        Ok(session) => Ok(session),
+        Err(zbus::Error::MethodError(name, _, _))
+            if name.as_str() == "org.freedesktop.login1.NoSessionForPID" =>
+        {
+            // systemd user services are outside login sessions. Resolve only
+            // this user's display session, never an arbitrary system session.
+            let uid = unsafe { libc::geteuid() };
+            let user: zbus::zvariant::OwnedObjectPath = manager
+                .call("GetUser", &(uid,))
+                .await
+                .map_err(|e| e.to_string())?;
+            let user = super::dbus::proxy(
+                bus,
+                "org.freedesktop.login1",
+                user.as_str(),
+                "org.freedesktop.login1.User",
+            )
+            .await
+            .map_err(|e| e.to_string())?;
+            let (id, path): (String, zbus::zvariant::OwnedObjectPath) = user
+                .get_property("Display")
+                .await
+                .map_err(|e| e.to_string())?;
+            if id.is_empty() || path.as_str() == "/" {
+                return Err("no display session for the current user".into());
+            }
+            Ok(path)
+        }
+        Err(e) => Err(e.to_string()),
+    }
+}
+
 pub async fn set(bus: &zbus::Connection, device: &str, value: f64) -> Result<(), String> {
     let device = device.to_string();
     let (path, raw) =
@@ -77,18 +124,7 @@ pub async fn set(bus: &zbus::Connection, device: &str, value: f64) -> Result<(),
     match result {
         Ok(()) => Ok(()),
         Err(e) if e.kind() == io::ErrorKind::PermissionDenied => {
-            let manager = super::dbus::proxy(
-                bus,
-                "org.freedesktop.login1",
-                "/org/freedesktop/login1",
-                "org.freedesktop.login1.Manager",
-            )
-            .await
-            .map_err(|e| e.to_string())?;
-            let session: zbus::zvariant::OwnedObjectPath = manager
-                .call("GetSessionByPID", &(std::process::id(),))
-                .await
-                .map_err(|e| e.to_string())?;
+            let session = logind_session(bus).await?;
             super::dbus::proxy(
                 bus,
                 "org.freedesktop.login1",

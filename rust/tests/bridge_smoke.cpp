@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QPluginLoader>
 #include <QQmlComponent>
 #include <QQmlEngine>
 #include <QTemporaryDir>
@@ -30,6 +31,15 @@ static bool check(bool result, const char *message) {
 int main(int argc, char **argv) {
     QCoreApplication app(argc, argv);
     if (argc != 2) return 2;
+    // Loading the library's constructors alone can register QML types even
+    // when a Rust cdylib has hidden Qt's plugin entry points. Quickshell also
+    // requires a real plugin instance, so exercise that path explicitly.
+    QPluginLoader plugin(QString::fromLocal8Bit(argv[1])
+        + "/qs/services/native/libqs_services_native.so");
+    if (!plugin.instance()) {
+        qCritical() << "Native plugin instance could not load:" << plugin.errorString();
+        return 1;
+    }
     const bool liveServices = qEnvironmentVariableIsSet("INIR_TEST_LIVE_SERVICES");
     QTemporaryDir directory;
     const QString path = directory.filePath("config.json");

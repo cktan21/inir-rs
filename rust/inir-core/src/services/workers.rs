@@ -18,7 +18,11 @@ pub struct Request {
 async fn update(bus: &Connection, domain: &str, events: &mpsc::Sender<Event>) {
     macro_rules! snapshot {
         ($function:expr, $variant:ident, $state:ty) => {
-            match tokio::time::timeout(Duration::from_secs(8), $function).await {
+            let start = std::time::Instant::now();
+            let result = tokio::time::timeout(Duration::from_secs(8), $function).await;
+            let elapsed = start.elapsed();
+            tracing::debug!(domain, elapsed_ms = elapsed.as_millis(), "snapshot update");
+            match result {
                 Ok(Ok(state)) => Event::$variant(state),
                 result => {
                     let mut state = <$state>::default();
@@ -114,7 +118,10 @@ async fn bus_cycle(
                 pending.insert(domain);
             }
             _ = tokio::time::sleep_until(deadline), if !pending.is_empty() => {
-                for domain in std::mem::take(&mut pending) { update(&bus, domain, events).await; }
+                let pending_count = pending.len();
+                let domains: Vec<_> = std::mem::take(&mut pending).into_iter().collect();
+                tracing::debug!(pending_count, domains_str = domains.join(","), "coalesced signal batch");
+                for domain in domains { update(&bus, domain, events).await; }
             }
         }
     }

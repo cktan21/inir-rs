@@ -2014,6 +2014,8 @@ Singleton {
         if (typeof target !== "string") return -1
         const raw = target.trim().toLowerCase()
         if (!raw) return -1
+        // IPC carries page keys and numeric indexes as strings.
+        if (/^\d+$/.test(raw)) return root.indexForKey(Number(raw))
         const byKey = root.pages.findIndex(p => (p.key ?? "").toLowerCase() === raw)
         if (byKey !== -1) return byKey
         const aliases = {
