@@ -1,3 +1,8 @@
+// Phase 1 (efficiency revamp): only Network, Power and Brightness run natively.
+// Audio, Battery, Bluetooth, Media and Niri are served by Quickshell's existing
+// native C++/QML to avoid duplicate subscriptions. The disabled modules remain
+// compiled so later phases can re-enable them with the delta architecture.
+#![allow(dead_code, unused_imports)]
 use super::{audio, bluetooth, brightness, media, network, niri, power};
 use crate::events::Event;
 use futures_util::{stream::SelectAll, StreamExt};
@@ -60,13 +65,12 @@ async fn bus_cycle(
     // Subscribe before initial reads. Paths also cover PropertiesChanged and
     // ObjectManager additions/removals without a per-object subscription storm.
     let paths: &[(&str, &str)] = if session {
-        &[("media", "/org/mpris/MediaPlayer2")]
+        &[] // Phase 1: media handled by Quickshell.Services.Mpris
     } else {
         &[
             ("network", "/org/freedesktop/NetworkManager"),
-            ("bluetooth", "/org/bluez"),
-            ("battery", "/org/freedesktop/UPower"),
             ("power", "/net/hadess/PowerProfiles"),
+            // Phase 1: bluetooth/battery handled by Quickshell C++
         ]
     };
     for (domain, path) in paths {
@@ -90,9 +94,9 @@ async fn bus_cycle(
             .boxed(),
     );
     let domains: &[&str] = if session {
-        &["media"]
+        &[] // Phase 1: no session-bus domains
     } else {
-        &["network", "bluetooth", "battery", "power"]
+        &["network", "power"] // Phase 1: dropped bluetooth, battery
     };
     for domain in domains {
         update(&bus, domain, events).await;
@@ -108,11 +112,10 @@ async fn bus_cycle(
                 let message = message?;
                 if domain == "owner" {
                     let (name, _, _): (String, String, String) = message.body().deserialize()?;
-                    domain = if name == network::SERVICE { "network" } else if name == bluetooth::SERVICE { "bluetooth" }
-                        else if name == power::UPOWER { "battery" } else if name == power::PROFILES || name == "net.hadess.PowerProfiles" { "power" }
-                        else if session && name.starts_with("org.mpris.MediaPlayer2.") { "media" } else { continue };
-                } else if domain == "battery" && message.header().path().is_some_and(|p| p.as_str().starts_with("/org/freedesktop/UPower/PowerProfiles")) {
-                    domain = "power";
+                    // Phase 1: only react to network and power name changes.
+                    domain = if name == network::SERVICE { "network" }
+                        else if name == power::PROFILES || name == "net.hadess.PowerProfiles" { "power" }
+                        else { continue };
                 }
                 if pending.is_empty() { deadline = tokio::time::Instant::now() + Duration::from_millis(50); }
                 pending.insert(domain);
@@ -139,12 +142,9 @@ async fn bus_worker(session: bool, events: mpsc::Sender<Event>, stop: Cancellati
                     let _ = events.send(Event::$variant(state)).await;
                 }};
             }
-            if session {
-                failed!(Media, MediaState);
-            } else {
+            // Phase 1: only network and power are served natively.
+            if !session {
                 failed!(Network, NetworkState);
-                failed!(Bluetooth, BluetoothState);
-                failed!(Battery, BatteryState);
                 failed!(Power, PowerState);
             }
         }
@@ -192,26 +192,21 @@ async fn niri_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
     }
 }
 
-async fn execute(command: Command, audio: &audio::Driver) -> Result<(), String> {
+async fn execute(command: Command) -> Result<(), String> {
     match command {
-        command @ (Command::AudioVolume { .. } | Command::AudioMute { .. }) => {
-            let (reply, response) = oneshot::channel();
-            audio
-                .sender
-                .send(audio::Message::Command(command, reply))
-                .map_err(|_| "PipeWire disconnected")?;
-            response
-                .await
-                .map_err(|_| "PipeWire command was cancelled".to_string())?
-        }
-        Command::Niri { action } => niri::action(action).await,
-        Command::Media { player, method } => {
-            media::execute(
-                &Connection::session().await.map_err(|e| e.to_string())?,
-                &player,
-                &method,
-            )
-            .await
+        // Phase 1: audio/media/niri/bluetooth commands are issued by the QML
+        // frontend against Quickshell's native services, not the Rust backend.
+        Command::AudioVolume { .. }
+        | Command::AudioMute { .. }
+        | Command::Niri { .. }
+        | Command::Media { .. }
+        | Command::BluetoothEnabled { .. }
+        | Command::BluetoothDiscovery { .. }
+        | Command::BluetoothConnect { .. }
+        | Command::BluetoothDisconnect { .. }
+        | Command::BluetoothPair { .. }
+        | Command::BluetoothForget { .. } => {
+            Err("command served by the QML frontend in Phase 1".into())
         }
         command => {
             let bus = Connection::system().await.map_err(|e| e.to_string())?;
@@ -220,12 +215,6 @@ async fn execute(command: Command, audio: &audio::Driver) -> Result<(), String> 
                 | Command::WifiScan
                 | Command::WifiDisconnect { .. }
                 | Command::WifiConnect { .. }) => network::execute(&bus, command).await,
-                command @ (Command::BluetoothEnabled { .. }
-                | Command::BluetoothDiscovery { .. }
-                | Command::BluetoothConnect { .. }
-                | Command::BluetoothDisconnect { .. }
-                | Command::BluetoothPair { .. }
-                | Command::BluetoothForget { .. }) => bluetooth::execute(&bus, command).await,
                 Command::PowerProfile { profile } => power::set_profile(&bus, &profile).await,
                 Command::Brightness { device, value } => {
                     brightness::set(&bus, &device, value).await
@@ -249,35 +238,21 @@ pub async fn run(
         }
         let cycle = stop.child_token();
         let mut tasks = JoinSet::new();
+        // Phase 1: only the system bus (network + power) and the backlight poll
+        // run natively. The session bus (media), Niri stream and PipeWire driver
+        // are intentionally not spawned to avoid duplicating Quickshell.
         tasks.spawn(bus_worker(false, events.clone(), cycle.clone()));
-        tasks.spawn(bus_worker(true, events.clone(), cycle.clone()));
         tasks.spawn(brightness_worker(events.clone(), cycle.clone()));
-        tasks.spawn(niri_worker(events.clone(), cycle.clone()));
-        let mut audio = match audio::Driver::start(events.clone()) {
-            Ok(driver) => driver,
-            Err(error) => {
-                tracing::error!(%error, "could not start PipeWire worker");
-                break;
-            }
-        };
         loop {
             tokio::select! {
                 biased;
                 _ = stop.cancelled() => break,
-                _ = &mut audio.terminated => {
-                    let mut state = AudioState::default(); state.status.error = "PipeWire connection closed; reconnecting".into();
-                    let _ = events.send(Event::Audio(state)).await;
-                    audio.shutdown().await;
-                    tokio::select! { _ = stop.cancelled() => return, _ = tokio::time::sleep(Duration::from_secs(2)) => {} }
-                    audio = match audio::Driver::start(events.clone()) { Ok(driver) => driver, Err(error) => { tracing::error!(%error, "could not restart PipeWire"); break; } };
-                }
                 changed = consumers.changed() => { if changed.is_err() || *consumers.borrow_and_update() == 0 { break; } }
                 request = requests.recv() => {
                     let Some(request) = request else { break; };
-                    let timeout = if matches!(request.command, Command::BluetoothPair { .. }) { 35 } else { 10 };
                     let result = tokio::select! {
                         _ = stop.cancelled() => Err("backend stopped".into()),
-                        result = tokio::time::timeout(Duration::from_secs(timeout), execute(request.command, &audio)) => result.unwrap_or_else(|_| Err("service command timed out".into()))
+                        result = tokio::time::timeout(Duration::from_secs(10), execute(request.command)) => result.unwrap_or_else(|_| Err("service command timed out".into()))
                     };
                     let _ = request.reply.send(result);
                 }
@@ -285,7 +260,6 @@ pub async fn run(
         }
         cycle.cancel();
         tasks.abort_all();
-        audio.shutdown().await;
         if stop.is_cancelled() {
             break;
         }

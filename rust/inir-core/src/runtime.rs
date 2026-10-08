@@ -71,8 +71,13 @@ impl Backend {
     }
 
     pub fn new() -> io::Result<Self> {
+        // Phase 1: the native workload is light async I/O (network/power D-Bus
+        // and a 2 s backlight poll). One worker thread (down from two) drives
+        // the spawned tasks and halves the runtime's idle wakeups while still
+        // auto-polling without an explicit block_on. spawn_blocking continues
+        // to use the separate blocking pool for sysfs reads.
         let runtime = tokio::runtime::Builder::new_multi_thread()
-            .worker_threads(2)
+            .worker_threads(1)
             .thread_name("inir-core")
             .enable_all()
             .build()?;

@@ -71,9 +71,10 @@ int main(int argc, char **argv) {
                 property int writeCount: 0
                 property bool desktopActive: DesktopServices.active
                 property int accessPointCount: DesktopServices.accessPoints.count
-                property bool servicesReady: DesktopServices.networkReady && DesktopServices.bluetoothReady
-                    && DesktopServices.batteryReady && DesktopServices.powerReady
-                    && DesktopServices.audioReady && DesktopServices.mediaReady
+                // Phase 1 efficiency revamp: only network and power are served
+                // natively. Bluetooth/battery/audio/media are served by
+                // Quickshell's existing C++/QML and never report ready here.
+                property bool servicesReady: DesktopServices.networkReady && DesktopServices.powerReady
                 property int audioNodeCount: DesktopServices.audioNodes.count
                 property string firstNodeId: ""
                 function activateServices(active) { DesktopServices.setServicesActive(active) }
@@ -122,9 +123,8 @@ int main(int argc, char **argv) {
             if (!check(until([&] { return object->property("commandIds").toString() == expectedIds; }), "service commands were dropped or reordered")) return 1;
             if (liveServices) {
                 QMetaObject::invokeMethod(object.get(), "activateServices", Q_ARG(QVariant, true));
-                if (!check(until([&] { return object->property("servicesReady").toBool() && object->property("audioNodeCount").toInt() > 0; }, 15000), "live desktop services never reached Qt")) return 1;
-                QMetaObject::invokeMethod(object.get(), "readNode");
-                if (!check(!object->property("firstNodeId").toString().isEmpty(), "native model get() was not accessible from QML")) return 1;
+                // Phase 1: network and power are the natively served live domains.
+                if (!check(until([&] { return object->property("servicesReady").toBool(); }, 15000), "live desktop services never reached Qt")) return 1;
                 QMetaObject::invokeMethod(object.get(), "activateServices", Q_ARG(QVariant, false));
             }
             const double uptime = object->property("uptime").toDouble();

@@ -119,3 +119,41 @@ Report back with:
 - Identifies the single largest hot spot
 
 Then we skip Phase 0's full measurement (we know the answer) and proceed directly to Phase 1.
+
+---
+
+## Phase 1 Implemented + Measured (2026-10-09)
+
+**Test harness fix:** earlier runs omitted `INIR_RUNTIME_DIR="$PWD"`, so
+`scripts/inir` launched the *stale installed config* (`~/.config/quickshell/inir`,
+Aug 31, no Rust plugin) — the plugin never loaded. Correct invocation:
+`INIR_RUNTIME_DIR="$PWD" INIR_RUST_BACKEND=1 INIR_LOG=debug ./scripts/inir run --foreground`.
+
+**Change:** only Network, Power and Brightness run natively. Audio, Battery,
+Bluetooth, Media and Niri fall back to Quickshell's native C++/existing QML
+(they never report `ready`, so the facades use their existing paths). Tokio
+runtime reduced from 2 worker threads to 1.
+
+**Live idle A/B (same machine, Niri session, steady-state windows):**
+
+| Metric | QML (og) | Rust before P1 | Rust after P1 |
+|---|---|---|---|
+| CPU per 20s idle | ~0.206s | 0.330s | **~0.153s** |
+| vs QML | baseline | 2.1× worse | **~0.74× (26% better)** |
+| Threads | 76 | 83 | 76 |
+| RSS | 700 MB | 726 MB | 685 MB |
+| Snapshots / 30s idle | n/a | 79 (69 bluetooth) | 7 (0 bluetooth) |
+| Slow applies (>100µs) / 30s | n/a | 25 | 4 |
+
+**Root cause found live:** BlueZ emitted a property-change signal ~5–10×/s on an
+idle connected device; the refetch design did a full `GetManagedObjects` each
+time, producing no state change — pure waste. Removing the duplicate Bluetooth
+domain eliminated it.
+
+**Verdict:** Phase 1 alone turned the native backend from **2× worse** to
+**~26% better** than QML at idle, with fewer threads and less RAM. Headless and
+live Qt smoke tests pass.
+
+**Not yet done (need interactive/live validation):** Phases 2–5 (JSON-free delta
+bridge, Rust-owned Niri, network without refetch). Interactive scenarios
+(Wi-Fi scan, workspace switch, volume drag) still need manual measurement.
