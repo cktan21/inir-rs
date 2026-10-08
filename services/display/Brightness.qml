@@ -20,6 +20,31 @@ Singleton {
     id: root
     signal brightnessChanged()
     property real lastUserChange: 0
+    readonly property var backendBrightness: NativeBackend.desktop
+    readonly property bool nativeBrightnessReady: backendBrightness?.brightnessReady ?? false
+
+    function _nativeBacklight(): var {
+        if (!nativeBrightnessReady) return null
+        for (let i = 0; i < backendBrightness.backlights.count; ++i) {
+            const device = backendBrightness.backlights.get(i)
+            if (device.id === root.backlightDevice) return device
+        }
+        return null
+    }
+
+    onNativeBrightnessReadyChanged: {
+        if (nativeBrightnessReady) root._detectBacklight()
+    }
+    Connections {
+        target: root.backendBrightness
+        function onBrightnessRevisionChanged() {
+            if (!root.nativeBrightnessReady) return
+            const devices = root.backendBrightness.backlights
+            const first = devices.count > 0 ? devices.get(0).id : ""
+            if (root.backlightDevice !== first) root._detectBacklight()
+            else root.monitors.forEach(monitor => { if (!monitor.isDdc) monitor.refresh() })
+        }
+    }
 
     property var ddcMonitors: []
     property list<BrightnessMonitor> monitors: []
@@ -63,6 +88,14 @@ Singleton {
     }
 
     function _detectBacklight(): void {
+        if (root.nativeBrightnessReady) {
+            backlightDetectProc.running = false
+            const devices = root.backendBrightness.backlights
+            root.backlightDevice = devices.count > 0 ? devices.get(0).id : ""
+            root.backlightDetectionReady = true
+            root.monitors.forEach(monitor => { if (!monitor.isDdc) monitor.initialize() })
+            return
+        }
         root.backlightDetectionReady = false
         root.backlightDevice = ""
         root._bestBacklightMax = 0
@@ -419,6 +452,11 @@ Singleton {
         function initialize() {
             monitor.ready = false;
             monitor._writtenRaw = -1
+            const device = root._nativeBacklight()
+            if (!monitor.isDdc && device) {
+                monitor._applyNativeBrightness(device)
+                return
+            }
             if (isDdc) {
                 initProc.command = ["ddcutil", "-b", busNum].concat(
                     BrightnessPolicy.ddcFlags(root._ddcHelp, false), ["getvcp", "10", "--brief"])
@@ -530,6 +568,17 @@ Singleton {
         property int _wantedRaw: -1
         property int _writingRaw: -1
         property int _writtenRaw: -1
+        property bool _nativeWriting: false
+
+        function _applyNativeBrightness(device): void {
+            if (device.raw <= 0 && monitor.ready) return
+            monitor.ready = false
+            monitor.rawMaxBrightness = device.maximum
+            monitor._writtenRaw = device.raw
+            monitor._wantedRaw = device.raw
+            monitor.brightness = device.value
+            monitor.ready = true
+        }
 
         function syncBrightness() {
             const raw = BrightnessPolicy.rawLevel(monitor.multipliedBrightness, monitor.rawMaxBrightness, monitor.isDdc)
@@ -542,10 +591,25 @@ Singleton {
         }
 
         function _writeNext(): void {
-            if (writeProc.running || monitor._wantedRaw < 0 || monitor._wantedRaw === monitor._writtenRaw)
+            if (writeProc.running || monitor._nativeWriting || monitor._wantedRaw < 0 || monitor._wantedRaw === monitor._writtenRaw)
                 return
             const raw = monitor._wantedRaw
             monitor._writingRaw = raw
+            const device = root._nativeBacklight()
+            if (!monitor.isDdc && device) {
+                monitor._nativeWriting = true
+                NativeBackend.sendCommand({ type: "brightness", device: device.id, value: raw / monitor.rawMaxBrightness }, (success, error) => {
+                    monitor._nativeWriting = false
+                    if (!success) {
+                        monitor._writtenRaw = -1
+                        console.warn("[Brightness] native backlight write failed:", error)
+                        return
+                    }
+                    monitor._writtenRaw = raw
+                    if (monitor._wantedRaw !== raw) monitor._writeNext()
+                })
+                return
+            }
             writeProc.command = monitor.isDdc
                 ? ["ddcutil", "-b", busNum].concat(BrightnessPolicy.ddcFlags(root._ddcHelp, true), ["setvcp", "10", `${raw}`])
                 : ["brightnessctl", "-d", root.backlightDevice, "s", `${raw}`, "--quiet"]
@@ -580,6 +644,12 @@ Singleton {
         }
 
         function refresh(): void {
+            const device = root._nativeBacklight()
+            if (!monitor.isDdc && device) {
+                if (!monitor._nativeWriting && !monitor.writePending && monitor._wantedRaw === monitor._writtenRaw)
+                    monitor._applyNativeBrightness(device)
+                return
+            }
             if (!monitor.ready || writeProc.running || monitor.writePending || readbackProc.running)
                 return
             if (monitor.isDdc ? !busNum : root.backlightDevice.length === 0)

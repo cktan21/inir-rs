@@ -117,10 +117,25 @@ Singleton {
     signal sinkProtectionTriggered(string reason);
     property real lastUserChange: 0
 
+    function _nativeNode(id): var {
+        const service = NativeBackend.desktop
+        if (!service?.audioReady) return null
+        for (let i = 0; i < service.audioNodes.count; ++i) {
+            const node = service.audioNodes.get(i)
+            if (node.id === String(id)) return node
+        }
+        return null
+    }
+
     // Controls
     function toggleMute() {
         if (!root.sink?.audio) return;
         root.lastUserChange = Date.now()
+        const node = root._nativeNode(root.sink.id)
+        if (node && node.muted !== null) {
+            NativeBackend.sendCommand({ type: "audioMute", node: node.id, muted: !node.muted })
+            return
+        }
         root.sink.audio.muted = !root.sink.audio.muted
     }
 
@@ -192,6 +207,11 @@ Singleton {
     property bool _sourceVolumePending: false
 
     function _queueSinkVolume(value: real): void {
+        const node = root._nativeNode(root.sink?.id)
+        if (node && node.volume !== null) {
+            NativeBackend.sendCommand({ type: "audioVolume", node: node.id, value: value })
+            return
+        }
         root._queuedSinkVolume = value
         root._sinkVolumePending = true
         if (!wpctlSetSinkVolume.running && !sinkVolumeDispatch.running)
@@ -199,6 +219,11 @@ Singleton {
     }
 
     function _queueSourceVolume(value: real): void {
+        const node = root._nativeNode(root._hardwareSourceId())
+        if (node && node.volume !== null) {
+            NativeBackend.sendCommand({ type: "audioVolume", node: node.id, value: value })
+            return
+        }
         root._queuedSourceVolume = value
         root._sourceVolumePending = true
         if (!wpctlSetSourceVolume.running && !sourceVolumeDispatch.running)

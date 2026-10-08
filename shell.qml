@@ -36,6 +36,7 @@ ShellRoot {
     property var _powerProfilePersistence: PowerProfilePersistence
     property var _devNavigationService: DevNavigation
     property var _shellEditSessionService: ShellEditSession
+    property var _nativeBackendService: NativeBackend
     // Acquire org.kde.StatusNotifierWatcher before graphical-session.target
     // releases XDG autostart applications. The systemd unit uses Type=dbus.
     property var _trayService: TrayService

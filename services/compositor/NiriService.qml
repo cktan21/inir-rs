@@ -811,6 +811,9 @@ Singleton {
     }
 
     function send(request) {
+        if (CompositorService.isNiri && NativeBackend.desktop?.niriReady && request.Action) {
+            return NativeBackend.sendCommand({ type: "niri", action: request.Action })
+        }
         if (!CompositorService.isNiri || !requestSocket.connected)
             return false
         requestSocket.send(request)

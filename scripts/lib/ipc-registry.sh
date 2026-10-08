@@ -2,8 +2,8 @@
 # Auto-generated from QML IpcHandler declarations + docs/IPC.md metadata.
 # Do not edit manually.
 # Regenerate: python3 scripts/lib/generate-ipc-registry.py
-# IPC.md hash: 25016b87576c6dda
-# Targets: 70
+# IPC.md hash: bfb1f5d208031611
+# Targets: 71
 
 declare -gA IPC_TARGET_DESC=(
   [ai]="Shared multi-provider AI service. It supports Gemini, OpenAI-compatible chat and Responses APIs, Mistral and Anthropic; live provider catalogs are normalized into capability-aware model records. Catalog visibility is separate from execution readiness, so public model lists remain browseable without pretending an API key exists. OpenCode Zen and Go resolve their current model lists and per-model API routes dynamically. Normal shell tools use typed actions and approval cards, while arbitrary commands are isolated in Advanced mode."
@@ -11,6 +11,7 @@ declare -gA IPC_TARGET_DESC=(
   [appCatalog]="App catalog service. Browse, search, and install curated applications."
   [audio]="Volume and mute control."
   [autostart]="Niri login autostart manager. Reads and writes the managed section of \`~/.config/niri/config.d/50-startup.kdl\` (delimited by \`// >>> inir-managed-autostart >>>\` / \`// <<< inir-managed-autostart <<<\`). Base iNiR lines and any hand-written \`spawn-at-startup\` lines outside the markers are preserved verbatim; toggling an entry comments the line out instead of deleting it. Safe no-op on non-Niri compositors (the page shows a guard instead)."
+  [backend]="Native backend diagnostics, available in every layout through the shell-owned \`NativeBackend\` singleton. Enable the bridge with \`INIR_RUST_BACKEND=1\` after building the plugin; services report the QML backend when it is disabled."
   [background]="Desktop background and widget controls."
   [bar]="Top bar visibility."
   [brightness]="Display brightness control."
@@ -84,6 +85,7 @@ declare -gA IPC_TARGET_FAMILY=(
   [appCatalog]="shared"
   [audio]="shared"
   [autostart]="waffle"
+  [backend]="shared"
   [background]="shared"
   [bar]="shared"
   [brightness]="shared"
@@ -157,6 +159,7 @@ declare -gA IPC_TARGET_FUNCTIONS=(
   [appCatalog]="refresh search install list"
   [audio]="volumeUp volumeDown mute playEvent micMute"
   [autostart]="status addCommand addApp removeLast reload"
+  [backend]="services"
   [background]="widgetDesign widgetMaterial widgetSearch toggleEditMode toggleWidgetManager setEditMode editState applyOrganicEdgePreset applyOrganicEdgeComposition applyOrganicEdgeMaterial applyOrganicEdgeResponse organicEdgeState setOrganicEdgeEnabled quickControlsPage quickControlsGeometry widgetSnapshot legibilityState desktopItemsState focusWidget promoteWidget resetLayerOrder setWidgetEnabled clockDebugState clockDebugSetMode clockDebugSetRegion clockDebugSetLayout clockDebugRestore"
   [bar]="mediaWidth toggle close open"
   [brightness]="increment decrement refresh set status sleepBegin restoreAfterWake"
@@ -252,6 +255,7 @@ declare -gA IPC_FUNCTION_DESC=(
   ["autostart:addApp"]="Append a managed \`gtk-launch <desktopId>\` entry"
   ["autostart:removeLast"]="Remove the last managed entry"
   ["autostart:reload"]="Force re-read the startup file"
+  ["backend:services"]=""
   ["background:widgetDesign"]="Put every desktop widget on \`iris\`, \`material\`, \`individual\`, \`instrument\` or \`readout\`; \`undo\` brings back the design and each widget's own look from before; \`status\` reports the design, how many widgets keep their own look and whether an undo is available."
   ["background:widgetMaterial"]="iRiS: \`status\` reports the shared widget material and how many widgets chose their own material or surface opacity in Look; \`match\` puts them back on the shared ones."
   ["background:widgetSearch"]="While arranging (iRiS), find a widget from the bar: the words to look for, \`open\` for an empty field, \`next\`/\`previous\` to move the selection, \`take\` to add or show the selected widget, \`close\`. Ctrl+F opens it"
@@ -904,8 +908,8 @@ Ctrl+Alt+A { spawn "inir" "wallpaperSelector" "openLauncher" "animated"; }'
   [ytmusic]='Mod+M+Space { spawn "inir" "ytmusic" "playPause"; }'
 )
 
-IPC_ALL_TARGETS=(ai altSwitcher appCatalog audio autostart background bar brightness cheatsheet clipboard cliphistService closeConfirm colorMode connections controlPanel coverflowSelector customWidgets dashboard dev equalizer gamemode globalActions globalStyle iris keyboard lock mascot mascotMood mediaControls memory minimize mpris network niriAnimations notifications orbit osd osdVolume osk overlay overview packageSearch panelFamily pill recordingOsd region search session settings settingsNav shellLayout shellUpdate sidebarLeft sidebarRight taskview tiling voiceSearch vpn wactionCenter waffleAltSwitcher wallpaperLauncher wallpaperSelector wbar widgetStacks widgetpower wnotificationCenter workspaceStrip wwidgets ytmusic zoom)
-IPC_SHARED_TARGETS=(ai altSwitcher appCatalog audio background bar brightness cheatsheet clipboard cliphistService closeConfirm colorMode connections controlPanel coverflowSelector dashboard dev gamemode globalActions globalStyle iris keyboard lock mascot mascotMood mediaControls memory minimize mpris network niriAnimations notifications orbit osd osdVolume osk overlay overview packageSearch panelFamily pill region session settings settingsNav shellLayout shellUpdate sidebarLeft sidebarRight taskview tiling voiceSearch vpn wallpaperLauncher wallpaperSelector workspaceStrip ytmusic zoom)
+IPC_ALL_TARGETS=(ai altSwitcher appCatalog audio autostart backend background bar brightness cheatsheet clipboard cliphistService closeConfirm colorMode connections controlPanel coverflowSelector customWidgets dashboard dev equalizer gamemode globalActions globalStyle iris keyboard lock mascot mascotMood mediaControls memory minimize mpris network niriAnimations notifications orbit osd osdVolume osk overlay overview packageSearch panelFamily pill recordingOsd region search session settings settingsNav shellLayout shellUpdate sidebarLeft sidebarRight taskview tiling voiceSearch vpn wactionCenter waffleAltSwitcher wallpaperLauncher wallpaperSelector wbar widgetStacks widgetpower wnotificationCenter workspaceStrip wwidgets ytmusic zoom)
+IPC_SHARED_TARGETS=(ai altSwitcher appCatalog audio backend background bar brightness cheatsheet clipboard cliphistService closeConfirm colorMode connections controlPanel coverflowSelector dashboard dev gamemode globalActions globalStyle iris keyboard lock mascot mascotMood mediaControls memory minimize mpris network niriAnimations notifications orbit osd osdVolume osk overlay overview packageSearch panelFamily pill region session settings settingsNav shellLayout shellUpdate sidebarLeft sidebarRight taskview tiling voiceSearch vpn wallpaperLauncher wallpaperSelector workspaceStrip ytmusic zoom)
 IPC_II_TARGETS=(equalizer)
 IPC_WAFFLE_TARGETS=(autostart customWidgets recordingOsd search wactionCenter waffleAltSwitcher wbar widgetStacks widgetpower wnotificationCenter wwidgets)
 

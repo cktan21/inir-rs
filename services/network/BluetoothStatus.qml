@@ -13,11 +13,13 @@ import qs.services
 Singleton {
     id: root
 
-    readonly property bool available: Bluetooth.adapters.values.length > 0
-    readonly property bool enabled: Bluetooth.defaultAdapter?.enabled ?? false
+    readonly property var backendBluetooth: NativeBackend.desktop
+    readonly property bool nativeBluetoothReady: backendBluetooth?.bluetoothReady ?? false
+    readonly property bool available: nativeBluetoothReady ? backendBluetooth.bluetoothAdapters.count > 0 : Bluetooth.adapters.values.length > 0
+    readonly property bool enabled: nativeBluetoothReady ? backendBluetooth.bluetoothEnabled : Bluetooth.defaultAdapter?.enabled ?? false
     readonly property BluetoothDevice firstActiveDevice: Bluetooth.defaultAdapter?.devices.values.find(device => device.connected) ?? null
-    readonly property int activeDeviceCount: Bluetooth.defaultAdapter?.devices.values.filter(device => device.connected).length ?? 0
-    readonly property bool connected: Bluetooth.devices.values.some(d => d.connected)
+    readonly property int activeDeviceCount: nativeBluetoothReady ? backendBluetooth.bluetoothConnectedCount : Bluetooth.defaultAdapter?.devices.values.filter(device => device.connected).length ?? 0
+    readonly property bool connected: nativeBluetoothReady ? activeDeviceCount > 0 : Bluetooth.devices.values.some(d => d.connected)
 
     // Address of the device currently going through the pairing flow, empty when
     // idle. Connecting and disconnecting a known device go through the Quickshell

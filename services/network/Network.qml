@@ -15,6 +15,66 @@ import qs.services.network
  */
 Singleton {
     id: root
+    readonly property var backendNetwork: NativeBackend.desktop
+    readonly property bool nativeNetworkReady: backendNetwork?.networkReady ?? false
+    readonly property bool nativeNetworkPending: NativeBackend.requested && (NativeBackend.loading
+        || (backendNetwork && !nativeNetworkReady && backendNetwork.networkError.length === 0))
+    property bool _started: false
+
+    function _applyNativeNetwork(): void {
+        if (!nativeNetworkReady) return
+        const model = backendNetwork.accessPoints
+        const grouped = new Map()
+        for (let i = 0; i < model.count; ++i) {
+            const record = model.get(i)
+            if (!record.ssid) continue
+            const previous = grouped.get(record.ssid)
+            if (!previous || (record.active && !previous.active) || (!previous.active && record.strength > previous.strength))
+                grouped.set(record.ssid, record)
+        }
+        const records = Array.from(grouped.values())
+        const list = root.wifiNetworks
+        for (let i = list.length - 1; i >= 0; --i) {
+            if (!records.some(record => record.id === list[i].lastIpcObject.id))
+                list.splice(i, 1).forEach(ap => ap.destroy())
+        }
+        for (const record of records) {
+            record.rate = record.rate > 0 ? `${(record.rate / 1000).toFixed(1)} Mbit/s` : ""
+            const existing = list.find(ap => ap.lastIpcObject.id === record.id)
+            if (existing) existing.lastIpcObject = record
+            else list.push(apComp.createObject(root, { lastIpcObject: record }))
+        }
+        root.wifiEnabled = backendNetwork.wifiEnabled
+        root.ethernet = backendNetwork.ethernet
+        root.connectivity = ["unknown", "none", "portal", "limited", "full"][backendNetwork.connectivity] ?? "unknown"
+        root.networkName = root.active?.ssid ?? ""
+        root.networkStrength = root.active?.strength ?? 0
+        root.wifi = root.active !== null
+        root.wifiStatus = !root.wifiEnabled ? "disabled" : root.active ? (root.connectivity === "limited" ? "limited" : "connected") : "disconnected"
+        root.networkChanged()
+    }
+
+    onNativeNetworkReadyChanged: {
+        if (nativeNetworkReady) {
+            subscriber.running = false
+            for (const process of [getNetworks, wifiStatusProcess, updateNetworkName, updateNetworkStrength, updateConnectionType])
+                process.running = false
+            root._applyNativeNetwork()
+        } else if (root._started && !root.nativeNetworkPending) {
+            subscriber.running = true
+            root.update()
+        }
+    }
+    onNativeNetworkPendingChanged: {
+        if (root._started && !root.nativeNetworkPending && !root.nativeNetworkReady) {
+            subscriber.running = true
+            root.update()
+        }
+    }
+    Connections {
+        target: root.backendNetwork
+        function onNetworkRevisionChanged() { root._applyNativeNetwork() }
+    }
 
     property bool wifi: true
     property bool ethernet: false
@@ -68,6 +128,10 @@ Singleton {
 
     // Control
     function enableWifi(enabled = true): void {
+        if (nativeNetworkReady) {
+            NativeBackend.sendCommand({ type: "wifiEnabled", enabled: enabled })
+            return
+        }
         const cmd = enabled ? "on" : "off";
         enableWifiProc.exec(["nmcli", "radio", "wifi", cmd]);
     }
@@ -77,6 +141,16 @@ Singleton {
     }
 
     function rescanWifi(): void {
+        if (nativeNetworkReady) {
+            wifiScanning = true
+            NativeBackend.sendCommand({ type: "wifiScan" }, (success, error) => {
+                // RequestScan acknowledges submission; AP/LastScan signals update
+                // the native model when the hardware completes the scan.
+                wifiScanning = false
+                if (!success) console.warn("[Network] native scan failed:", error)
+            })
+            return
+        }
         wifiScanning = true;
         getNetworks.running = true;
         rescanProcess.running = true;
@@ -91,10 +165,15 @@ Singleton {
     }
 
     function disconnectWifiNetwork(): void {
+        if (nativeNetworkReady && active?.lastIpcObject.device) {
+            NativeBackend.sendCommand({ type: "wifiDisconnect", device: active.lastIpcObject.device })
+            return
+        }
         if (active) disconnectProc.exec(["nmcli", "connection", "down", active.ssid]);
     }
 
     function refreshActiveNetworkDetails(): void {
+        if (nativeNetworkReady) { root._applyNativeNetwork(); return }
         if (!getNetworks.running) {
             getNetworks.running = true;
         }
@@ -167,6 +246,7 @@ Singleton {
 
     /** Forces a fresh scan without waiting on the full `nmcli dev wifi list` parse. */
     function rescanWifiDevice(): void {
+        if (nativeNetworkReady) { rescanWifi(); return }
         deviceRescanProc.running = true;
     }
 
@@ -404,6 +484,8 @@ Singleton {
 
     // Actual update logic
     function _doUpdate() {
+        if (root.nativeNetworkReady) { root._applyNativeNetwork(); return }
+        if (root.nativeNetworkPending) return
         root.networkChanged();
         updateConnectionType.startCheck();
         wifiStatusProcess.running = true
@@ -414,9 +496,10 @@ Singleton {
     property bool _destroying: false
 
     Component.onCompleted: {
+        root._started = true
         // Kill any orphaned nmcli monitor processes from previous shell instances,
         // then start the fresh subscriber once cleanup finishes.
-        _cleanupStale.running = true;
+        if (!NativeBackend.requested) _cleanupStale.running = true;
         // Prime initial state once; subsequent updates come from nmcli monitor.
         Qt.callLater(() => root.update())
     }
@@ -430,7 +513,7 @@ Singleton {
         id: _cleanupStale
         command: ["pkill", "-f", "nmcli monitor"]
         running: false
-        onExited: subscriber.running = true
+        onExited: if (!root.nativeNetworkReady && !root.nativeNetworkPending) subscriber.running = true
     }
 
     Process {
@@ -438,7 +521,7 @@ Singleton {
         running: false
         command: ["nmcli", "monitor"]
         // Auto-restart if the monitor process dies (can happen after lockscreen/suspend)
-        onRunningChanged: if (!running && !root._destroying) running = true
+        onRunningChanged: if (!running && !root._destroying && !root.nativeNetworkReady && !root.nativeNetworkPending) running = true
         stdout: SplitParser {
             onRead: root.update()
         }
@@ -466,6 +549,7 @@ Singleton {
             }
         }
         onExited: (exitCode, exitStatus) => {
+            if (root.nativeNetworkReady) return
             const lines = updateConnectionType.buffer.trim().split('\n');
             const connectivity = (lines.pop() ?? "").trim()
             let hasEthernet = false;
@@ -513,6 +597,7 @@ Singleton {
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
+                if (root.nativeNetworkReady) return
                 // A VPN is an active connection too, and it often sorts first, which used
                 // to make the bar show the VPN profile's name instead of the network's.
                 const carriers = ["802-11-wireless", "802-3-ethernet"];
@@ -539,6 +624,7 @@ Singleton {
         command: ["sh", "-c", "nmcli -f IN-USE,SIGNAL,SSID device wifi | awk '/^\\*/{if (NR!=1) {print $2}}'"]
         stdout: SplitParser {
             onRead: data => {
+                if (root.nativeNetworkReady) return
                 root.networkStrength = parseInt(data);
             }
         }
@@ -547,13 +633,14 @@ Singleton {
     Process {
         id: wifiStatusProcess
         command: ["nmcli", "radio", "wifi"]
-        Component.onCompleted: running = true
+        Component.onCompleted: if (!NativeBackend.requested) running = true
         environment: ({
             LANG: "C",
             LC_ALL: "C"
         })
         stdout: StdioCollector {
             onStreamFinished: {
+                if (root.nativeNetworkReady) return
                 root.wifiEnabled = text.trim() === "enabled";
             }
         }
@@ -569,6 +656,7 @@ Singleton {
         })
         stdout: StdioCollector {
             onStreamFinished: {
+                if (root.nativeNetworkReady) return
                 const PLACEHOLDER = "STRINGWHICHHOPEFULLYWONTBEUSED";
                 const rep = new RegExp("\\\\:", "g");
                 const rep2 = new RegExp(PLACEHOLDER, "g");

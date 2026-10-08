@@ -16,13 +16,15 @@ Singleton {
         if (Quickshell.env("QS_DEBUG") === "1") console.log(...args);
     }
 
-    property bool available: UPower.displayDevice.isLaptopBattery
-    property var chargeState: UPower.displayDevice.state
+    readonly property var backendPower: NativeBackend.desktop
+    readonly property bool nativeBatteryReady: backendPower?.batteryReady ?? false
+    property bool available: nativeBatteryReady ? backendPower.batteryAvailable : UPower.displayDevice.isLaptopBattery
+    property var chargeState: nativeBatteryReady ? backendPower.batteryState : UPower.displayDevice.state
     property bool isCharging: chargeState == UPowerDeviceState.Charging
     property bool isPluggedIn: isCharging || chargeState == UPowerDeviceState.PendingCharge
     // Discharging-based, not !isPluggedIn: FullyCharged on AC must not count as "on battery"
-    readonly property bool onBattery: available && (chargeState == UPowerDeviceState.Discharging || chargeState == UPowerDeviceState.PendingDischarge)
-    property real percentage: UPower.displayDevice?.percentage ?? 1
+    readonly property bool onBattery: nativeBatteryReady ? available && backendPower.onBattery : available && (chargeState == UPowerDeviceState.Discharging || chargeState == UPowerDeviceState.PendingDischarge)
+    property real percentage: nativeBatteryReady ? backendPower.batteryPercentage : UPower.displayDevice?.percentage ?? 1
     readonly property bool allowAutomaticSuspend: Config.options?.battery?.automaticSuspend ?? false
     readonly property bool soundEnabled: Config.options?.sounds?.battery ?? true
 
@@ -31,14 +33,22 @@ Singleton {
     property bool isSuspending: available && (percentage <= ((Config.options?.battery?.suspend ?? 5) / 100))
     property bool isFull: available && (percentage >= ((Config.options?.battery?.full ?? 95) / 100))
 
-    property bool isLowAndNotCharging: isLow && !isCharging
-    property bool isCriticalAndNotCharging: isCritical && !isCharging
-    property bool isSuspendingAndNotCharging: allowAutomaticSuspend && isSuspending && !isCharging
-    property bool isFullAndCharging: isFull && isCharging
+    // Read one committed native snapshot for policy predicates, avoiding
+    // intermediate combinations of the presentation properties above.
+    function _nativeLowAt(threshold): bool {
+        return backendPower.batteryAvailable && backendPower.batteryState !== UPowerDeviceState.Charging
+            && backendPower.batteryPercentage <= threshold / 100
+    }
+    property bool isLowAndNotCharging: nativeBatteryReady ? _nativeLowAt(Config.options?.battery?.low ?? 20) : isLow && !isCharging
+    property bool isCriticalAndNotCharging: nativeBatteryReady ? _nativeLowAt(Config.options?.battery?.critical ?? 10) : isCritical && !isCharging
+    property bool isSuspendingAndNotCharging: allowAutomaticSuspend && (nativeBatteryReady ? _nativeLowAt(Config.options?.battery?.suspend ?? 5) : isSuspending && !isCharging)
+    property bool isFullAndCharging: nativeBatteryReady
+        ? backendPower.batteryAvailable && backendPower.batteryState === UPowerDeviceState.Charging && backendPower.batteryPercentage >= (Config.options?.battery?.full ?? 95) / 100
+        : isFull && isCharging
 
-    property real energyRate: UPower.displayDevice.changeRate
-    property real timeToEmpty: UPower.displayDevice.timeToEmpty
-    property real timeToFull: UPower.displayDevice.timeToFull
+    property real energyRate: nativeBatteryReady ? backendPower.energyRate : UPower.displayDevice.changeRate
+    property real timeToEmpty: nativeBatteryReady ? backendPower.timeToEmpty : UPower.displayDevice.timeToEmpty
+    property real timeToFull: nativeBatteryReady ? backendPower.timeToFull : UPower.displayDevice.timeToFull
 
     // ─── Charge limit ───
     readonly property bool chargeLimitEnabled: Config.options?.battery?.chargeLimit?.enable ?? false

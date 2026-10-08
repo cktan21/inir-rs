@@ -37,6 +37,21 @@ For low-level debugging, `inir ipc <target> <function>` still works.
 
 ## Available Targets
 
+### backend
+
+Native backend diagnostics, available in every layout through the shell-owned
+`NativeBackend` singleton. Enable the bridge with `INIR_RUST_BACKEND=1` after
+building the plugin; services report the QML backend when it is disabled.
+
+| Function | Description |
+| --- | --- |
+| `services()` | JSON describing native worker threads, resource consumers and active core tasks. |
+
+```bash
+inir services
+inir backend services
+```
+
 Everything iNiR can do, exposed for your scripting pleasure.
 
 ### dev

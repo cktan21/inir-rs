@@ -102,6 +102,7 @@ Quick start:
   inir status            Shell status info
   inir doctor            Health checks (--perf: runtime graphics/media snapshot)
   inir profile           Capture a baseline (--layout ii|iris|waffle, --duration N)
+  inir services          List active native backend workers
 
 EOF
 
@@ -1737,8 +1738,33 @@ apply_gpu_policy() {
     fi
 }
 
+apply_native_import_path() {
+    local candidate native_root=""
+    local candidates=(
+        "${INIR_NATIVE_QML_DIR:-}"
+        "${config_dir:-$launcher_root}/rust/build/qml"
+        "$launcher_root/rust/build/qml"
+        "$launcher_root/../lib/qt-6/qml"
+        "/usr/local/lib/qt-6/qml"
+        "/usr/lib/qt-6/qml"
+        "/usr/lib/qt6/qml"
+    )
+    for candidate in "${candidates[@]}"; do
+        if [[ -n "$candidate" && -f "$candidate/qs/services/native/qmldir" ]]; then
+            native_root="$candidate"
+            break
+        fi
+    done
+    [[ -n "$native_root" ]] || return 0
+    case ":${QML_IMPORT_PATH:-}:" in
+        *":$native_root:"*) ;;
+        *) export QML_IMPORT_PATH="$native_root${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}" ;;
+    esac
+}
+
 apply_qt_runtime_env() {
     # Must run before Qt reads env at QGuiApplication construction.
+    apply_native_import_path
     apply_gpu_policy
     # inir.service is started by systemd, not as a direct Niri child. Mirror
     # Niri's app-facing policy so Quickshell and apps launched through it see
@@ -3978,6 +4004,11 @@ case "$command_name" in
     profile)
         resolve_config_dir
         exec python3 "$config_dir/scripts/profile-backend.py" "$@"
+        ;;
+    services)
+        require_qs
+        resolve_config_dir
+        exec "$qs_bin" -p "$config_dir" ipc call backend services
         ;;
     install)
         setup_dir="$(resolve_setup_dir)"

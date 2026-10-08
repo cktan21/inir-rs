@@ -4,33 +4,41 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import qs.services
 
 /**
  * Provides some system info: distro, username.
  */
 Singleton {
     id: root
-    property string distroName: "Unknown"
-    property string distroId: "unknown"
-    property string distroIcon: "linux-symbolic"
+    readonly property var backendInfo: NativeBackend.systemInfo
+    property string distroName: backendInfo ? backendInfo.distroName : "Unknown"
+    property string distroId: backendInfo ? backendInfo.distroId : "unknown"
+    property string distroIcon: backendInfo ? backendInfo.distroIcon : "linux-symbolic"
     // Seed identity from the process environment so consumers do not build
     // transient paths for the placeholder user while `id -un` is starting.
     // The asynchronous lookup below remains the authoritative refresh.
-    property string username: Quickshell.env("USER") || "user"
-    property string displayName: ""
+    property string username: backendInfo?.ready ? backendInfo.username : (Quickshell.env("USER") || "user")
+    property string displayName: backendInfo ? backendInfo.displayName : ""
     // Static hostname. `/etc/hostname` is the portable source; the env var is a
     // seed for the frame before the file is read and is absent on most systems.
-    property string hostname: Quickshell.env("HOSTNAME") || ""
-    property string homeUrl: ""
-    property string documentationUrl: ""
-    property string supportUrl: ""
-    property string bugReportUrl: ""
-    property string privacyPolicyUrl: ""
-    property string logo: ""
-    property string desktopEnvironment: String(Quickshell.env("XDG_CURRENT_DESKTOP") ?? "").trim()
-    property string windowingSystem: String(Quickshell.env("WAYLAND_DISPLAY") ?? "").trim().length > 0 ? "Wayland" : "X11"
+    property string hostname: backendInfo ? backendInfo.hostname : (Quickshell.env("HOSTNAME") || "")
+    property string homeUrl: backendInfo ? backendInfo.homeUrl : ""
+    property string documentationUrl: backendInfo ? backendInfo.documentationUrl : ""
+    property string supportUrl: backendInfo ? backendInfo.supportUrl : ""
+    property string bugReportUrl: backendInfo ? backendInfo.bugReportUrl : ""
+    property string privacyPolicyUrl: backendInfo ? backendInfo.privacyPolicyUrl : ""
+    property string logo: backendInfo ? backendInfo.logo : ""
+    property string desktopEnvironment: backendInfo ? backendInfo.desktopEnvironment : String(Quickshell.env("XDG_CURRENT_DESKTOP") ?? "").trim()
+    property string windowingSystem: backendInfo ? backendInfo.windowingSystem : (String(Quickshell.env("WAYLAND_DISPLAY") ?? "").trim().length > 0 ? "Wayland" : "X11")
 
     function refreshIdentity(): void {
+        if (backendInfo) {
+            backendInfo.refreshIdentity()
+            return
+        }
+        if (NativeBackend.loading)
+            return
         if (getUsername.running || getDisplayName.running)
             return
         getUsername.running = true
@@ -39,7 +47,7 @@ Singleton {
     Timer {
         triggeredOnStart: true
         interval: 1
-        running: true
+        running: !root.backendInfo && !NativeBackend.loading
         repeat: false
         onTriggered: {
             refreshIdentity()
