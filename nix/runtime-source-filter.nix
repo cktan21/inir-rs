@@ -18,11 +18,17 @@ let
   relative = lib.removePrefix prefix (toString path);
   parent = builtins.dirOf relative;
   suffixes = policy.excludedDirectorySuffixes.${parent} or [];
+  nativeSource = relative == "rust" || lib.hasPrefix "rust/" relative;
+  buildArtifact = lib.any (p: relative == p || lib.hasPrefix (p + "/") relative)
+    [ "rust/target" "rust/build" ];
 in
 (builtins.elem relative runtimeFiles
  || (builtins.baseNameOf relative == relative && lib.hasSuffix ".qml" relative)
- || lib.any (p: relative == p || lib.hasPrefix (p + "/") relative) runtimeDirs)
+ || lib.any (p: relative == p || lib.hasPrefix (p + "/") relative) runtimeDirs
+ || nativeSource)
 && lib.cleanSourceFilter path type
 && !(lib.any excludedName (lib.splitString "/" relative))
-&& !(lib.any (p: relative == p || lib.hasPrefix (p + "/") relative) policy.excludedPaths)
+&& !buildArtifact
+&& !(lib.any (p: relative == p || lib.hasPrefix (p + "/") relative)
+  (lib.filter (p: p != "rust") policy.excludedPaths))
 && !(lib.any (s: lib.hasSuffix s relative) suffixes)

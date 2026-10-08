@@ -6,6 +6,25 @@ The PKGBUILDs live in `sdata/dist-arch/`.
 
 > **`inir-deps`** is a meta-package that depends on all the groups below. It exists so that `pacman -Qdtq | pacman -Rns -` (clean orphans) doesn't remove iNiR's dependencies. It has no files of its own.
 
+## Native backend build dependencies
+
+Building the Rust QML plugin with `make build-native` requires the packages below.
+The shell PKGBUILDs in `distro/arch/` declare these as build dependencies;
+`nix/package.nix` supplies the corresponding toolchain and libraries.
+
+| Package | Purpose |
+|---------|---------|
+| `rust`, `cargo` | Rust compiler and locked dependency builds |
+| `cmake` | Native plugin build and installation |
+| `gcc` | C++ compiler for the Qt bridge |
+| `clang` | libclang for PipeWire binding generation |
+| `pkgconf` | PipeWire library discovery |
+| `libpipewire` | Native PipeWire headers and runtime library |
+| `qt6-base`, `qt6-declarative` | Qt bridge, QML plugin and Qt tests |
+
+The git package also requires `git`. Build helpers are pinned in
+`rust/cmake/vendor/`; Cargo dependencies are pinned in `rust/Cargo.lock`.
+
 ---
 
 ## Core (`inir-core`)

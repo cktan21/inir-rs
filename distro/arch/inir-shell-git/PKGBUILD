@@ -4,7 +4,7 @@ pkgname=inir-shell-git
 pkgver=2.21.0.r0.g0000000
 pkgrel=1
 pkgdesc='iNiR shell payload, launcher, and user service (git)'
-arch=(any)
+arch=(x86_64 aarch64)
 url='https://github.com/snowarch/iNiR'
 license=('GPL-3.0-only')
 depends=(
@@ -95,7 +95,7 @@ optdepends=(
   'python-ytmusicapi: YouTube Music browsing (InnerTube engine)'
   'millennium-bin: Steam theming via Millennium (requires steam)'
 )
-makedepends=(git)
+makedepends=(git rust cargo cmake gcc clang pkgconf libpipewire qt6-base qt6-declarative)
 install=inir-shell-git.install
 provides=('inir-shell')
 conflicts=('inir-shell' 'noctalia-qs' 'noctalia-shell' 'cachyos-niri-noctalia')
@@ -111,7 +111,19 @@ pkgver() {
   printf '%s.r%s.g%s' "$base" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
+build() {
+  cmake -S "${srcdir}/inir/rust" -B "${srcdir}/native-build" \
+    -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib
+  cmake --build "${srcdir}/native-build" --parallel 2
+}
+
+check() {
+  cargo test --manifest-path "${srcdir}/inir/rust/Cargo.toml" -p inir-core -p inir-types --locked
+  ctest --test-dir "${srcdir}/native-build" --output-on-failure
+}
+
 package() {
+  DESTDIR="$pkgdir" cmake --install "${srcdir}/native-build"
   local srcroot="${srcdir}/inir"
   local shellroot="${pkgdir}/usr/share/quickshell/inir"
   local docroot="${pkgdir}/usr/share/doc/${pkgname}"

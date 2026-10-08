@@ -4,7 +4,7 @@ pkgname=inir-shell
 pkgver=2.32.0
 pkgrel=1
 pkgdesc='iNiR shell payload, launcher, and user service'
-arch=(any)
+arch=(x86_64 aarch64)
 url='https://github.com/snowarch/iNiR'
 license=('GPL-3.0-only')
 _default_source_archive="https://github.com/snowarch/iNiR/archive/refs/tags/v${pkgver}.tar.gz"
@@ -108,7 +108,21 @@ source=(
 )
 sha256sums=('SKIP')
 
+makedepends=(rust cargo cmake gcc clang pkgconf libpipewire qt6-base qt6-declarative)
+
+build() {
+  cmake -S "${srcdir}/iNiR-${pkgver}/rust" -B "${srcdir}/native-build" \
+    -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib
+  cmake --build "${srcdir}/native-build" --parallel 2
+}
+
+check() {
+  cargo test --manifest-path "${srcdir}/iNiR-${pkgver}/rust/Cargo.toml" -p inir-core -p inir-types --locked
+  ctest --test-dir "${srcdir}/native-build" --output-on-failure
+}
+
 package() {
+  DESTDIR="$pkgdir" cmake --install "${srcdir}/native-build"
   local srcroot="${srcdir}/iNiR-${pkgver}"
   local shellroot="${pkgdir}/usr/share/quickshell/inir"
   local docroot="${pkgdir}/usr/share/doc/${pkgname}"

@@ -135,7 +135,7 @@ let
     ++ optionalQt6 "qtvirtualkeyboard"
     ++ optionalQt6 "qtwayland";
 in
-pkgs.stdenvNoCC.mkDerivation {
+pkgs.stdenv.mkDerivation {
   pname = "inir";
   version = lib.removeSuffix "\n" (builtins.readFile ../VERSION);
   src = lib.cleanSourceWith {
@@ -143,7 +143,26 @@ pkgs.stdenvNoCC.mkDerivation {
     filter = import ./runtime-source-filter.nix { inherit lib; root = ../.; };
   };
 
-  nativeBuildInputs = [ pkgs.makeWrapper pkgs.python3 pkgs.rsync ];
+  cargoDeps = pkgs.rustPlatform.importCargoLock {
+    lockFile = ../rust/Cargo.lock;
+  };
+  cargoRoot = "rust";
+  cmakeDir = "rust";
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" "-DBUILD_TESTING=ON" ];
+  nativeBuildInputs = [
+    pkgs.makeWrapper pkgs.python3 pkgs.rsync pkgs.cmake pkgs.ninja
+    pkgs.cargo pkgs.rustc pkgs.pkg-config pkgs.rustPlatform.cargoSetupHook
+    pkgs.qt6.wrapQtAppsHook
+    pkgs.rustPlatform.bindgenHook
+  ];
+  buildInputs = [ pkgs.qt6.qtbase pkgs.qt6.qtdeclarative pkgs.pipewire ];
+  dontWrapQtApps = true;
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ctest --output-on-failure
+    runHook postCheck
+  '';
 
   # Prevent patchShebangs from attempting to rewrite Python scripts;
   # non-executable files are skipped during fixupPhase.
@@ -158,10 +177,12 @@ pkgs.stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
+    cmake --install .
+
     runtime="$out/share/quickshell/inir"
     mkdir -p "$runtime" "$out/bin"
 
-    python3 sdata/lib/runtime-payload.py copy --root . --target "$runtime"
+    python3 "$src/sdata/lib/runtime-payload.py" copy --root "$src" --target "$runtime"
 
     chmod +x "$runtime/setup" "$runtime/scripts/inir"
     find "$runtime/scripts" -type f \( -name '*.sh' -o -name '*.fish' -o -name '*.py' \) -exec chmod +x {} \;
@@ -176,6 +197,7 @@ pkgs.stdenvNoCC.mkDerivation {
     makeWrapper "$runtime/scripts/inir" "$out/bin/inir" \
       --prefix PATH : "${lib.makeBinPath runtimeDeps}" \
       --prefix QML2_IMPORT_PATH : "${lib.makeSearchPath "lib/qt-6/qml" qmlDeps}" \
+      --prefix QML_IMPORT_PATH : "$out/lib/qt-6/qml:${lib.makeSearchPath "lib/qt-6/qml" qmlDeps}" \
       --prefix QT_PLUGIN_PATH : "${lib.makeSearchPath "lib/qt-6/plugins" qmlDeps}" \
       ${materialSymbolsWrapperArg}
       --set-default INIR_SYSTEM_RUNTIME_DIR "$runtime" \

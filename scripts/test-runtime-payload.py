@@ -217,6 +217,17 @@ cleanup_orphans "$2/installed" "$2/installed/.inir-manifest"
         self.run_command(['git', 'add', 'VERSION'])
         self.run_command(['git', '-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
                           '-c', 'commit.gpgsign=false', 'commit', '-qm', 'fixture'])
+        # Exercise the package's native install step without compiling Rust in
+        # this payload fixture. The real plugin is validated by make test-native.
+        native_build = self.base / 'native-build'
+        native_build.mkdir()
+        native_module = self.base / 'native-module'
+        native_module.mkdir()
+        for filename in ['qmldir', 'plugin.qmltypes', 'libqs_services_native.so']:
+            (native_module / filename).write_text('native fixture\n')
+        (native_build / 'cmake_install.cmake').write_text(
+            'file(INSTALL DESTINATION "/usr/lib/qt-6/qml/qs/services/native" '
+            f'TYPE DIRECTORY FILES "{native_module}/")\n')
         for variant in ['inir-shell', 'inir-shell-git']:
             stage = self.base / variant
             self.run_command(['bash', '-c', '''
@@ -232,6 +243,7 @@ fi
 package
 ''', 'fixture', str(ROOT / 'distro/arch' / variant / 'PKGBUILD'), str(self.base), str(stage), str(self.source)])
             self.assert_payload(stage / 'usr/share/quickshell/inir')
+            self.assertTrue((stage / 'usr/lib/qt-6/qml/qs/services/native/libqs_services_native.so').is_file())
 
 
 if __name__ == '__main__':

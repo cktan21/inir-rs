@@ -40,8 +40,11 @@ python3 -B "$runtime_root/scripts/test-backend-profile.py"
 # Rust toolchain, so that stays opt-in rather than a hard requirement for a
 # shell-only checkout.
 if command -v cargo &>/dev/null && [[ "${INIR_BUILD_RUST:-0}" == "1" ]]; then
-    step "rust contract compiles"
-    cargo build --manifest-path "$runtime_root/rust/Cargo.toml" --locked
+    step "native core and dynamic QML bridge"
+    cargo test --manifest-path "$runtime_root/rust/Cargo.toml" -p inir-core -p inir-types --locked
+    cmake -S "$runtime_root/rust" -B "$runtime_root/rust/build" -DCMAKE_BUILD_TYPE=Debug
+    cmake --build "$runtime_root/rust/build" --parallel 2
+    ctest --test-dir "$runtime_root/rust/build" --output-on-failure
 fi
 
 step "session tray ordering"
