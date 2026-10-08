@@ -64,6 +64,13 @@ complete -c inir -n '__fish_use_subcommand' -a test-local -d 'Run local tests'
 complete -c inir -n '__fish_use_subcommand' -a setup -d 'Run setup directly'
 complete -c inir -n '__fish_use_subcommand' -a service -d 'Manage systemd service'
 complete -c inir -n '__fish_use_subcommand' -a doctor -d 'Health checks'
+complete -c inir -n '__fish_use_subcommand' -a profile -d 'Capture a performance baseline'
+complete -c inir -n '__fish_seen_subcommand_from profile' -l layout -r -a 'ii iris waffle'
+complete -c inir -n '__fish_seen_subcommand_from profile' -l scenario -r -a 'idle settings network windows'
+complete -c inir -n '__fish_seen_subcommand_from profile' -l duration -r
+complete -c inir -n '__fish_seen_subcommand_from profile' -l interval -r
+complete -c inir -n '__fish_seen_subcommand_from profile' -l output -r
+complete -c inir -n '__fish_seen_subcommand_from profile' -l pid -r
 complete -c inir -n '__fish_use_subcommand' -a migrate -d 'Run migrations'
 complete -c inir -n '__fish_use_subcommand' -a status -d 'Shell status'
 complete -c inir -n '__fish_use_subcommand' -a update -d 'Update shell'

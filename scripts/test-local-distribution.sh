@@ -34,6 +34,8 @@ python3 -B "$runtime_root/scripts/test-backend-boundary.py"
 
 step "rust service contract"
 python3 -B "$runtime_root/scripts/test-rust-contract.py"
+step "performance baseline sampler"
+python3 -B "$runtime_root/scripts/test-backend-profile.py"
 # The contract check above is pure parsing and always runs. Compiling it needs a
 # Rust toolchain, so that stays opt-in rather than a hard requirement for a
 # shell-only checkout.

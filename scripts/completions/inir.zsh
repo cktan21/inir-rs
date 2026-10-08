@@ -49,6 +49,7 @@ _inir() {
         'setup:Run setup directly'
         'service:Manage systemd service'
         'doctor:Health checks'
+        'profile:Capture a performance baseline'
         'migrate:Run migrations'
         'status:Shell status'
         'update:Update shell'

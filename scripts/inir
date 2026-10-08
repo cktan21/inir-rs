@@ -101,6 +101,7 @@ Quick start:
   inir logs              View runtime logs (--issues: every warning/error since start, grouped; -n N: last N lines; --full: all categories; --debug: foreground debug)
   inir status            Shell status info
   inir doctor            Health checks (--perf: runtime graphics/media snapshot)
+  inir profile           Capture a baseline (--layout ii|iris|waffle, --duration N)
 
 EOF
 
@@ -3974,6 +3975,10 @@ command_name="${1:-help}"
 shift || true
 
 case "$command_name" in
+    profile)
+        resolve_config_dir
+        exec python3 "$config_dir/scripts/profile-backend.py" "$@"
+        ;;
     install)
         setup_dir="$(resolve_setup_dir)"
         run_setup_command "$setup_dir" install "$@"

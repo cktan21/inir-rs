@@ -1,0 +1,25 @@
+{
+  "formatVersion": 1,
+  "capturedAt": "2026-10-07T16:47:54.212784+00:00",
+  "layout": "ii",
+  "scenario": "idle",
+  "backendRequested": "qml",
+  "tools": {
+    "qs": false,
+    "quickshell": false,
+    "niri": false,
+    "pidstat": false,
+    "perf": false,
+    "strace": false
+  },
+  "available": false,
+  "metrics": null,
+  "unavailableMetrics": {
+    "wakeupsPerSecond": "Requires scheduler tracing; context switches are reported separately.",
+    "forksPerMinute": "Short-lived processes require strace -f -e trace=clone,clone3,execve.",
+    "coldStartupMilliseconds": "Requires shell boot markers from a cold start.",
+    "settingsOpenMilliseconds": "Requires a UI interaction trace.",
+    "qmlObjectCount": "Requires the QML profiler."
+  },
+  "error": "no running iNiR Quickshell process; capture this layout in a live Niri session"
+}
