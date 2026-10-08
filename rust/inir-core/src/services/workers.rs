@@ -81,18 +81,28 @@ async fn bus_cycle(
         let stream = MessageStream::for_match_rule(rule, &bus, Some(128)).await?;
         streams.push(stream.map(move |message| (*domain, message)).boxed());
     }
-    let owner_rule = MatchRule::builder()
-        .msg_type(zbus::message::Type::Signal)
-        .sender("org.freedesktop.DBus")?
-        .interface("org.freedesktop.DBus")?
-        .member("NameOwnerChanged")?
-        .build();
-    streams.push(
-        MessageStream::for_match_rule(owner_rule, &bus, Some(128))
-            .await?
-            .map(|message| ("owner", message))
-            .boxed(),
-    );
+    // Phase 1/4: filter NameOwnerChanged at the bus with arg0 so only our own
+    // services' restarts wake the worker, not every client on the bus.
+    let owner_names: &[&str] = if session {
+        &[]
+    } else {
+        &[network::SERVICE, power::PROFILES, "net.hadess.PowerProfiles"]
+    };
+    for name in owner_names {
+        let owner_rule = MatchRule::builder()
+            .msg_type(zbus::message::Type::Signal)
+            .sender("org.freedesktop.DBus")?
+            .interface("org.freedesktop.DBus")?
+            .member("NameOwnerChanged")?
+            .arg(0, *name)?
+            .build();
+        streams.push(
+            MessageStream::for_match_rule(owner_rule, &bus, Some(16))
+                .await?
+                .map(|message| ("owner", message))
+                .boxed(),
+        );
+    }
     let domains: &[&str] = if session {
         &[] // Phase 1: no session-bus domains
     } else {
