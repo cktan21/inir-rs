@@ -1,3 +1,10 @@
 [workspace]
-members = ["inir-backend"]
+members = ["inir-backend", "inir-core", "inir-qt", "inir-types"]
 resolver = "2"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.53", features = ["rt-multi-thread", "sync", "time", "fs", "macros", "net", "io-util"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+tracing = "0.1"

@@ -1,0 +1,22 @@
+[package]
+name = "inir-qt"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+inir-core = { path = "../inir-core" }
+inir-types = { path = "../inir-types" }
+cxx = "1.0"
+cxx-qt = "=0.10.0"
+cxx-qt-lib = "=0.10.0"
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[build-dependencies]
+cxx-qt-build = "=0.10.0"

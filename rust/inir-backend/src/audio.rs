@@ -12,6 +12,7 @@ pub mod qobject {
         type QString = cxx_qt_lib::QString;
     }
 
+    #[auto_cxx_name]
     extern "RustQt" {
         /// Volume, mute and microphone state for the default PipeWire nodes.
         #[qobject]

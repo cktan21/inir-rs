@@ -77,6 +77,10 @@ class RustContractTests(unittest.TestCase):
             with self.subTest(bridge=bridge):
                 self.assertTrue(list(contracted(BRIDGES / bridge)))
 
+    def test_contracts_export_camel_case_qt_names(self):
+        for bridge in CONTRACTS:
+            self.assertIn('#[auto_cxx_name]', (BRIDGES / bridge).read_text())
+
     def test_contracted_members_exist_on_the_qml_service(self):
         missing = []
         for bridge, qml in CONTRACTS.items():

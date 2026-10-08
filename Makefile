@@ -1,21 +1,37 @@
 PREFIX ?= /usr/local
-BINDIR = $(PREFIX)/bin
-SHAREDIR = $(PREFIX)/share
+DESTDIR ?=
+BINDIR = $(DESTDIR)$(PREFIX)/bin
+SHAREDIR = $(DESTDIR)$(PREFIX)/share
 APPLICATIONS_DIR = $(SHAREDIR)/applications
 ICON_DIR = $(SHAREDIR)/icons/hicolor/scalable/apps
 SHELL_INSTALL_DIR = $(SHAREDIR)/quickshell/inir
 DOC_DIR = $(SHAREDIR)/doc/inir-shell
-SYSTEMD_USER_DIR ?= $(PREFIX)/lib/systemd/user
+SYSTEMD_USER_DIR ?= $(DESTDIR)$(PREFIX)/lib/systemd/user
+NATIVE_BUILD_DIR ?= rust/build
+NATIVE_BUILD_TYPE ?= Release
 
-.PHONY: all build test-local install install-bin install-shell install-systemd install-icon install-desktop install-docs uninstall uninstall-bin uninstall-shell uninstall-systemd uninstall-icon uninstall-desktop uninstall-docs
+.PHONY: all build build-native test-native test-local install install-native install-bin install-shell install-systemd install-icon install-desktop install-docs uninstall uninstall-native uninstall-bin uninstall-shell uninstall-systemd uninstall-icon uninstall-desktop uninstall-docs
 
 all: build
 
-build:
+build: build-native
 	@chmod +x scripts/inir
 	@chmod +x scripts/test-local-distribution.sh
 	@chmod +x setup
 	@find scripts -type f \( -name "*.sh" -o -name "*.fish" -o -name "*.py" \) -exec chmod +x {} +
+
+build-native:
+	cmake -S rust -B "$(NATIVE_BUILD_DIR)" -DCMAKE_BUILD_TYPE=$(NATIVE_BUILD_TYPE) -DCMAKE_INSTALL_PREFIX="$(PREFIX)" -DCMAKE_INSTALL_LIBDIR=lib
+	cmake --build "$(NATIVE_BUILD_DIR)" --parallel 2
+
+test-native:
+	cargo test --manifest-path rust/Cargo.toml -p inir-core -p inir-types --locked
+	cmake -S rust -B "$(NATIVE_BUILD_DIR)" -DCMAKE_BUILD_TYPE=$(NATIVE_BUILD_TYPE) -DBUILD_TESTING=ON
+	cmake --build "$(NATIVE_BUILD_DIR)" --parallel 2
+	ctest --test-dir "$(NATIVE_BUILD_DIR)" --output-on-failure
+
+install-native: build-native
+	DESTDIR="$(DESTDIR)" cmake --install "$(NATIVE_BUILD_DIR)"
 
 test-local: build
 	@bash scripts/test-local-distribution.sh
@@ -31,8 +47,8 @@ install-shell:
 
 install-systemd:
 	@mkdir -p $(SYSTEMD_USER_DIR)
-	@sed -e 's|^ExecStart=.*|ExecStart=$(BINDIR)/inir run --session|' \
-		-e 's|^ExecStopPost=-.*|ExecStopPost=-$(BINDIR)/inir cleanup-orphans|' \
+	@sed -e 's|^ExecStart=.*|ExecStart=$(PREFIX)/bin/inir run --session|' \
+		-e 's|^ExecStopPost=-.*|ExecStopPost=-$(PREFIX)/bin/inir cleanup-orphans|' \
 		assets/systemd/inir.service > $(SYSTEMD_USER_DIR)/inir.service
 	@chmod 644 $(SYSTEMD_USER_DIR)/inir.service
 
@@ -50,7 +66,10 @@ install-docs:
 	@install -Dm644 docs/SETUP.md $(DOC_DIR)/SETUP.md
 	@install -Dm644 docs/IPC.md $(DOC_DIR)/IPC.md
 
-install: build install-bin install-shell install-systemd install-icon install-desktop install-docs
+install: build install-native install-bin install-shell install-systemd install-icon install-desktop install-docs
+
+uninstall-native:
+	@rm -rf "$(DESTDIR)$(PREFIX)/lib/qt-6/qml/qs/services/native"
 
 uninstall-bin:
 	@rm -f $(BINDIR)/inir
@@ -72,4 +91,4 @@ uninstall-desktop:
 uninstall-docs:
 	@rm -rf $(DOC_DIR)
 
-uninstall: uninstall-systemd uninstall-desktop uninstall-icon uninstall-docs uninstall-shell uninstall-bin
+uninstall: uninstall-systemd uninstall-desktop uninstall-icon uninstall-docs uninstall-shell uninstall-bin uninstall-native

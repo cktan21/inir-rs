@@ -7,6 +7,7 @@
 
 #[cxx_qt::bridge]
 pub mod qobject {
+    #[auto_cxx_name]
     extern "RustQt" {
         /// UPower display-device state plus the thresholds the shell derives from it.
         #[qobject]

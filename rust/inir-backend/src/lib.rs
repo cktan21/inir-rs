@@ -10,9 +10,9 @@
 //! beside the QML one so the two can be compared, and a shadowing module name
 //! would make that impossible.
 //!
-//! These are contracts, not a port. Bodies are the minimum that makes the
-//! declared surface coherent; `RUST_BACKEND_MIGRATION.md` Gate 3 picks which
-//! domain earns a real implementation first, on profiling evidence.
+//! These historical contracts are not the runtime plugin. `inir-qt` provides
+//! the implemented native services; each remaining domain must pass the
+//! mandatory migration plan's parity gate before these bodies are replaced.
 
 pub mod audio;
 pub mod battery;

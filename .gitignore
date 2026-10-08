@@ -120,6 +120,7 @@ node_modules/
 # Cargo output for the rust/ contract crate. Cargo.lock is kept: the backend
 # plan pins build dependencies, so the lockfile is part of the contract.
 rust/target/
+rust/build/
 
 # ── Logs / Debug / Temp ──────────────────────────────────────
 *.log

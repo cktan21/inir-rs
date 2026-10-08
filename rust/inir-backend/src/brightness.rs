@@ -12,6 +12,7 @@ pub mod qobject {
         type QString = cxx_qt_lib::QString;
     }
 
+    #[auto_cxx_name]
     extern "RustQt" {
         /// Backlight and DDC state shared across outputs.
         #[qobject]
