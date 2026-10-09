@@ -1,8 +1,5 @@
-pub mod audio;
-pub mod bluetooth;
 pub mod brightness;
 pub mod dbus;
-pub mod media;
 pub mod network;
 pub mod niri;
 pub mod power;

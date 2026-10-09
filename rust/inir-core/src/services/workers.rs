@@ -3,7 +3,7 @@
 // native C++/QML to avoid duplicate subscriptions. The disabled modules remain
 // compiled so later phases can re-enable them with the delta architecture.
 #![allow(dead_code, unused_imports)]
-use super::{audio, bluetooth, brightness, media, network, niri, power};
+use super::{brightness, network, niri, power};
 use crate::events::Event;
 use futures_util::{stream::SelectAll, StreamExt};
 use inir_types::desktop::*;
@@ -42,10 +42,7 @@ async fn update(bus: &Connection, domain: &str, events: &mpsc::Sender<Event>) {
     }
     let event = match domain {
         "network" => snapshot!(network::snapshot(bus), Network, NetworkState),
-        "bluetooth" => snapshot!(bluetooth::snapshot(bus), Bluetooth, BluetoothState),
-        "battery" => snapshot!(power::battery(bus), Battery, BatteryState),
         "power" => snapshot!(power::profiles(bus), Power, PowerState),
-        "media" => snapshot!(media::snapshot(bus), Media, MediaState),
         _ => return,
     };
     let _ = events.send(event).await;
@@ -204,20 +201,9 @@ async fn niri_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
 
 async fn execute(command: Command) -> Result<(), String> {
     match command {
-        // Phase 1: audio/media/niri/bluetooth commands are issued by the QML
-        // frontend against Quickshell's native services, not the Rust backend.
-        Command::AudioVolume { .. }
-        | Command::AudioMute { .. }
-        | Command::Niri { .. }
-        | Command::Media { .. }
-        | Command::BluetoothEnabled { .. }
-        | Command::BluetoothDiscovery { .. }
-        | Command::BluetoothConnect { .. }
-        | Command::BluetoothDisconnect { .. }
-        | Command::BluetoothPair { .. }
-        | Command::BluetoothForget { .. } => {
-            Err("command served by the QML frontend in Phase 1".into())
-        }
+        // Niri actions remain served by the QML frontend until Phase 3 cuts the
+        // native Niri domain over to the Rust backend.
+        Command::Niri { .. } => Err("command served by the QML frontend".into()),
         command => {
             let bus = Connection::system().await.map_err(|e| e.to_string())?;
             match command {

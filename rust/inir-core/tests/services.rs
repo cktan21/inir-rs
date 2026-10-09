@@ -4,10 +4,6 @@ use inir_core::{
     services::{brightness, network, niri},
 };
 use inir_types::desktop::*;
-use pipewire::spa::{
-    self,
-    pod::{Object, Property, Value, ValueArray},
-};
 use std::{
     collections::HashMap,
     sync::{
@@ -78,29 +74,6 @@ fn backlight_reading_and_write_validation() {
     for name in ["", "..", "../panel", "panel/brightness"] {
         assert!(brightness::target(dir.path(), name, 0.5).is_err());
     }
-}
-
-#[test]
-fn audio_spa_props_use_cubic_volume_and_reject_invalid_channels() {
-    let mut node = AudioNode::default();
-    let props = |values| {
-        Value::Object(Object {
-            type_: spa::utils::SpaTypes::ObjectParamProps.as_raw(),
-            id: spa::param::ParamType::Props.as_raw(),
-            properties: vec![
-                Property::new(spa::sys::SPA_PROP_mute, Value::Bool(true)),
-                Property::new(
-                    spa::sys::SPA_PROP_channelVolumes,
-                    Value::ValueArray(ValueArray::Float(values)),
-                ),
-            ],
-        })
-    };
-    inir_core::services::audio::apply_props(&mut node, props(vec![0.125, 0.064]));
-    assert_eq!(node.muted, Some(true));
-    assert!((node.volume.unwrap() - 0.5).abs() < 1e-6);
-    inir_core::services::audio::apply_props(&mut node, props(vec![f32::NAN]));
-    assert_eq!(node.channels, vec![0.125, 0.064]);
 }
 
 fn window(id: u64, focused: bool) -> niri_ipc::Window {

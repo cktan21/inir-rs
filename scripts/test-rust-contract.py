@@ -1,45 +1,61 @@
 #!/usr/bin/env python3
-"""Hold the CXX-Qt contracts in rust/ to the QML services they must replace.
+"""Hold the CXX-Qt network contract in rust/ to the QML service it must replace.
 
-Milestone 2.2 of docs/plans/UI_CONSOLIDATION_AND_BACKEND_BOUNDARY.md exists so a
-compiled backend can drop in "without changing QML consumers". That promise is
-only worth anything if the two sides are checked against each other: renaming a
-QML property or dropping a method would otherwise leave the Rust contract quietly
-describing a service that no longer exists.
+The compiled backend is meant to drop in "without changing QML consumers". That
+promise is only worth anything if the two sides are checked against each other:
+renaming a QML property or dropping a method would otherwise leave the Rust
+contract quietly describing a service that no longer exists.
 
-So for every member a bridge declares, the matching QML singleton must still
-expose it under its camelCase name, at the root of the singleton — a function
-nested inside an `IpcHandler` is not part of the QML API that layouts bind to.
-
-The contract is deliberately a subset: a service may expose more than is
-contracted, and `rust/` is not required to cover every service yet. What is
-forbidden is a contract that claims something the QML side does not have.
+Network is the live drop-in domain: `services/network/Network.qml` binds the
+native `DesktopServices` members through `NativeBackend.desktop`. So every
+network member the bridge declares must still be referenced by that QML service
+under its camelCase name. Audio, battery, bluetooth and media are intentionally
+served by Quickshell's C++ (not re-implemented in Rust), and power/brightness/
+niri are produced natively but not yet consumed, so they are listed as reserved
+rather than contracted.
 """
 
 import re
-import sys
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BRIDGES = ROOT / "rust/inir-backend/src"
-
-# Bridge source -> the QML singleton it is a contract for.
-CONTRACTS = {
-    "audio.rs": "services/media/Audio.qml",
-    "battery.rs": "services/power/Battery.qml",
-    "brightness.rs": "services/display/Brightness.qml",
-}
+BRIDGE = ROOT / "rust/inir-qt/src/qobjects/desktop.rs"
+NETWORK_QML = ROOT / "services/network/Network.qml"
 
 QPROPERTY = re.compile(r"#\[qproperty\(\s*[^,]+,\s*(\w+)\s*\)\]")
 QMETHOD = re.compile(r"#\[(qinvokable|qsignal)\]\s*fn\s+(\w+)")
 
-# Root-level members of a QML singleton sit at exactly one indent level; anything
-# deeper belongs to a nested object such as an IpcHandler or a Process.
-QML_PROPERTY = re.compile(r"^ {4}(?:readonly\s+)?property\s+[\w.<>]+\s+(\w+)\s*:", re.M)
-QML_REQUIRED = re.compile(r"^ {4}required\s+property\s+[\w.<>]+\s+(\w+)", re.M)
-QML_FUNCTION = re.compile(r"^ {4}function\s+(\w+)\s*\(", re.M)
-QML_SIGNAL = re.compile(r"^ {4}signal\s+(\w+)", re.M)
+# Network members the QML service binds through NativeBackend.desktop.
+NETWORK_MEMBERS = {
+    "network_ready",
+    "network_error",
+    "wifi_enabled",
+    "ethernet",
+    "connectivity",
+    "network_revision",
+}
+# Produced natively but without a QML consumer yet (power/brightness) or held
+# for Phase 3 (niri); plus command/lease infrastructure bound indirectly.
+RESERVED = {
+    "active",
+    "power_ready",
+    "power_error",
+    "active_power_profile",
+    "power_profiles_json",
+    "brightness_ready",
+    "brightness_error",
+    "brightness_revision",
+    "niri_ready",
+    "niri_error",
+    "overview_open",
+    "niri_revision",
+    "set_services_active",
+    "execute",
+    "command_finished",
+}
+# Domains that must not reappear as native Rust state; they stay Quickshell C++.
+FORBIDDEN_MEMBERS = ("bluetooth", "battery", "audio", "media")
 
 
 def camel(snake: str) -> str:
@@ -47,63 +63,60 @@ def camel(snake: str) -> str:
     return head + "".join(part[:1].upper() + part[1:] for part in rest)
 
 
-def qml_members(path: Path) -> set:
-    source = path.read_text(encoding="utf-8")
-    members = set()
-    for pattern in (QML_PROPERTY, QML_REQUIRED, QML_FUNCTION, QML_SIGNAL):
-        members.update(pattern.findall(source))
+def bridge_members():
+    source = BRIDGE.read_text(encoding="utf-8")
+    members = set(QPROPERTY.findall(source))
+    members.update(name for _kind, name in QMETHOD.findall(source))
     return members
 
 
-def contracted(path: Path):
-    source = path.read_text(encoding="utf-8")
-    for name in QPROPERTY.findall(source):
-        yield "property", name
-    for kind, name in QMETHOD.findall(source):
-        yield ("signal" if kind == "qsignal" else "method"), name
-
-
 class RustContractTests(unittest.TestCase):
-    def test_every_bridge_maps_to_a_known_service(self):
-        bridges = {p.name for p in BRIDGES.glob("*.rs")} - {"lib.rs"}
-        self.assertEqual(
-            bridges,
-            set(CONTRACTS),
-            "a bridge without an entry here is a contract nothing checks",
+    def test_bridge_exists(self):
+        self.assertTrue(BRIDGE.is_file(), BRIDGE)
+        self.assertFalse(
+            (ROOT / "rust/inir-backend").exists(),
+            "inir-backend scaffolding was removed; it must not return",
         )
 
-    def test_contracts_are_not_vacuous(self):
-        for bridge in CONTRACTS:
-            with self.subTest(bridge=bridge):
-                self.assertTrue(list(contracted(BRIDGES / bridge)))
+    def test_network_contract_is_not_vacuous(self):
+        self.assertTrue(NETWORK_MEMBERS <= bridge_members())
 
-    def test_contracts_export_camel_case_qt_names(self):
-        for bridge in CONTRACTS:
-            self.assertIn('#[auto_cxx_name]', (BRIDGES / bridge).read_text())
-
-    def test_contracted_members_exist_on_the_qml_service(self):
+    def test_network_members_exist_on_the_qml_service(self):
+        source = NETWORK_QML.read_text(encoding="utf-8")
         missing = []
-        for bridge, qml in CONTRACTS.items():
-            service = ROOT / qml
-            self.assertTrue(service.is_file(), qml)
-            members = qml_members(service)
-            for kind, name in contracted(BRIDGES / bridge):
-                if camel(name) not in members:
-                    missing.append(f"{bridge}: {kind} {name} -> {qml} has no {camel(name)}")
+        for member in NETWORK_MEMBERS:
+            name = camel(member)
+            handler = "on" + name[:1].upper() + name[1:] + "Changed"
+            if name not in source and handler not in source:
+                missing.append(member)
         self.assertEqual(
             missing,
             [],
-            "CXX-Qt contract and QML service have drifted apart:\n  "
-            + "\n  ".join(missing),
+            "CXX-Qt network contract and Network.qml have drifted apart: "
+            + ", ".join(camel(m) for m in missing),
         )
 
-    def test_bridges_do_not_shadow_the_qml_module(self):
-        """A native module named qs.services would hide the QML one it is compared against."""
-        build = (ROOT / "rust/inir-backend/build.rs").read_text()
-        uris = re.findall(r'QmlModule::new\("([^"]+)"\)', build)
-        self.assertTrue(uris)
-        for uri in uris:
-            self.assertNotEqual(uri, "qs.services")
+    def test_every_bridge_member_is_contracted_or_reserved(self):
+        unknown = bridge_members() - NETWORK_MEMBERS - RESERVED
+        self.assertEqual(
+            unknown,
+            set(),
+            "bridge exposes members that are neither contracted nor reserved: "
+            + ", ".join(sorted(unknown)),
+        )
+
+    def test_removed_domains_stay_out_of_the_bridge(self):
+        source = BRIDGE.read_text(encoding="utf-8").lower()
+        present = [name for name in FORBIDDEN_MEMBERS if name in source]
+        self.assertEqual(
+            present,
+            [],
+            "domains served by Quickshell C++ must not reappear in the bridge: "
+            + ", ".join(present),
+        )
+
+    def test_bridge_exports_camel_case_qt_names(self):
+        self.assertIn("#[auto_cxx_name]", BRIDGE.read_text(encoding="utf-8"))
 
     def test_cargo_target_is_not_tracked(self):
         ignore = (ROOT / ".gitignore").read_text()

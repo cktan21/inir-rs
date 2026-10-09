@@ -8,12 +8,8 @@ pub enum Event {
     Resource(ResourceState),
     Config(Config),
     Network(NetworkState),
-    Bluetooth(BluetoothState),
-    Battery(BatteryState),
     Power(PowerState),
     Brightness(BrightnessState),
-    Audio(AudioState),
-    Media(MediaState),
     Niri(NiriState),
 }
 
@@ -45,28 +41,12 @@ impl AppState {
                 self.desktop.network = next;
                 Some(Domain::Desktop)
             }
-            Event::Bluetooth(next) if self.desktop.bluetooth != next => {
-                self.desktop.bluetooth = next;
-                Some(Domain::Desktop)
-            }
-            Event::Battery(next) if self.desktop.battery != next => {
-                self.desktop.battery = next;
-                Some(Domain::Desktop)
-            }
             Event::Power(next) if self.desktop.power != next => {
                 self.desktop.power = next;
                 Some(Domain::Desktop)
             }
             Event::Brightness(next) if self.desktop.brightness != next => {
                 self.desktop.brightness = next;
-                Some(Domain::Desktop)
-            }
-            Event::Audio(next) if self.desktop.audio != next => {
-                self.desktop.audio = next;
-                Some(Domain::Desktop)
-            }
-            Event::Media(next) if self.desktop.media != next => {
-                self.desktop.media = next;
                 Some(Domain::Desktop)
             }
             Event::Niri(next) if self.desktop.niri != next => {

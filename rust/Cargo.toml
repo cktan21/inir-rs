@@ -1,5 +1,5 @@
 [workspace]
-members = ["inir-backend", "inir-core", "inir-qt", "inir-types"]
+members = ["inir-core", "inir-qt", "inir-types"]
 resolver = "2"
 
 [workspace.dependencies]

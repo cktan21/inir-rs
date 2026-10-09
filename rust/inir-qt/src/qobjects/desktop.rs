@@ -18,42 +18,20 @@ pub mod qobject {
         #[qproperty(bool, active)]
         #[qproperty(bool, network_ready)]
         #[qproperty(QString, network_error)]
-        #[qproperty(bool, bluetooth_ready)]
-        #[qproperty(QString, bluetooth_error)]
-        #[qproperty(bool, battery_ready)]
-        #[qproperty(QString, battery_error)]
         #[qproperty(bool, power_ready)]
         #[qproperty(QString, power_error)]
         #[qproperty(bool, brightness_ready)]
         #[qproperty(QString, brightness_error)]
-        #[qproperty(bool, audio_ready)]
-        #[qproperty(QString, audio_error)]
-        #[qproperty(bool, media_ready)]
-        #[qproperty(QString, media_error)]
         #[qproperty(bool, niri_ready)]
         #[qproperty(QString, niri_error)]
         #[qproperty(bool, wifi_enabled)]
         #[qproperty(bool, ethernet)]
         #[qproperty(i32, connectivity)]
-        #[qproperty(i32, bluetooth_connected_count)]
-        #[qproperty(bool, bluetooth_enabled)]
-        #[qproperty(bool, battery_available)]
-        #[qproperty(bool, on_battery)]
-        #[qproperty(i32, battery_state)]
-        #[qproperty(f64, battery_percentage)]
-        #[qproperty(f64, energy_rate)]
-        #[qproperty(f64, time_to_empty)]
-        #[qproperty(f64, time_to_full)]
         #[qproperty(QString, active_power_profile)]
         #[qproperty(QString, power_profiles_json)]
-        #[qproperty(QString, default_sink)]
-        #[qproperty(QString, default_source)]
         #[qproperty(bool, overview_open)]
         #[qproperty(u64, network_revision)]
-        #[qproperty(u64, bluetooth_revision)]
         #[qproperty(u64, brightness_revision)]
-        #[qproperty(u64, audio_revision)]
-        #[qproperty(u64, media_revision)]
         #[qproperty(u64, niri_revision)]
         type DesktopServices = super::DesktopServicesRust;
         #[qinvokable]
@@ -95,42 +73,20 @@ pub struct DesktopServicesRust {
     active: bool,
     network_ready: bool,
     network_error: QString,
-    bluetooth_ready: bool,
-    bluetooth_error: QString,
-    battery_ready: bool,
-    battery_error: QString,
     power_ready: bool,
     power_error: QString,
     brightness_ready: bool,
     brightness_error: QString,
-    audio_ready: bool,
-    audio_error: QString,
-    media_ready: bool,
-    media_error: QString,
     niri_ready: bool,
     niri_error: QString,
     wifi_enabled: bool,
     ethernet: bool,
     connectivity: i32,
-    bluetooth_connected_count: i32,
-    bluetooth_enabled: bool,
-    battery_available: bool,
-    on_battery: bool,
-    battery_state: i32,
-    battery_percentage: f64,
-    energy_rate: f64,
-    time_to_empty: f64,
-    time_to_full: f64,
     active_power_profile: QString,
     power_profiles_json: QString,
-    default_sink: QString,
-    default_source: QString,
     overview_open: bool,
     network_revision: u64,
-    bluetooth_revision: u64,
     brightness_revision: u64,
-    audio_revision: u64,
-    media_revision: u64,
     niri_revision: u64,
     backend: Option<Arc<Backend>>,
     commands: Option<tokio::sync::mpsc::Sender<(QString, Command)>>,
@@ -234,81 +190,6 @@ impl qobject::DesktopServices {
             self.as_mut().set_network_revision(revision);
             self.as_mut().set_network_ready(state.network.status.ready);
         }
-        if old.bluetooth != state.bluetooth {
-            self.as_mut()
-                .set_bluetooth_error(QString::from(state.bluetooth.status.error.as_str()));
-            self.as_mut().set_bluetooth_connected_count(
-                state
-                    .bluetooth
-                    .devices
-                    .iter()
-                    .filter(|d| d.connected)
-                    .count() as i32,
-            );
-            self.as_mut()
-                .set_bluetooth_enabled(state.bluetooth.adapters.iter().any(|a| a.powered));
-            if state.bluetooth.adapters != old.bluetooth.adapters {
-                self.as_mut().apply_collection(
-                    &QString::from("bluetoothAdapters"),
-                    &QString::from(serde_json::to_string(&state.bluetooth.adapters).unwrap()),
-                );
-            }
-            if state.bluetooth.devices != old.bluetooth.devices {
-                self.as_mut().apply_collection(
-                    &QString::from("bluetoothDevices"),
-                    &QString::from(serde_json::to_string(&state.bluetooth.devices).unwrap()),
-                );
-            }
-            let revision = self.rust().bluetooth_revision.wrapping_add(1);
-            self.as_mut().set_bluetooth_revision(revision);
-            self.as_mut()
-                .set_bluetooth_ready(state.bluetooth.status.ready);
-        }
-        if old.battery != state.battery {
-            // Commit the complete snapshot before notifying QML. Battery policy
-            // bindings must never observe a default percentage with ready=true.
-            {
-                let mut rust = self.as_mut().rust_mut();
-                rust.battery_ready = state.battery.status.ready;
-                rust.battery_error = QString::from(state.battery.status.error.as_str());
-                rust.battery_available = state.battery.available;
-                rust.on_battery = state.battery.on_battery;
-                rust.battery_state = state.battery.state as i32;
-                rust.battery_percentage = state.battery.percentage;
-                rust.energy_rate = state.battery.energy_rate;
-                rust.time_to_empty = state.battery.time_to_empty as f64;
-                rust.time_to_full = state.battery.time_to_full as f64;
-            }
-            if QString::from(state.battery.status.error.as_str())
-                != QString::from(old.battery.status.error.as_str())
-            {
-                self.as_mut().battery_error_changed();
-            }
-            if state.battery.available != old.battery.available {
-                self.as_mut().battery_available_changed();
-            }
-            if state.battery.on_battery != old.battery.on_battery {
-                self.as_mut().on_battery_changed();
-            }
-            if state.battery.state as i32 != old.battery.state as i32 {
-                self.as_mut().battery_state_changed();
-            }
-            if state.battery.percentage != old.battery.percentage {
-                self.as_mut().battery_percentage_changed();
-            }
-            if state.battery.energy_rate != old.battery.energy_rate {
-                self.as_mut().energy_rate_changed();
-            }
-            if state.battery.time_to_empty as f64 != old.battery.time_to_empty as f64 {
-                self.as_mut().time_to_empty_changed();
-            }
-            if state.battery.time_to_full as f64 != old.battery.time_to_full as f64 {
-                self.as_mut().time_to_full_changed();
-            }
-            if state.battery.status.ready != old.battery.status.ready {
-                self.as_mut().battery_ready_changed();
-            }
-        }
         if old.power != state.power {
             self.as_mut()
                 .set_power_error(QString::from(state.power.status.error.as_str()));
@@ -333,37 +214,6 @@ impl qobject::DesktopServices {
             self.as_mut().set_brightness_revision(revision);
             self.as_mut()
                 .set_brightness_ready(state.brightness.status.ready);
-        }
-        if old.audio != state.audio {
-            self.as_mut()
-                .set_audio_error(QString::from(state.audio.status.error.as_str()));
-            self.as_mut()
-                .set_default_sink(QString::from(state.audio.default_sink.as_str()));
-            self.as_mut()
-                .set_default_source(QString::from(state.audio.default_source.as_str()));
-            if state.audio.nodes != old.audio.nodes {
-                self.as_mut().apply_collection(
-                    &QString::from("audioNodes"),
-                    &QString::from(serde_json::to_string(&state.audio.nodes).unwrap()),
-                );
-            }
-            let revision = self.rust().audio_revision.wrapping_add(1);
-            self.as_mut().set_audio_revision(revision);
-            self.as_mut().set_audio_ready(state.audio.status.ready);
-        }
-        if old.media != state.media {
-            self.as_mut()
-                .set_media_error(QString::from(state.media.status.error.as_str()));
-
-            if state.media.players != old.media.players {
-                self.as_mut().apply_collection(
-                    &QString::from("mediaPlayers"),
-                    &QString::from(serde_json::to_string(&state.media.players).unwrap()),
-                );
-            }
-            let revision = self.rust().media_revision.wrapping_add(1);
-            self.as_mut().set_media_revision(revision);
-            self.as_mut().set_media_ready(state.media.status.ready);
         }
         if old.niri != state.niri {
             self.as_mut()

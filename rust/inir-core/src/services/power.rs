@@ -1,35 +1,11 @@
 use super::dbus::{self, read};
-use inir_types::desktop::{BatteryState, PowerState, ServiceStatus};
-use zbus::{
-    zvariant::{OwnedObjectPath, Value},
-    Connection,
-};
+use inir_types::desktop::{PowerState, ServiceStatus};
+use zbus::{zvariant::Value, Connection};
 
-pub const UPOWER: &str = "org.freedesktop.UPower";
 pub const PROFILES: &str = "org.freedesktop.UPower.PowerProfiles";
 const PROFILE_PATH: &str = "/org/freedesktop/UPower/PowerProfiles";
 const OLD_PROFILES: &str = "net.hadess.PowerProfiles";
 const OLD_PATH: &str = "/net/hadess/PowerProfiles";
-
-pub async fn battery(bus: &Connection) -> zbus::Result<BatteryState> {
-    let root = dbus::proxy(bus, UPOWER, "/org/freedesktop/UPower", UPOWER).await?;
-    let path: OwnedObjectPath = root.call("GetDisplayDevice", &()).await?;
-    let p = dbus::properties(bus, UPOWER, path.as_str(), "org.freedesktop.UPower.Device").await?;
-    let root = dbus::properties(bus, UPOWER, "/org/freedesktop/UPower", UPOWER).await?;
-    Ok(BatteryState {
-        status: ServiceStatus {
-            ready: true,
-            error: String::new(),
-        },
-        available: read::<u32>(&p, "Type") == 2 && read(&p, "IsPresent"),
-        on_battery: read(&root, "OnBattery"),
-        state: read(&p, "State"),
-        percentage: (read::<f64>(&p, "Percentage") / 100.0).clamp(0.0, 1.0),
-        energy_rate: read(&p, "EnergyRate"),
-        time_to_empty: read(&p, "TimeToEmpty"),
-        time_to_full: read(&p, "TimeToFull"),
-    })
-}
 
 async fn endpoint(bus: &Connection) -> zbus::Result<(&'static str, &'static str)> {
     if dbus::properties(bus, PROFILES, PROFILE_PATH, PROFILES)

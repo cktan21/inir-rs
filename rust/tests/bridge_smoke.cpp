@@ -75,10 +75,7 @@ int main(int argc, char **argv) {
                 // natively. Bluetooth/battery/audio/media are served by
                 // Quickshell's existing C++/QML and never report ready here.
                 property bool servicesReady: DesktopServices.networkReady && DesktopServices.powerReady
-                property int audioNodeCount: DesktopServices.audioNodes.count
-                property string firstNodeId: ""
                 function activateServices(active) { DesktopServices.setServicesActive(active) }
-                function readNode() { firstNodeId = DesktopServices.audioNodes.get(0).id }
                 property int commandFailures: 0
                 property string commandIds: ""
                 property Connections commandObserver: Connections {

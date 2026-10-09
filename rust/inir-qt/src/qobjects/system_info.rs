@@ -223,13 +223,11 @@ impl qobject::SystemInfo {
         let services = backend.map(|b| b.snapshot().desktop).unwrap_or_default();
         QString::from(
             serde_json::json!({
-                "backend": "rust", "tokioWorkerThreads": 2, "resourceConsumers": consumers,
-                "desktopConsumers": service_consumers, "pipewireWorkerRequested": service_consumers > 0,
+                "backend": "rust", "tokioWorkerThreads": 1, "resourceConsumers": consumers,
+                "desktopConsumers": service_consumers,
                 "services": {
-                    "network": services.network.status, "bluetooth": services.bluetooth.status,
-                    "battery": services.battery.status, "power": services.power.status,
-                    "brightness": services.brightness.status, "audio": services.audio.status,
-                    "media": services.media.status, "niri": services.niri.status
+                    "network": services.network.status, "power": services.power.status,
+                    "brightness": services.brightness.status, "niri": services.niri.status
                 },
                 "resourceSampling": consumers > 0,
                 "tasks": [

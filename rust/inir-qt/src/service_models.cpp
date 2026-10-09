@@ -65,11 +65,7 @@ bool RecordModel::apply(const QString &json) {
 ServiceModels::ServiceModels(QObject *parent) : QObject(parent) {
     auto add = [this](const QString &name, const QStringList &fields) { m_models.insert(name, new RecordModel(fields, this)); };
     add("accessPoints", {"id", "device", "ssid", "bssid", "strength", "frequency", "rate", "security", "active"});
-    add("bluetoothAdapters", {"id", "address", "name", "powered", "discovering"});
-    add("bluetoothDevices", {"id", "adapter", "address", "name", "icon", "paired", "trusted", "connected", "battery"});
     add("backlights", {"id", "kind", "raw", "maximum", "value"});
-    add("audioNodes", {"id", "serial", "name", "description", "mediaClass", "volume", "muted", "channels"});
-    add("mediaPlayers", {"id", "identity", "playbackStatus", "title", "artist", "artUrl", "length", "canControl", "canSeek"});
     add("niriWindows", {"id", "title", "appId", "workspaceId", "focused", "floating", "urgent", "focusSerial"});
     add("niriWorkspaces", {"id", "index", "name", "output", "active", "focused", "activeWindowId", "urgent"});
 }
