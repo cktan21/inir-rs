@@ -2,10 +2,12 @@
 #include <QAbstractListModel>
 #include <QHash>
 #include <QStringList>
+#include <QVariantList>
 #include <QVariantMap>
 
 // The only C++ policy here is Qt's model notification protocol. Discovery,
 // ordering, device operations and state reduction belong to the Rust core.
+// Rows arrive as typed QVariantMaps built in Rust, so no JSON is parsed here.
 class RecordModel final : public QAbstractListModel {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
@@ -15,7 +17,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
     int count() const { return m_rows.size(); }
-    bool apply(const QString &json);
+    bool applyRows(const QVariantList &rows);
     Q_INVOKABLE QVariantMap get(int index) const;
 signals:
     void countChanged();
@@ -36,7 +38,7 @@ public:
     QAbstractItemModel *backlights() const { return m_models.value("backlights"); }
     QAbstractItemModel *niriWindows() const { return m_models.value("niriWindows"); }
     QAbstractItemModel *niriWorkspaces() const { return m_models.value("niriWorkspaces"); }
-    bool applyCollection(const QString &name, const QString &json);
+    bool applyCollection(const QString &name, const QVariant &rows);
 private:
     QHash<QString, RecordModel*> m_models;
 };

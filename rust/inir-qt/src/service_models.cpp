@@ -1,7 +1,4 @@
 #include "inir-qt/service_models.h"
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QSet>
 #include <QThread>
 
@@ -18,16 +15,12 @@ QVariant RecordModel::data(const QModelIndex &index, int role) const {
 }
 QHash<int, QByteArray> RecordModel::roleNames() const { return m_roles; }
 QVariantMap RecordModel::get(int index) const { return index >= 0 && index < count() ? m_rows[index] : QVariantMap{}; }
-bool RecordModel::apply(const QString &json) {
+bool RecordModel::applyRows(const QVariantList &rows) {
     Q_ASSERT(QThread::currentThread() == thread());
-    QJsonParseError error;
-    const auto document = QJsonDocument::fromJson(json.toUtf8(), &error);
-    if (error.error != QJsonParseError::NoError || !document.isArray()) return false;
     QList<QVariantMap> next;
     QSet<QString> ids;
-    for (const auto &value : document.array()) {
-        if (!value.isObject()) return false;
-        const auto row = value.toObject().toVariantMap();
+    for (const auto &value : rows) {
+        const auto row = value.toMap();
         const auto id = row.value("id").toString();
         if (id.isEmpty() || ids.contains(id)) return false;
         ids.insert(id); next.append(row);
@@ -69,6 +62,6 @@ ServiceModels::ServiceModels(QObject *parent) : QObject(parent) {
     add("niriWindows", {"id", "title", "appId", "workspaceId", "focused", "floating", "urgent", "focusSerial"});
     add("niriWorkspaces", {"id", "index", "name", "output", "active", "focused", "activeWindowId", "urgent"});
 }
-bool ServiceModels::applyCollection(const QString &name, const QString &json) {
-    const auto model = m_models.value(name); return model && model->apply(json);
+bool ServiceModels::applyCollection(const QString &name, const QVariant &rows) {
+    const auto model = m_models.value(name); return model && model->applyRows(rows.toList());
 }

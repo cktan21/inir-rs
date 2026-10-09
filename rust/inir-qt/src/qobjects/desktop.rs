@@ -3,6 +3,8 @@ pub mod qobject {
     unsafe extern "C++" {
         include!("cxx-qt-lib/qstring.h");
         type QString = cxx_qt_lib::QString;
+        include!("cxx-qt-lib/qvariant.h");
+        type QVariant = cxx_qt_lib::QVariant;
     }
     unsafe extern "C++Qt" {
         include!("inir-qt/service_models.h");
@@ -52,7 +54,7 @@ pub mod qobject {
         fn apply_collection(
             self: Pin<&mut DesktopServices>,
             name: &QString,
-            json: &QString,
+            rows: &QVariant,
         ) -> bool;
     }
     impl cxx_qt::Threading for DesktopServices {}
@@ -60,13 +62,84 @@ pub mod qobject {
 }
 
 use cxx_qt::{CxxQtType, Threading};
-use cxx_qt_lib::QString;
+use cxx_qt_lib::{QList, QMap, QMapPair_QString_QVariant, QString, QVariant};
 use inir_core::runtime::{Backend, ResourceConsumer, TaskGuard};
-use inir_types::desktop::{Command, DesktopState};
+use inir_types::desktop::{AccessPoint, Backlight, Command, DesktopState, NiriWindow, NiriWorkspace};
 use std::{
     pin::Pin,
     sync::{Arc, Mutex},
 };
+
+type VariantMap = QMap<QMapPair_QString_QVariant>;
+
+fn qstr(value: &str) -> QVariant {
+    QVariant::from(&QString::from(value))
+}
+
+/// Build a `QVariantList` (wrapped in a `QVariant`) from typed rows with no
+/// JSON serialization. Each row is a `QVariantMap`; the C++ model applies it
+/// directly, so no encoding or `QJsonDocument` parse runs on the GUI thread.
+fn rows(items: impl ExactSizeIterator<Item = VariantMap>) -> QVariant {
+    let mut list = QList::<QVariant>::default();
+    list.reserve(items.len() as isize);
+    for item in items {
+        list.append(QVariant::from(&item));
+    }
+    QVariant::from(&list)
+}
+
+fn access_point_row(ap: &AccessPoint) -> VariantMap {
+    let mut m = VariantMap::default();
+    m.insert(QString::from("id"), qstr(&ap.id));
+    m.insert(QString::from("device"), qstr(&ap.device));
+    m.insert(QString::from("ssid"), qstr(&ap.ssid));
+    m.insert(QString::from("bssid"), qstr(&ap.bssid));
+    m.insert(QString::from("strength"), QVariant::from(&(ap.strength as i32)));
+    m.insert(QString::from("frequency"), QVariant::from(&(ap.frequency as i32)));
+    m.insert(QString::from("rate"), QVariant::from(&(ap.rate as i32)));
+    m.insert(QString::from("security"), qstr(&ap.security));
+    m.insert(QString::from("active"), QVariant::from(&ap.active));
+    m
+}
+
+fn backlight_row(b: &Backlight) -> VariantMap {
+    let mut m = VariantMap::default();
+    m.insert(QString::from("id"), qstr(&b.id));
+    m.insert(QString::from("kind"), qstr(&b.kind));
+    m.insert(QString::from("raw"), QVariant::from(&(b.raw as i32)));
+    m.insert(QString::from("maximum"), QVariant::from(&(b.maximum as i32)));
+    m.insert(QString::from("value"), QVariant::from(&b.value));
+    m
+}
+
+fn niri_window_row(w: &NiriWindow) -> VariantMap {
+    let mut m = VariantMap::default();
+    m.insert(QString::from("id"), qstr(&w.id));
+    m.insert(QString::from("title"), qstr(&w.title));
+    m.insert(QString::from("appId"), qstr(&w.app_id));
+    m.insert(QString::from("workspaceId"), qstr(&w.workspace_id));
+    m.insert(QString::from("focused"), QVariant::from(&w.focused));
+    m.insert(QString::from("floating"), QVariant::from(&w.floating));
+    m.insert(QString::from("urgent"), QVariant::from(&w.urgent));
+    m.insert(
+        QString::from("focusSerial"),
+        QVariant::from(&(w.focus_serial as i64)),
+    );
+    m
+}
+
+fn niri_workspace_row(w: &NiriWorkspace) -> VariantMap {
+    let mut m = VariantMap::default();
+    m.insert(QString::from("id"), qstr(&w.id));
+    m.insert(QString::from("index"), QVariant::from(&(w.index as i32)));
+    m.insert(QString::from("name"), qstr(&w.name));
+    m.insert(QString::from("output"), qstr(&w.output));
+    m.insert(QString::from("active"), QVariant::from(&w.active));
+    m.insert(QString::from("focused"), QVariant::from(&w.focused));
+    m.insert(QString::from("activeWindowId"), qstr(&w.active_window_id));
+    m.insert(QString::from("urgent"), QVariant::from(&w.urgent));
+    m
+}
 
 #[derive(Default)]
 pub struct DesktopServicesRust {
@@ -181,10 +254,9 @@ impl qobject::DesktopServices {
             self.as_mut()
                 .set_connectivity(state.network.connectivity as i32);
             if state.network.access_points != old.network.access_points {
-                self.as_mut().apply_collection(
-                    &QString::from("accessPoints"),
-                    &QString::from(serde_json::to_string(&state.network.access_points).unwrap()),
-                );
+                let rows = rows(state.network.access_points.iter().map(access_point_row));
+                self.as_mut()
+                    .apply_collection(&QString::from("accessPoints"), &rows);
             }
             let revision = self.rust().network_revision.wrapping_add(1);
             self.as_mut().set_network_revision(revision);
@@ -203,12 +275,10 @@ impl qobject::DesktopServices {
         if old.brightness != state.brightness {
             self.as_mut()
                 .set_brightness_error(QString::from(state.brightness.status.error.as_str()));
-
             if state.brightness.devices != old.brightness.devices {
-                self.as_mut().apply_collection(
-                    &QString::from("backlights"),
-                    &QString::from(serde_json::to_string(&state.brightness.devices).unwrap()),
-                );
+                let rows = rows(state.brightness.devices.iter().map(backlight_row));
+                self.as_mut()
+                    .apply_collection(&QString::from("backlights"), &rows);
             }
             let revision = self.rust().brightness_revision.wrapping_add(1);
             self.as_mut().set_brightness_revision(revision);
@@ -220,16 +290,14 @@ impl qobject::DesktopServices {
                 .set_niri_error(QString::from(state.niri.status.error.as_str()));
             self.as_mut().set_overview_open(state.niri.overview_open);
             if state.niri.windows != old.niri.windows {
-                self.as_mut().apply_collection(
-                    &QString::from("niriWindows"),
-                    &QString::from(serde_json::to_string(&state.niri.windows).unwrap()),
-                );
+                let rows = rows(state.niri.windows.iter().map(niri_window_row));
+                self.as_mut()
+                    .apply_collection(&QString::from("niriWindows"), &rows);
             }
             if state.niri.workspaces != old.niri.workspaces {
-                self.as_mut().apply_collection(
-                    &QString::from("niriWorkspaces"),
-                    &QString::from(serde_json::to_string(&state.niri.workspaces).unwrap()),
-                );
+                let rows = rows(state.niri.workspaces.iter().map(niri_workspace_row));
+                self.as_mut()
+                    .apply_collection(&QString::from("niriWorkspaces"), &rows);
             }
             let revision = self.rust().niri_revision.wrapping_add(1);
             self.as_mut().set_niri_revision(revision);
@@ -238,7 +306,10 @@ impl qobject::DesktopServices {
         self.as_mut().rust_mut().last = state;
         let apply_duration = apply_start.elapsed();
         if apply_duration.as_micros() > 100 {
-            tracing::warn!(apply_us = apply_duration.as_micros(), "slow apply call on Qt main thread");
+            tracing::warn!(
+                apply_us = apply_duration.as_micros(),
+                "slow apply call on Qt main thread"
+            );
         } else {
             tracing::debug!(apply_us = apply_duration.as_micros(), "apply call");
         }
