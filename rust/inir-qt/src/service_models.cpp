@@ -59,7 +59,7 @@ ServiceModels::ServiceModels(QObject *parent) : QObject(parent) {
     auto add = [this](const QString &name, const QStringList &fields) { m_models.insert(name, new RecordModel(fields, this)); };
     add("accessPoints", {"id", "device", "ssid", "bssid", "strength", "frequency", "rate", "security", "active"});
     add("backlights", {"id", "kind", "raw", "maximum", "value"});
-    add("niriWindows", {"id", "title", "appId", "workspaceId", "focused", "floating", "urgent", "focusSerial"});
+    add("niriWindows", {"id", "title", "appId", "workspaceId", "focused", "floating", "urgent", "focusSerial", "column", "row"});
     add("niriWorkspaces", {"id", "index", "name", "output", "active", "focused", "activeWindowId", "urgent"});
 }
 bool ServiceModels::applyCollection(const QString &name, const QVariant &rows) {

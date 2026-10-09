@@ -51,7 +51,12 @@ record!(NiriWindow {
     focused: bool,
     floating: bool,
     urgent: bool,
-    focus_serial: u64
+    focus_serial: u64,
+    // Position in the scrolling layout (-1 when the window has no layout slot).
+    // Windows are emitted already ordered by output/workspace/column/row so the
+    // QML side no longer re-runs sortWindowsByLayout.
+    column: i32,
+    row: i32
 });
 record!(NiriWorkspace {
     id: String,

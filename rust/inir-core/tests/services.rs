@@ -208,6 +208,20 @@ async fn niri_stream_and_action_use_separate_sockets() {
             .write_all(b"{\"FutureEvent\":{}}\n")
             .await
             .unwrap();
+        // The engine queries outputs on its own short-lived connection at startup.
+        let (outputs, _) = listener.accept().await.unwrap();
+        let mut outputs = BufReader::new(outputs);
+        line.clear();
+        outputs.read_line(&mut line).await.unwrap();
+        assert!(matches!(
+            serde_json::from_str::<niri_ipc::Request>(&line).unwrap(),
+            niri_ipc::Request::Outputs
+        ));
+        outputs
+            .get_mut()
+            .write_all(b"{\"Ok\":{\"Outputs\":{}}}\n")
+            .await
+            .unwrap();
         let (action, _) = listener.accept().await.unwrap();
         let mut action = BufReader::new(action);
         line.clear();

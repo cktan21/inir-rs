@@ -222,9 +222,8 @@ async fn niri_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
 
 async fn execute(command: Command) -> Result<(), String> {
     match command {
-        // Niri actions remain served by the QML frontend until Phase 3 cuts the
-        // native Niri domain over to the Rust backend.
-        Command::Niri { .. } => Err("command served by the QML frontend".into()),
+        // Phase 3: Niri actions go through the native backend's action socket.
+        Command::Niri { action } => niri::action(action).await,
         command => {
             let bus = Connection::system().await.map_err(|e| e.to_string())?;
             match command {
@@ -261,6 +260,7 @@ pub async fn run(
         tasks.spawn(network_worker(events.clone(), cycle.clone()));
         tasks.spawn(bus_worker(false, events.clone(), cycle.clone()));
         tasks.spawn(brightness_worker(events.clone(), cycle.clone()));
+        tasks.spawn(niri_worker(events.clone(), cycle.clone()));
         loop {
             tokio::select! {
                 biased;

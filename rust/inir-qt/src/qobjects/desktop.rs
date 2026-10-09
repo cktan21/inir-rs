@@ -125,6 +125,8 @@ fn niri_window_row(w: &NiriWindow) -> VariantMap {
         QString::from("focusSerial"),
         QVariant::from(&(w.focus_serial as i64)),
     );
+    m.insert(QString::from("column"), QVariant::from(&w.column));
+    m.insert(QString::from("row"), QVariant::from(&w.row));
     m
 }
 
