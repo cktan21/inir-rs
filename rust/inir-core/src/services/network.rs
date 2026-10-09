@@ -1,17 +1,165 @@
 use super::dbus::{self, read, Properties};
+use crate::events::Event;
+use futures_util::StreamExt;
 use inir_types::desktop::{AccessPoint, Command, NetworkState, ServiceStatus};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
+use std::time::Duration;
+use tokio::sync::mpsc;
+use tokio_util::sync::CancellationToken;
 use zbus::{
     zvariant::{OwnedObjectPath, Value},
-    Connection,
+    Connection, MatchRule, MessageStream,
 };
 
 pub const SERVICE: &str = "org.freedesktop.NetworkManager";
 const ROOT: &str = "/org/freedesktop/NetworkManager";
+const AP_PREFIX: &str = "/org/freedesktop/NetworkManager/AccessPoint";
 const MANAGER: &str = SERVICE;
 const DEVICE: &str = "org.freedesktop.NetworkManager.Device";
 const WIRELESS: &str = "org.freedesktop.NetworkManager.Device.Wireless";
 const AP: &str = "org.freedesktop.NetworkManager.AccessPoint";
+// AP properties that change continuously during a scan. Applying their signal
+// bodies in place avoids the full manager→device→AP refetch cascade.
+const FAST_KEYS: [&str; 4] = ["Strength", "Frequency", "MaxBitrate", "LastSeen"];
+
+fn sort_access_points(aps: &mut [AccessPoint]) {
+    // Stable keys preserve rows across rescans; do not deduplicate distinct BSSIDs.
+    aps.sort_by(|a, b| {
+        b.active
+            .cmp(&a.active)
+            .then(b.strength.cmp(&a.strength))
+            .then(a.id.cmp(&b.id))
+    });
+}
+
+/// Event-driven network actor. Bootstraps once with a full snapshot, then keeps
+/// the state current by applying D-Bus signal bodies: high-frequency AP property
+/// changes are applied in place, and structural changes (devices, active AP,
+/// AP add/remove, manager state) trigger a scoped re-snapshot. The signal body
+/// is no longer discarded, so a scan no longer costs one full refetch per tick.
+pub async fn stream(
+    bus: &Connection,
+    events: &mpsc::Sender<Event>,
+    stop: &CancellationToken,
+) -> Result<(), String> {
+    let rule = MatchRule::builder()
+        .msg_type(zbus::message::Type::Signal)
+        .sender(SERVICE)
+        .map_err(|e| e.to_string())?
+        .path_namespace(ROOT)
+        .map_err(|e| e.to_string())?
+        .build();
+    let mut signals = MessageStream::for_match_rule(rule, bus, Some(256))
+        .await
+        .map_err(|e| e.to_string())?;
+
+    let mut state = snapshot(bus).await.map_err(|e| e.to_string())?;
+    sort_access_points(&mut state.access_points);
+    if events.send(Event::Network(state.clone())).await.is_err() {
+        return Ok(());
+    }
+
+    let mut full_rescan = false;
+    let mut ap_updates: HashSet<String> = HashSet::new();
+    let mut ap_props: HashMap<String, Properties> = HashMap::new();
+    let mut deadline = tokio::time::Instant::now();
+    loop {
+        tokio::select! {
+            biased;
+            _ = stop.cancelled() => return Ok(()),
+            message = signals.next() => {
+                let Some(message) = message else {
+                    return Err("NetworkManager signal stream ended".into());
+                };
+                let message = message.map_err(|e| e.to_string())?;
+                let header = message.header();
+                let member = header.member().map(|m| m.as_str().to_owned());
+                let path = header.path().map(|p| p.as_str().to_owned()).unwrap_or_default();
+                let mut structural = true;
+                if member.as_deref() == Some("PropertiesChanged")
+                    && path.starts_with(AP_PREFIX)
+                {
+                    if let Ok((iface, changed, _invalidated)) =
+                        message.body().deserialize::<(String, Properties, Vec<String>)>()
+                    {
+                        if iface == AP && changed.keys().all(|k| FAST_KEYS.contains(&k.as_str())) {
+                            // AP property delta: apply the body, skip the refetch.
+                            ap_props.entry(path.clone()).or_default().extend(changed);
+                            ap_updates.insert(path);
+                            structural = false;
+                        }
+                    }
+                }
+                if structural {
+                    full_rescan = true;
+                }
+                if deadline <= tokio::time::Instant::now() {
+                    deadline = tokio::time::Instant::now() + Duration::from_millis(50);
+                }
+            }
+            _ = tokio::time::sleep_until(deadline),
+                if full_rescan || !ap_updates.is_empty() =>
+            {
+                let previous = state.clone();
+                if full_rescan {
+                    full_rescan = false;
+                    match snapshot(bus).await {
+                        Ok(mut next) => {
+                            sort_access_points(&mut next.access_points);
+                            state = next;
+                            tracing::debug!(
+                                aps = state.access_points.len(),
+                                "network full snapshot (structural change)"
+                            );
+                        }
+                        Err(error) => {
+                            if error.to_string().contains("ServiceUnknown") {
+                                return Err(error.to_string());
+                            }
+                        }
+                    }
+                } else {
+                    let updated = ap_updates.len();
+                    let mut changed = false;
+                    for id in ap_updates.drain() {
+                        let Some(props) = ap_props.remove(&id) else { continue };
+                        let Some(ap) = state.access_points.iter_mut().find(|ap| ap.id == id) else {
+                            // AP vanished before its delta applied; resync next tick.
+                            full_rescan = true;
+                            continue;
+                        };
+                        if props.contains_key("Strength") {
+                            ap.strength = read(&props, "Strength");
+                            changed = true;
+                        }
+                        if props.contains_key("Frequency") {
+                            ap.frequency = read(&props, "Frequency");
+                            changed = true;
+                        }
+                        if props.contains_key("MaxBitrate") {
+                            ap.rate = read(&props, "MaxBitrate");
+                            changed = true;
+                        }
+                    }
+                    if changed {
+                        sort_access_points(&mut state.access_points);
+                        tracing::debug!(updated, "network AP delta applied (no refetch)");
+                    }
+                }
+                ap_updates.clear();
+                ap_props.clear();
+                // A vanished AP above leaves full_rescan set; re-arm the timer so
+                // the next tick resyncs instead of spinning on a past deadline.
+                if full_rescan {
+                    deadline = tokio::time::Instant::now() + Duration::from_millis(50);
+                }
+                if state != previous && events.send(Event::Network(state.clone())).await.is_err() {
+                    return Ok(());
+                }
+            }
+        }
+    }
+}
 
 pub async fn snapshot(bus: &Connection) -> zbus::Result<NetworkState> {
     let manager = dbus::properties(bus, SERVICE, ROOT, MANAGER).await?;

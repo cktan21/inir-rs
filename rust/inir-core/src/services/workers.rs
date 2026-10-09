@@ -62,13 +62,11 @@ async fn bus_cycle(
     // Subscribe before initial reads. Paths also cover PropertiesChanged and
     // ObjectManager additions/removals without a per-object subscription storm.
     let paths: &[(&str, &str)] = if session {
-        &[] // Phase 1: media handled by Quickshell.Services.Mpris
+        &[] // media handled by Quickshell.Services.Mpris
     } else {
-        &[
-            ("network", "/org/freedesktop/NetworkManager"),
-            ("power", "/net/hadess/PowerProfiles"),
-            // Phase 1: bluetooth/battery handled by Quickshell C++
-        ]
+        // Network runs in its own delta actor (network_worker); the generic
+        // refetch loop now only drives the low-frequency power-profiles domain.
+        &[("power", "/net/hadess/PowerProfiles")]
     };
     for (domain, path) in paths {
         let rule = MatchRule::builder()
@@ -83,7 +81,7 @@ async fn bus_cycle(
     let owner_names: &[&str] = if session {
         &[]
     } else {
-        &[network::SERVICE, power::PROFILES, "net.hadess.PowerProfiles"]
+        &[power::PROFILES, "net.hadess.PowerProfiles"]
     };
     for name in owner_names {
         let owner_rule = MatchRule::builder()
@@ -101,9 +99,9 @@ async fn bus_cycle(
         );
     }
     let domains: &[&str] = if session {
-        &[] // Phase 1: no session-bus domains
+        &[] // no session-bus domains
     } else {
-        &["network", "power"] // Phase 1: dropped bluetooth, battery
+        &["power"] // network has its own delta actor
     };
     for domain in domains {
         update(&bus, domain, events).await;
@@ -119,9 +117,7 @@ async fn bus_cycle(
                 let message = message?;
                 if domain == "owner" {
                     let (name, _, _): (String, String, String) = message.body().deserialize()?;
-                    // Phase 1: only react to network and power name changes.
-                    domain = if name == network::SERVICE { "network" }
-                        else if name == power::PROFILES || name == "net.hadess.PowerProfiles" { "power" }
+                    domain = if name == power::PROFILES || name == "net.hadess.PowerProfiles" { "power" }
                         else { continue };
                 }
                 if pending.is_empty() { deadline = tokio::time::Instant::now() + Duration::from_millis(50); }
@@ -149,11 +145,36 @@ async fn bus_worker(session: bool, events: mpsc::Sender<Event>, stop: Cancellati
                     let _ = events.send(Event::$variant(state)).await;
                 }};
             }
-            // Phase 1: only network and power are served natively.
             if !session {
-                failed!(Network, NetworkState);
                 failed!(Power, PowerState);
             }
+        }
+        tokio::select! { _ = stop.cancelled() => break, _ = tokio::time::sleep(Duration::from_secs(2)) => {} }
+    }
+}
+
+async fn network_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
+    loop {
+        let bus = tokio::select! {
+            biased;
+            _ = stop.cancelled() => break,
+            bus = Connection::system() => bus,
+        };
+        let result = match bus {
+            Ok(bus) => {
+                tokio::select! {
+                    biased;
+                    _ = stop.cancelled() => break,
+                    result = network::stream(&bus, &events, &stop) => result,
+                }
+            }
+            Err(error) => Err(error.to_string()),
+        };
+        if let Err(error) = result {
+            tracing::warn!(%error, "network actor disconnected");
+            let mut state = NetworkState::default();
+            state.status.error = error;
+            let _ = events.send(Event::Network(state)).await;
         }
         tokio::select! { _ = stop.cancelled() => break, _ = tokio::time::sleep(Duration::from_secs(2)) => {} }
     }
@@ -234,9 +255,10 @@ pub async fn run(
         }
         let cycle = stop.child_token();
         let mut tasks = JoinSet::new();
-        // Phase 1: only the system bus (network + power) and the backlight poll
-        // run natively. The session bus (media), Niri stream and PipeWire driver
-        // are intentionally not spawned to avoid duplicating Quickshell.
+        // Natively served: network (event-driven delta actor), power profiles
+        // (generic refetch loop) and the backlight poll. Audio/battery/bluetooth/
+        // media stay on Quickshell's C++; Niri is served by QML until Phase 3.
+        tasks.spawn(network_worker(events.clone(), cycle.clone()));
         tasks.spawn(bus_worker(false, events.clone(), cycle.clone()));
         tasks.spawn(brightness_worker(events.clone(), cycle.clone()));
         loop {
