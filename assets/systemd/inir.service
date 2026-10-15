@@ -42,6 +42,7 @@ KillSignal=SIGTERM
 # infinite crash loops — after 3 rapid failures systemd gives up.
 Restart=on-failure
 RestartSec=5
+TimeoutStartSec=60
 TimeoutStopSec=15
 
 # Disable coredumps and QS crash reports.  Unpatched Quickshell segfaults
