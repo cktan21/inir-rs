@@ -81,6 +81,13 @@ int main(int argc, char **argv) {
                     return Array.isArray(value.layout.tile_size) && value.layout.pos === null
                 }
                 property bool servicesReady: NativeNetwork.ready
+                property var bluetooth: NativeBluetoothController
+                property bool bluetoothShapeValid: !bluetooth.active && !bluetooth.ready && bluetooth.count === 0
+                function rejectInactiveBluetooth() {
+                    return !bluetooth.scan("inactive", "hci0", 25000)
+                        && !bluetooth.execute("inactive", "power", {adapter: "hci0", enabled: true})
+                        && !bluetooth.respond("expired", true, "")
+                }
                 function activateServices(active) { NativeNetwork.setEnabled(active) }
                 property int commandFailures: 0
                 property string commandIds: ""
@@ -111,6 +118,10 @@ int main(int argc, char **argv) {
         std::unique_ptr<QObject> object(component.create());
         if (!object) { qCritical() << component.errors(); return 1; }
         if (!check(object->property("niriShapeValid").toBool(), "Niri arrays/nulls or unchanged row identity were lost")) return 1;
+        if (!check(object->property("bluetoothShapeValid").toBool(), "Bluetooth control bridge started without its provider")) return 1;
+        QVariant rejected;
+        QMetaObject::invokeMethod(object.get(), "rejectInactiveBluetooth", Q_RETURN_ARG(QVariant, rejected));
+        if (!check(rejected.toBool(), "Inactive Bluetooth control accepted commands")) return 1;
         if (!check(object->property("diagnosticsTyped").toBool(), "SystemInfo diagnostics did not expose typed metadata")) return 1;
         if (!check(!object->property("desktopActive").toBool() && object->property("accessPointCount").toInt() == 0, "desktop services started without a consumer")) return 1;
         QMetaObject::invokeMethod(object.get(), "invalidCommand");

@@ -6,6 +6,13 @@
 #include <QJSEngine>
 #include <QQmlEngine>
 inline QJSValue scriptValue(QObject *owner, const QVariant &value);
+// QML object/array arguments can arrive wrapped in QJSValue rather than as a
+// QVariantMap/List. Materialize them on the Qt thread before Rust reads fields.
+inline QVariant commandVariant(const QVariant &value) {
+    return value.metaType().id() == qMetaTypeId<QJSValue>()
+        ? value.value<QJSValue>().toVariant() : value;
+}
+
 // Qt notification trampoline only. No rows, snapshots, diffing or JSON here.
 class ListModelBase : public QAbstractListModel {
     Q_OBJECT
@@ -49,6 +56,7 @@ class NiriListModelBase : public ListModelBase { Q_OBJECT public: using ListMode
 class WorkspaceListModelBase : public ListModelBase { Q_OBJECT public: using ListModelBase::ListModelBase; };
 class NetworkListModelBase : public ListModelBase { Q_OBJECT public: using ListModelBase::ListModelBase; };
 class BrightnessListModelBase : public ListModelBase { Q_OBJECT public: using ListModelBase::ListModelBase; };
+class BluetoothControlModelBase : public ListModelBase { Q_OBJECT public: using ListModelBase::ListModelBase; };
 // QML requires actual arrays for nested geometry/extension data. Only convert
 // changed small metadata, not whole window/workspace collections.
 inline QJSValue scriptValue(QObject *owner, const QVariant &value) {

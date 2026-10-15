@@ -1,4 +1,5 @@
 pub mod brightness;
+pub mod bluetooth_control;
 pub mod dbus;
 pub mod keyboard;
 pub mod network;
