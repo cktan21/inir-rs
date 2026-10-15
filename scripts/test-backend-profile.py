@@ -7,7 +7,9 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("backend_profile", ROOT / "scripts/profile-backend.py")
@@ -39,6 +41,25 @@ class BaselineTests(unittest.TestCase):
         self.assertTrue(report["samples"])
         self.assertNotIn("forksPerMinute", report)
         self.assertNotIn("wakeupsPerSecond", report)
+
+    def test_capture_includes_tail_when_process_scan_crosses_deadline(self):
+        clock = [0.0]
+        def sleep(seconds):
+            clock[0] += seconds
+        def children(_pid):
+            clock[0] += .06
+            return {}
+        fake_time = SimpleNamespace(monotonic=lambda: clock[0], sleep=sleep)
+        state = {"ppid": 1, "ticks": 0, "start": 42, "rss": 4096}
+        with patch.object(profile, "time", fake_time), \
+                patch.object(profile, "process_stat", return_value=state), \
+                patch.object(profile, "context_switches", return_value=0), \
+                patch.object(profile, "gpu_engines", return_value={}), \
+                patch.object(profile, "child_processes", side_effect=children):
+            report = profile.capture(123, .15, .05)
+        self.assertGreaterEqual(report["durationSeconds"], .15)
+        self.assertGreaterEqual(report["samples"][-1]["elapsedSeconds"], .15)
+        self.assertEqual(len(report["samples"]), 2)
 
     def test_unavailable_process_produces_an_explicit_artifact(self):
         with tempfile.TemporaryDirectory() as temporary:

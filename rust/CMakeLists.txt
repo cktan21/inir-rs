@@ -39,6 +39,11 @@ if(BUILD_TESTING)
     find_package(Qt6 REQUIRED COMPONENTS Test)
     set(CMAKE_AUTOMOC ON)
     find_package(Qt6 REQUIRED COMPONENTS Gui)
+    find_package(Qt6 REQUIRED COMPONENTS Widgets)
+    # A static real Wayland window whose title can be churned by the live A/B
+    # harness. It is not part of the shell process or its CPU measurements.
+    add_executable(inir_title_churn tests/title_churn.cpp)
+    target_link_libraries(inir_title_churn PRIVATE Qt6::Widgets)
     add_executable(inir_native_models tests/native_models.cpp)
     target_link_libraries(inir_native_models PRIVATE Qt6::Core Qt6::Gui Qt6::Qml Qt6::Test)
     add_dependencies(inir_native_models inir_native_stage)

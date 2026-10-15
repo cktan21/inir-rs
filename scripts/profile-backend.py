@@ -103,7 +103,7 @@ def capture(pid, duration, interval):
     initial_children = set(child_processes(pid).items())
     seen = set(initial_children)
     rows = []
-    while time.monotonic() - started < duration:
+    while True:
         time.sleep(min(interval, max(0, duration - (time.monotonic() - started))))
         current = process_stat(pid)
         if current["start"] != start_identity:
@@ -117,6 +117,7 @@ def capture(pid, duration, interval):
         children = child_processes(pid)
         seen |= set(children.items())
         rows.append({"elapsedSeconds": now-started,
+                     "intervalSeconds": elapsed,
                      "cpuPercent": max(0, current["ticks"]-previous["ticks"]) / clock_ticks / elapsed * 100,
                      "rssBytes": current["rss"],
                      # Context switches are a proxy, not scheduler wakeups.
@@ -124,8 +125,12 @@ def capture(pid, duration, interval):
                      "gpuBusiestEnginePercent": max(gpu_values) if gpu_values else None,
                      "activeChildProcesses": len(children)})
         previous, previous_time, previous_contexts, previous_gpu = current, now, contexts, gpu
+        # A procfs scan can itself cross the deadline. Always observe one
+        # counter snapshot at/after it instead of silently dropping the tail.
+        if now - started >= duration:
+            break
     return {"durationSeconds": previous_time-started,
-            "cpuMeanPercent": statistics.fmean(row["cpuPercent"] for row in rows),
+            "cpuMeanPercent": sum(row["cpuPercent"] * row["intervalSeconds"] for row in rows) / (previous_time-started),
             "cpuMaxPercent": max(row["cpuPercent"] for row in rows),
             "rssMeanBytes": statistics.fmean(row["rssBytes"] for row in rows),
             "rssMaxBytes": max(row["rssBytes"] for row in rows),
