@@ -536,6 +536,28 @@ pub async fn request(path: &Path, request: Request) -> Result<niri_ipc::Response
     serde_json::from_str::<Reply>(&line).map_err(|e| e.to_string())?
 }
 
+// QML numbers arrive through the typed bridge as f64, including window ids and
+// workspace indices. Restore integral JSON numbers before niri-ipc validates
+// them; retain fractions and out-of-range values so validation can reject them.
+fn normalize_action_numbers(value: &mut serde_json::Value) {
+    use serde_json::Value;
+    match value {
+        Value::Number(number) if number.is_f64() => {
+            let n = number.as_f64().unwrap();
+            if n.fract() == 0.0 {
+                if n >= 0.0 && n < u64::MAX as f64 {
+                    *number = (n as u64).into();
+                } else if n < 0.0 && n >= i64::MIN as f64 {
+                    *number = (n as i64).into();
+                }
+            }
+        }
+        Value::Array(values) => values.iter_mut().for_each(normalize_action_numbers),
+        Value::Object(values) => values.values_mut().for_each(normalize_action_numbers),
+        _ => {}
+    }
+}
+
 /// FIFO owner of the action connection. Taking the stream out before awaiting
 /// also discards it on timeout/cancellation, so a late reply cannot satisfy the
 /// next command. Never replay an action after an ambiguous transport failure.
@@ -545,7 +567,8 @@ pub struct ActionClient {
 }
 
 impl ActionClient {
-    pub async fn action(&mut self, path: &Path, value: serde_json::Value) -> Result<(), String> {
+    pub async fn action(&mut self, path: &Path, mut value: serde_json::Value) -> Result<(), String> {
+        normalize_action_numbers(&mut value);
         let action: Action = serde_json::from_value(value).map_err(|e| e.to_string())?;
         let mut stream = match self.stream.take() {
             Some(stream) => stream,
