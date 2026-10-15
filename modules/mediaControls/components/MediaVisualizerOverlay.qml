@@ -14,6 +14,7 @@ Item {
 
     property var visualizerPoints: []
     property bool active: false
+    property bool motion: true
     property color playerColor: Appearance.colors.colPrimary
     property real edgeHeight: 35
 
@@ -49,6 +50,7 @@ Item {
             anchors.fill: parent
             points: root.visualizerPoints
             active: root.active
+            animate: root.motion && root.visible
             visualizerType: root.visualizerType
             normalizationCeiling: CavaService.normalizationCeiling
             spectrumColors: root.palette

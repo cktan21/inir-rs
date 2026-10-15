@@ -43,6 +43,11 @@ Item {
     readonly property bool windowReady: (windowLoader.item?.drawnKey ?? "") === root.placedKey
     readonly property var hostWindow: root.Window.window
     readonly property var screen: root.QsWindow.window?.screen ?? null
+    // Keep ancestor geometry/composition checks on every eligible host frame.
+    // Inactive/in-place-only instances cannot detach, so need no frame callback.
+    readonly property bool trackingHostFrames: root.live && root.allowed
+        && root.hostCalm && root.visible && root.content !== null
+        && root.width > 0 && root.height > 0
 
     // Where the item sits on the output, whole-pixel origin and fraction, and whether it is drawn 1:1 and opaque.
     property rect restRect: Qt.rect(0, 0, 0, 0)
@@ -112,8 +117,10 @@ Item {
     }
     Connections {
         target: root.hostWindow
+        enabled: root.trackingHostFrames
         function onAfterAnimating(): void { root.evaluate() }
     }
+    onTrackingHostFramesChanged: root.evaluate()
     onLiveChanged: root.evaluate()
     onAllowedChanged: root.evaluate()
     onHostCalmChanged: root.evaluate()

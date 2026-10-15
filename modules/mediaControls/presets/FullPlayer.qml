@@ -37,6 +37,7 @@ Item {
     PlayerBase {
         id: playerBase
         player: root.player
+        positionUpdatesActive: root.visible && root.motion
     }
 
     // Adaptive colors from artwork
@@ -172,6 +173,7 @@ Item {
 
         // Visualizer overlay
         MediaVisualizerOverlay {
+            motion: root.motion
             anchors.fill: parent
             edgeHeight: 35
             visualizerPoints: root.visualizerPoints

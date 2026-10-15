@@ -30,6 +30,7 @@ Item {
     PlayerBase {
         id: playerBase
         player: root.player
+        positionUpdatesActive: root.visible && root.motion
     }
 
     property color themeSourceColor: playerBase.artDominantColor
@@ -211,6 +212,7 @@ Item {
                         }
 
                             MediaVisualizerOverlay {
+                                motion: root.motion
                             anchors.fill: parent
                             edgeHeight: 42
                                             visualizerPoints: root.visualizerPoints

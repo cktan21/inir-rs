@@ -5,6 +5,7 @@ import Quickshell.Io
 import Quickshell.Services.Mpris
 import qs.modules.common
 import qs.modules.common.widgets
+import qs.modules.common.widgets.activity
 import qs.modules.common.functions
 import qs.modules.common.models
 import qs.services
@@ -197,13 +198,9 @@ QtObject {
         }
     }
     
-    property var positionUpdateTimer: Timer {
-        running: root.positionUpdatesActive
-            && root.player?.playbackState === MprisPlaybackState.Playing
-        // Four bounded updates per second are enough for a continuous timeline
-        // once PlayerProgress interpolates between samples.
-        interval: 250
-        repeat: true
-        onTriggered: root.player?.positionChanged()
+    property var positionUpdateTimer: PlaybackPositionTicker {
+        player: root.player
+        active: root.positionUpdatesActive
+        playing: root.player?.playbackState === MprisPlaybackState.Playing
     }
 }

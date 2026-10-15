@@ -1,0 +1,3 @@
+module qs.modules.common.widgets.activity
+PlaybackPositionTicker 1.0 PlaybackPositionTicker.qml
+VisualizerFrameSnapshot 1.0 VisualizerFrameSnapshot.qml

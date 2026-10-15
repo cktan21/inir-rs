@@ -35,6 +35,7 @@ Item {
     PlayerBase {
         id: playerBase
         player: root.player
+        positionUpdatesActive: root.visible && root.motion
     }
 
     // Theme seed for the whole player. Defaults to the album-art colour (floating popup
@@ -87,6 +88,7 @@ Item {
 
         // Visualizer overlay
         MediaVisualizerOverlay {
+            motion: root.motion
             anchors.fill: parent
             edgeHeight: 25
             visualizerPoints: root.visualizerPoints

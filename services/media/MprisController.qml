@@ -173,6 +173,9 @@ Singleton {
 			for (const player of Mpris.players.values)
 				if (root._heldTrack(player) && root._tabShows(player.trackTitle)) root._notePageTrack(player)
 		}
+		function onWindowRolesChanged(roles): void {
+			if ((roles & 6) !== 0) onWindowsChanged()
+		}
 	}
 	// A seek sets Quickshell's position itself; an offset measured before it would be added on top.
 	function clearPositionOffset(player): void { root._setPositionOffset(player?.dbusName ?? "", 0) }

@@ -11,6 +11,7 @@ import qs.modules.mediaControls.components
 
 Item {
     id: root
+    property bool motion: true
     property MprisPlayer player: null
     property list<real> visualizerPoints: []
     property real radius: Appearance.zzzEverywhere ? Appearance.zzz.panelRadius : Appearance.angelEverywhere ? Appearance.angel.roundingNormal : Appearance.rounding.normal
@@ -20,6 +21,7 @@ Item {
     PlayerBase {
         id: playerBase
         player: root.player
+        positionUpdatesActive: root.visible && root.motion
     }
 
     property color themeSourceColor: playerBase.artDominantColor
@@ -118,6 +120,7 @@ Item {
             }
 
                 MediaVisualizerOverlay {
+                    motion: root.motion
                 anchors.fill: parent
                 edgeHeight: 42
                     visualizerPoints: root.visualizerPoints

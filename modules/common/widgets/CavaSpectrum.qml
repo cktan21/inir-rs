@@ -9,6 +9,8 @@ Canvas {
 
     property var points: []
     property bool active: false
+    // LiveLayer keeps home/away copies. Only the owner may queue dynamic paints.
+    property bool drawing: true
     property bool threadedRendering: false
     property string visualizerType: "bars"
     property real normalizationCeiling: 1000
@@ -57,7 +59,7 @@ Canvas {
     opacity: root.active ? Math.max(0, Math.min(1, root.spectrumOpacity)) : 0
 
     Behavior on opacity {
-        enabled: Appearance.animationsEnabled
+        enabled: Appearance.animationsEnabled && root.drawing
         NumberAnimation {
             duration: Appearance.calcEffectiveDuration(root.active ? 180 : 480)
             easing.type: root.active ? Easing.OutCubic : Easing.InOutCubic
@@ -577,16 +579,19 @@ Canvas {
 
     // Hidden (an organic layer, a closed card) it still hears the ceiling fall on every cava frame; painting
     // then kept the canvas thread and the GUI thread busy for nothing. Showing it again repaints it.
-    function _queuePaint(): void {
-        if (root.available && root.visible)
+    function _queuePaint(prime = false): void {
+        if (root.available && root.visible && (root.drawing || prime))
             root.requestPaint()
     }
 
-    onAvailableChanged: root._queuePaint()
+    // Prime/resize a retained copy once so it has a texture before handoff.
+    // Audio samples and scale changes still cannot repaint a non-drawing copy.
+    onAvailableChanged: root._queuePaint(true)
+    onDrawingChanged: if (root.drawing) root._queuePaint()
     onPointsChanged: if (root.visible) root._queuePaint()
     onVisibleChanged: if (root.visible) root._queuePaint()
-    onWidthChanged: root._queuePaint()
-    onHeightChanged: root._queuePaint()
+    onWidthChanged: root._queuePaint(true)
+    onHeightChanged: root._queuePaint(true)
     onVisualizerTypeChanged: root._queuePaint()
     onNormalizationCeilingChanged: root._queuePaint()
     onFillRatioChanged: root._queuePaint()

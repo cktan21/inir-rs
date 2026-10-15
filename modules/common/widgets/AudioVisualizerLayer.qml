@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Qt5Compat.GraphicalEffects as GE
 import qs.modules.common
+import qs.modules.common.widgets.activity
 import qs.services
 import qs.services.deferred
 
@@ -15,13 +16,13 @@ Item {
     property bool active: false
     // False holds the last frame: no new points, no motion clock, still drawn.
     property bool animate: true
-    property var _shownPoints: []
-    Binding {
-        target: root
-        property: "_shownPoints"
-        value: root.points
-        when: root.animate
-        restoreMode: Binding.RestoreNone
+    readonly property var _shownPoints: motionFrame.shownPoints
+    readonly property real _shownCeiling: motionFrame.shownCeiling
+    VisualizerFrameSnapshot {
+        id: motionFrame
+        points: root.points
+        normalizationCeiling: root.normalizationCeiling
+        updating: root.animate && root.effectiveActive && root.visible
     }
     property string visualizerType: "wave" // wave | bars | organic
     property real normalizationCeiling: CavaService.normalizationCeiling
@@ -118,7 +119,7 @@ Item {
             active: root.effectiveActive && edgeField.visible && edgeField.drawing
             animate: root.animate && edgeField.drawing
             points: root.organicPoints
-            normalizationCeiling: root.normalizationCeiling
+            normalizationCeiling: root._shownCeiling
             primaryColor: root.spectrumColors?.length > 0
                 ? root.spectrumColors[0] : root.spectrumColor
             secondaryColor: root.spectrumColors?.length > 1
@@ -178,10 +179,18 @@ Item {
             id: drawn
             property bool drawing: false
 
+            VisualizerFrameSnapshot {
+                id: drawnFrame
+                points: root._shownPoints
+                normalizationCeiling: root._shownCeiling
+                updating: root.animate && root.effectiveActive && drawn.drawing
+            }
+
             CavaSpectrum {
                 anchors.fill: parent
                 visible: root.visualizerType !== "organic"
-                points: root._shownPoints
+                points: drawnFrame.shownPoints
+                drawing: drawn.drawing
                 sampleStartRatio: root.sampleStartRatio
                 sampleEndRatio: root.sampleEndRatio
                 reverseFrequency: root.reverseFrequency
@@ -193,7 +202,7 @@ Item {
                 active: root.effectiveActive && root.visualizerType !== "organic" && drawn.drawing
                 threadedRendering: root.threadedRendering
                 visualizerType: root.visualizerType
-                normalizationCeiling: root.normalizationCeiling
+                normalizationCeiling: drawnFrame.shownCeiling
                 spectrumColors: root.spectrumColors
                 spectrumColor: root.spectrumColor
                 spectrumOpacity: root.spectrumOpacity
@@ -268,7 +277,7 @@ Item {
                         }
                     }
                 }
-                normalizationCeiling: root.normalizationCeiling
+                normalizationCeiling: drawnFrame.shownCeiling
                 primaryColor: root.spectrumColors?.length > 0
                     ? root.spectrumColors[0] : root.spectrumColor
                 secondaryColor: root.spectrumColors?.length > 1

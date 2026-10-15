@@ -3,6 +3,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.models
 import qs.services
+import qs.services.deferred
 import qs
 import qs.modules.common.functions
 import qs.modules.background.widgets
@@ -370,15 +371,19 @@ AbstractBackgroundWidget {
     // true. Rechecking the global base would incorrectly disable Cava for a
     // widget enabled only on this monitor.
     // Frozen (covered, paused for power) the field shows its last frame: nothing reads the audio then.
+    readonly property bool presentationActive: root.visible && root.opacity > 0 && root.motionActive
     readonly property bool visualizerActive: !root.irisFaced && !root.instrument && root.vizPosition !== "none"
-        && root.visible && root.motionActive && MprisController.isPlaying
+        && root.presentationActive && MprisController.isPlaying
 
     CavaProcess {
         id: cavaProcess
         active: root.visualizerActive
     }
 
-    property list<real> visualizerPoints: cavaProcess.points
+    // The lease controls acquisition, not frame retention. Its wrapper returns
+    // [] on release; read the shared producer so renderers can freeze before the
+    // debounced producer teardown, without racing that empty lease-local value.
+    property list<real> visualizerPoints: CavaService.points
 
     readonly property point widgetScreenPos: root.mapToItem(null, 0, 0)
     
@@ -401,7 +406,7 @@ AbstractBackgroundWidget {
         id: irisPlayerComponent
         IrisMediaCard {
             compact: ["compact", "minimal"].includes(root.effectiveRenderedPreset)
-            active: root.visible && root.powerActive
+            active: root.presentationActive
             showBackground: false
         }
     }
@@ -485,7 +490,7 @@ AbstractBackgroundWidget {
                     // whenever a player exists; audio activity modulates it through
                     // visualizerPoints instead of deciding whether it exists at all.
                     active: root.hasPlayer && root.visible && root.powerActive
-                    animate: root.motionActive
+                    animate: root.presentationActive
                     playerColor: root.widgetAccentVisible
                     albumPalette: root.organicArtworkPalette
                     accentPalette: [root.widgetAccentVisible,
@@ -519,7 +524,7 @@ AbstractBackgroundWidget {
                             item.radius = root.popupRounding
                             item.screenX = Qt.binding(() => root.widgetScreenPos.x)
                             item.screenY = Qt.binding(() => root.widgetScreenPos.y)
-                            item.motion = Qt.binding(() => root.motionActive)
+                            item.motion = Qt.binding(() => root.presentationActive)
                         }
                         const loadedPreset = root.effectiveRenderedPreset;
                         Qt.callLater(() => {
