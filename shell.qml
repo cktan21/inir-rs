@@ -37,6 +37,7 @@ ShellRoot {
     property var _devNavigationService: DevNavigation
     property var _shellEditSessionService: ShellEditSession
     property var _nativeBackendService: NativeBackend
+    property var _bluetoothService: BluetoothStatus
     // Acquire org.kde.StatusNotifierWatcher before graphical-session.target
     // releases XDG autostart applications. The systemd unit uses Type=dbus.
     property var _trayService: TrayService
@@ -692,6 +693,11 @@ ShellRoot {
         active: Config.ready && (Config.options?.panelFamily ?? "ii") !== "iris" && (Config.options?.settingsUi?.overlayMode ?? false)
             && (Config.options?.settingsUi?.overlayStyle ?? "rail") === "editorial"
         component: SettingsEditorial {}
+    }
+
+    Loader {
+        active: Config.ready && !GlobalStates.screenLocked && (BluetoothStatus.managerOpen || BluetoothStatus.prompt !== null)
+        source: "modules/bluetooth/BluetoothManager.qml"
     }
 
     // === Panel Loaders ===

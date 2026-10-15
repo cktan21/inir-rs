@@ -1,0 +1,2 @@
+module qs.services
+singleton BluetoothStatus 1.0 BluetoothStatus.qml

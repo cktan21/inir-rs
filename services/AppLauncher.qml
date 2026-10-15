@@ -93,6 +93,7 @@ Singleton {
             defaultCommand: "blueman-manager",
             placeholder: "kcmshell6 kcm_bluetooth",
             presets: [
+                { id: "inir-bluetooth", label: "iNiR Bluetooth", command: "inir bluetooth" },
                 { id: "blueman", label: "Blueman", command: "blueman-manager" },
                 { id: "kcm-bluetooth", label: "KDE Bluetooth", command: "kcmshell6 kcm_bluetooth" },
                 { id: "gnome-bluetooth", label: "GNOME Bluetooth", command: "gnome-control-center bluetooth" }
@@ -207,6 +208,11 @@ Singleton {
 
     function launch(slotId: string): void {
         const command = root.commandFor(slotId)
+        if (slotId === "bluetooth" && (command === "inir bluetooth"
+                || (BluetoothStatus.integrated && command === "blueman-manager"))) {
+            BluetoothStatus.openManager()
+            return
+        }
         if (command.length === 0)
             return
 

@@ -114,10 +114,10 @@ DialogListItem {
                         operationPending = true;
                         pendingTimeout.start();
                         if (root.device?.connected) {
-                            root.device.disconnect();
+                            BluetoothStatus.disconnectDevice(root.device);
                         } else {
                             root.device.trusted = true;
-                            root.device.connect();
+                            BluetoothStatus.connectDevice(root.device);
                         }
                     }
 
@@ -143,7 +143,7 @@ DialogListItem {
                         colRipple: Appearance.colors.colErrorActive
                         colText: Appearance.colors.colOnError
                         buttonText: Translation.tr("Forget")
-                        onClicked: root.device?.forget()
+                        onClicked: BluetoothStatus.forgetDevice(root.device)
                     }
                 }
             }

@@ -696,6 +696,11 @@ Singleton {
             property bool familyTransitionAnimation: true // Show animated overlay when switching families
             property list<string> familyCycle: ["ii", "waffle", "iris"] // Families the switch shortcut (panelFamily cycle) walks through
 
+            property JsonObject bluetooth: JsonObject {
+                property string managerMode: "external"
+                property string receiveDirectory: ""
+            }
+
             property JsonObject policies: JsonObject {
                 property int ai: 0 // 0: No | 1: Yes | 2: Local
                 property int weeb: 0 // 0: No | 1: Open | 2: Closet

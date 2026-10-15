@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import Quickshell
 import QtQuick.Layouts
 import Quickshell.Bluetooth
 import qs.services
@@ -12,7 +13,8 @@ ColumnLayout {
     id: root
 
     readonly property real d: IrisStyle.density
-    readonly property var devices: (Bluetooth.defaultAdapter?.devices?.values ?? [])
+    BluetoothDiscoveryView { id: discovery; active: root.visible; autoScan: false }
+    readonly property var devices: discovery.devices
         .filter(device => device && (device.paired || device.connected || device.trusted))
     spacing: 2 * root.d
 
@@ -32,7 +34,7 @@ ColumnLayout {
     }
 
     Repeater {
-        model: BluetoothStatus.enabled ? root.devices : []
+        model: ScriptModel { values: BluetoothStatus.enabled ? root.devices : [] }
         IrisButton {
             id: deviceRow
             required property BluetoothDevice modelData
@@ -41,8 +43,8 @@ ColumnLayout {
             implicitHeight: Math.round(40 * root.d)
             buttonRadius: IrisStyle.radiusTile
             onClicked: {
-                if (deviceRow.modelData.connected) deviceRow.modelData.disconnect()
-                else deviceRow.modelData.connect()
+                if (deviceRow.modelData.connected) BluetoothStatus.disconnectDevice(deviceRow.modelData)
+                else BluetoothStatus.connectDevice(deviceRow.modelData)
             }
             RowLayout {
                 anchors.fill: parent

@@ -16,11 +16,9 @@ import qs.modules.waffle.actionCenter
 Item {
     id: root
 
-    Component.onCompleted: {
-        if (Bluetooth.defaultAdapter.enabled) Bluetooth.defaultAdapter.discovering = true;
-    }
-    Component.onDestruction: {
-        Bluetooth.defaultAdapter.discovering = false;
+    BluetoothDiscoveryView {
+        id: discovery
+        active: GlobalStates.waffleActionCenterOpen && root.StackView.status === StackView.Active
     }
 
     WPanelPageColumn {
@@ -51,14 +49,9 @@ Item {
                             id: toggleSwitch
                             Layout.rightMargin: 12
                             checked: Bluetooth.defaultAdapter?.enabled ?? false
-                            onCheckedChanged: {
+                            onToggled: {
                                 if (Bluetooth.defaultAdapter) {
                                     Bluetooth.defaultAdapter.enabled = checked;
-                                    if (checked) {
-                                        Bluetooth.defaultAdapter.discovering = true;
-                                    } else {
-                                        Bluetooth.defaultAdapter.discovering = false;
-                                    }
                                 }
                             }
                         }
@@ -67,7 +60,7 @@ Item {
                         Layout.leftMargin: -4
                         Layout.rightMargin: -4
                         Layout.fillWidth: true
-                        shown: Bluetooth.defaultAdapter?.discovering ?? false
+                        shown: discovery.scanning
                         visible: true
                         sourceComponent: WIndeterminateProgressBar {}
                     }
@@ -85,12 +78,7 @@ Item {
                     spacing: 4
 
                     model: ScriptModel {
-                        values: [...(Bluetooth.defaultAdapter?.devices.values ?? [])].sort((a, b) => {
-                            // Connected -> paired -> others
-                            const conn = (b.connected - a.connected) || (b.paired - a.paired);
-                            if (conn !== 0) return conn;
-                            return a.name.localeCompare(b.name);
-                        })
+                        values: discovery.devices
                     }
                     delegate: BluetoothDeviceItem {
                         required property BluetoothDevice modelData
@@ -119,10 +107,10 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 12
-                enabled: !Bluetooth.defaultAdapter?.discovering && Bluetooth.defaultAdapter?.enabled
+                enabled: Bluetooth.defaultAdapter?.enabled ?? false
 
                 onClicked: {
-                    Bluetooth.defaultAdapter.discovering = true;
+                    if (discovery.scanning) discovery.stopScan(); else discovery.rescan();
                 }
 
                 contentItem: FluentIcon {

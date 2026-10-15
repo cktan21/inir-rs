@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import Quickshell
 import Quickshell.Bluetooth
 import qs.modules.common
 import qs.services
@@ -21,25 +22,15 @@ Item {
     signal back()
 
     readonly property var adapter: (typeof Bluetooth !== "undefined" && Bluetooth) ? Bluetooth.defaultAdapter : null
-    readonly property var devices: (typeof Bluetooth !== "undefined" && Bluetooth && Bluetooth.devices) ? Bluetooth.devices.values : []
 
     /**
      * BlueZ hands the cache out in arbitrary order; sort connected first,
      * then paired, then named devices, nameless MACs last so a discovery scan
      * doesn't churn the useful rows around.
      */
-    readonly property var devicesSorted: devices.slice().sort(function(a, b) {
-        function rank(d) {
-            if (!d) return 3;
-            if (d.connected) return 0;
-            if (d.paired) return 1;
-            return (d.name && d.name.length) ? 2 : 3;
-        }
-        var r = rank(a) - rank(b);
-        if (r !== 0) return r;
-        return String((a && a.name) || "").localeCompare(String((b && b.name) || ""));
-    })
-    readonly property bool discovering: adapter ? adapter.discovering === true : false
+    readonly property var devicesSorted: discovery.devices
+    readonly property bool discovering: discovery.scanning
+    BluetoothDiscoveryView { id: discovery; active: root.active; adapter: root.adapter }
 
     readonly property string pairingAddress: BluetoothStatus.pairingAddress
     property string failedAddress: ""
@@ -91,14 +82,12 @@ Item {
 
     function connectDevice(d) {
         expandedAddress = "";
-        if (d && typeof d.connect === "function")
-            d.connect();
+        BluetoothStatus.connectDevice(d);
     }
 
     function disconnectDevice(d) {
         expandedAddress = "";
-        if (d && typeof d.disconnect === "function")
-            d.disconnect();
+        BluetoothStatus.disconnectDevice(d);
     }
 
     /**
@@ -108,8 +97,7 @@ Item {
      */
     function forgetDevice(d) {
         expandedAddress = "";
-        if (d && typeof d.forget === "function")
-            d.forget();
+        BluetoothStatus.forgetDevice(d);
     }
 
     function pairDevice(d) {
@@ -121,18 +109,8 @@ Item {
 
     onActiveChanged: {
         if (!active) {
-            scanTimer.stop();
             expandedAddress = "";
-            if (adapter && adapter.discovering)
-                adapter.discovering = false;
         }
-    }
-
-    Timer {
-        id: scanTimer
-        interval: 25000
-        repeat: false
-        onTriggered: if (root.adapter) root.adapter.discovering = false
     }
 
     Timer {
@@ -219,11 +197,7 @@ Item {
                     onClicked: {
                         if (!root.adapter)
                             return;
-                        root.adapter.discovering = !root.adapter.discovering;
-                        if (root.adapter.discovering)
-                            scanTimer.restart();
-                        else
-                            scanTimer.stop();
+                        if (discovery.scanning) discovery.stopScan(); else discovery.rescan();
                     }
                 }
             }
@@ -278,7 +252,7 @@ Item {
                 spacing: 2 * root.s
 
                 Repeater {
-                    model: root.devicesSorted
+                    model: ScriptModel { values: root.devicesSorted }
 
                     Column {
                         id: devItem

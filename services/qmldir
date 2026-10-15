@@ -8,6 +8,7 @@ singleton Audio 1.0 media/Audio.qml
 singleton Autostart 1.0 Autostart.qml
 singleton Battery 1.0 power/Battery.qml
 singleton BluetoothStatus 1.0 network/BluetoothStatus.qml
+BluetoothDiscoveryView 1.0 network/BluetoothDiscoveryView.qml
 singleton Booru 1.0 Booru.qml
 BooruResponseData 1.0 BooruResponseData.qml
 singleton Brightness 1.0 display/Brightness.qml

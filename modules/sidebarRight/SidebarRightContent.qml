@@ -1092,15 +1092,6 @@ Item {
     ToggleDialog {
         shownPropertyString: "showBluetoothDialog"
         dialog: BluetoothDialog {}
-        onShownChanged: {
-            if (!Bluetooth.defaultAdapter) return
-            if (!shown) {
-                Bluetooth.defaultAdapter.discovering = false;
-            } else {
-                Bluetooth.defaultAdapter.enabled = true;
-                Bluetooth.defaultAdapter.discovering = true;
-            }
-        }
     }
 
     ToggleDialog {

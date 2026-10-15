@@ -28,6 +28,8 @@ CONSUMERS = {
     "services/KeyboardIndicators.qml": {"backendKeyboard": "keyboard.rs"},
     "services/network/Vpn.qml": {"backendNetwork": "network.rs"},
     "services/network/Hotspot.qml": {"backendNetwork": "network.rs"},
+    "services/native/BluetoothProvider.qml": {"controller": "bluetooth_control.rs"},
+    "services/network/BluetoothStatus.qml": {"controller": "bluetooth_control.rs"},
 }
 
 # Members inherited from QAbstractListModel/QObject or from the shared list_model.h
@@ -40,6 +42,7 @@ PROVIDED_TYPES = {
     "NativeBrightness": "brightness.rs", "NativePower": "power.rs",
     "NativeKeyboard": "keyboard.rs",
     "SystemInfo": "system_info.rs", "ConfigService": "config.rs",
+    "NativeBluetoothController": "bluetooth_control.rs",
 }
 
 QPROPERTY = re.compile(r"#\[qproperty\(\s*[^,]+,\s*(\w+)\s*\)\]")
@@ -92,6 +95,12 @@ class RustContractTests(unittest.TestCase):
         present = []
         for path in QOBJECTS.glob("*.rs"):
             text = path.read_text(encoding="utf-8").lower()
+            if path.name == "bluetooth_control.rs":
+                # Control, pairing agents and transfer jobs are native. Device
+                # discovery data still has exactly one owner: Quickshell.
+                self.assertNotIn("bluetooth_devices", text)
+                self.assertNotIn("bluetooth_adapters", text)
+                continue
             present.extend(f"{path.name}:{name}" for name in FORBIDDEN if f"fn {name}" in text or f"type {name}" in text)
         self.assertEqual(present, [], "Quickshell-owned domains must not reappear in the bridge")
 
