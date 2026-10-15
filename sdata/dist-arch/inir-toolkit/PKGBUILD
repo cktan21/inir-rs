@@ -51,3 +51,7 @@ depends=(
   tesseract-data-chi_tra
   tesseract-data-chi_tra_vert
 )
+optdepends=(
+  'bluez-obex: integrated Bluetooth file transfers'
+  'dnsmasq: integrated Bluetooth internet sharing'
+)

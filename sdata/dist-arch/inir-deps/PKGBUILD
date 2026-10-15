@@ -176,6 +176,8 @@ depends=(
 # AUR / optional packages — listed here so pacman knows about them
 # but won't block install if missing.
 optdepends=(
+  'bluez-obex: integrated Bluetooth file transfers'
+  'dnsmasq: integrated Bluetooth internet sharing'
   'darkly-bin: Material You Qt style'
   'kde-cli-tools: Dolphin Open With dialog (QT_QPA_PLATFORMTHEME=kde)'
   'ttf-roboto-flex: default UI font'
