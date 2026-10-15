@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
+import "helpers" as OverviewViews
 
 Item {
     id: root
@@ -898,17 +899,27 @@ Item {
             implicitHeight: workspaceColumnLayout.implicitHeight
             
             property var windowItems: []
+            property var _windowItemViews: new Map()
+            Component {
+                id: overviewRecordComponent
+                OverviewViews.OverviewWindowRecord {}
+            }
+            function clearWindowItems() {
+                if (windowItems.length > 0) windowItems = []
+                for (const view of _windowItemViews.values()) view.destroy()
+                _windowItemViews.clear()
+            }
             
             function rebuildWindowItems() {
                 if (!GlobalStates.overviewOpen) {
-                    windowItems = []
+                    clearWindowItems()
                     return
                 }
                 
                 const wins = (NiriService.windows || []).filter(window => root.windowMatchesFilter(window))
                 const wsList = root.workspacesForOutput || []
                 if (wsList.length === 0 || wins.length === 0) {
-                    windowItems = []
+                    clearWindowItems()
                     return
                 }
 
@@ -955,29 +966,39 @@ Item {
                     collected.push({ window: w, workspaceNumber: wsNumber, workspaceSlot: slot })
                 }
 
-                const result = []
+                const result = [], liveIds = new Set()
                 for (let i = 0; i < collected.length; ++i) {
                     const entry = collected[i]
                     const wsKey = entry.workspaceNumber.toString()
-                    const key = wsKey
-                    const count = counters[key] || 0
-                    counters[key] = count + 1
+                    const count = counters[wsKey] || 0
+                    counters[wsKey] = count + 1
 
                     const gridInfo = maxPerWorkspace[wsKey] || { maxCol: 1, maxRow: 1 }
 
-                    result.push({
-                        "id": entry.window.id,
-                        "window": entry.window,
-                        "workspaceNumber": entry.workspaceNumber,
-                        "workspaceSlot": entry.workspaceSlot,
-                        "indexInWorkspace": count,
-                        "windowCount": countsPerWorkspace[wsKey] || 1,
-                        "maxCol": gridInfo.maxCol,
-                        "maxRow": gridInfo.maxRow
-                    })
+                    const key = String(entry.window.id)
+                    liveIds.add(key)
+                    let view = _windowItemViews.get(key)
+                    if (!view) {
+                        view = overviewRecordComponent.createObject(windowSpace, { windowId: entry.window.id })
+                        _windowItemViews.set(key, view)
+                    }
+                    view.window = entry.window
+                    view.workspaceNumber = entry.workspaceNumber
+                    view.workspaceSlot = entry.workspaceSlot
+                    view.indexInWorkspace = count
+                    view.windowCount = countsPerWorkspace[wsKey] || 1
+                    view.maxCol = gridInfo.maxCol
+                    view.maxRow = gridInfo.maxRow
+                    result.push(view.record)
                 }
-
-                windowItems = result
+                if (result.length !== windowItems.length || result.some((item, index) => item !== windowItems[index]))
+                    windowItems = result
+                for (const [key, view] of _windowItemViews) {
+                    if (!liveIds.has(key)) {
+                        view.destroy()
+                        _windowItemViews.delete(key)
+                    }
+                }
                 if (GlobalStates.overviewOpen
                         && (root.orbitMode || Config.options?.overview?.showPreviews !== false)
                         && result.length > 0) {
@@ -985,38 +1006,55 @@ Item {
                         root.orbitMode ? 12000 : undefined)
                 }
             }
-            
+
+            OverviewViews.OverviewRebuildQueue {
+                id: rebuildQueue
+                onTriggered: windowSpace.rebuildWindowItems()
+            }
+            function scheduleRebuild() { if (GlobalStates.overviewOpen) rebuildQueue.schedule() }
+
             Connections {
                 target: NiriService
                 enabled: GlobalStates.overviewOpen
                 function onWindowsChanged() {
-                    windowSpace.rebuildWindowItems()
+                    windowSpace.scheduleRebuild()
+                }
+                function onWindowOrderChanged() { windowSpace.scheduleRebuild() }
+                function onWindowRolesChanged(roles) {
+                    // Membership of a title/app filter can change without any
+                    // spatial reordering or collection publication.
+                    if ((roles & 6) !== 0 && root.orbitMode && root.filterText.trim().length > 0)
+                        windowSpace.scheduleRebuild()
                 }
             }
-            
+
             Connections {
                 target: root
                 function onWorkspacesForOutputChanged() {
-                    windowSpace.rebuildWindowItems()
+                    windowSpace.scheduleRebuild()
                 }
                 function onFirstVisibleWorkspaceSlotChanged() {
-                    windowSpace.rebuildWindowItems()
+                    windowSpace.scheduleRebuild()
                 }
             }
-            
+
             Connections {
                 target: GlobalStates
                 function onOverviewOpenChanged() {
                     if (GlobalStates.overviewOpen)
-                        windowSpace.rebuildWindowItems()
+                        windowSpace.scheduleRebuild()
+                    else {
+                        rebuildQueue.cancel()
+                        windowSpace.clearWindowItems()
+                    }
                 }
             }
-            
-            Component.onCompleted: rebuildWindowItems()
+
+            Component.onCompleted: scheduleRebuild()
 
             Connections {
                 target: root
-                function onFilterTextChanged() { windowSpace.rebuildWindowItems() }
+                function onFilterTextChanged() { windowSpace.scheduleRebuild() }
             }
 
             Repeater {
