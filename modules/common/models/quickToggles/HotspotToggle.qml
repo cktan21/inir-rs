@@ -13,6 +13,18 @@ import Quickshell
  */
 QuickToggleModel {
     id: root
+    // The owning surface supplies visibility; a model can outlive its hidden page.
+    property bool watching: false
+    property bool _holding: false
+    function _syncLease(): void {
+        if (root._holding === root.watching) return
+        root._holding = root.watching
+        if (root._holding) Hotspot.keepAlive()
+        else Hotspot.releaseKeepAlive()
+    }
+    onWatchingChanged: root._syncLease()
+    Component.onCompleted: root._syncLease()
+    Component.onDestruction: if (root._holding) Hotspot.releaseKeepAlive()
 
     name: Translation.tr("Hotspot")
     icon: "wifi_tethering"

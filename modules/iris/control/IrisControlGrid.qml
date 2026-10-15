@@ -628,7 +628,7 @@ Item {
     Component { id: networkModel; NetworkToggle {} }
     Component { id: bluetoothModel; BluetoothToggle {} }
     Component { id: vpnModel; VpnToggle {} }
-    Component { id: hotspotModel; HotspotToggle {} }
+    Component { id: hotspotModel; HotspotToggle { watching: root.visible } }
     Component { id: profilesModel; PowerProfilesToggle {} }
     Component { id: focusModel; NotificationToggle {} }
     Component { id: gameModeModel; GameModeToggle {} }

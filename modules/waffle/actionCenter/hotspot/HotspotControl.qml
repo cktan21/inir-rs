@@ -18,6 +18,7 @@ Item {
     // Shared toggle model so the switch stays in sync with the toggle button
     HotspotToggle {
         id: hotspotToggle
+        watching: root.visible
     }
 
     WPanelPageColumn {

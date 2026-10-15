@@ -13,14 +13,36 @@ import qs.services
  * connection profiles (OpenVPN, WireGuard, IPSec, anything with an NM plugin)
  * and Tailscale, which runs beside NetworkManager rather than inside it.
  *
- * There is no background polling: refreshes follow nmcli monitor through
- * Network.networkChanged and callers asking; a timer runs only while a surface holds
- * the service alive, because Tailscale changes do not reach NetworkManager.
+ * Native NetworkManager state is event-driven. The fallback refreshes its profile
+ * summary after network events; detailed profile/Tailscale queries are refreshed
+ * when a viewer opens. Tailscale polling runs only while a viewer holds a lease.
  */
 Singleton {
     id: root
 
-    property var profiles: []
+    property var _savedProfiles: []
+    readonly property var backendNetwork: NativeBackend.network
+    readonly property bool nativeNetworkReady: root.backendNetwork?.ready ?? false
+    readonly property var nativeActiveConnections: nativeNetworkReady
+        ? (root.backendNetwork.jsValue(root.backendNetwork.activeConnections) ?? []) : []
+    readonly property var nativeVpnConnections: root.nativeActiveConnections.filter(entry =>
+        entry.state === 2 && (entry.vpn || entry.type === "vpn" || entry.type === "wireguard"))
+    readonly property var profiles: {
+        if (!root.nativeNetworkReady) return root._savedProfiles
+        const active = new Map(root.nativeVpnConnections.map(entry => [entry.uuid, entry]))
+        const result = root._savedProfiles.map(entry => {
+            const connection = active.get(entry.uuid)
+            active.delete(entry.uuid)
+            return { name: connection?.id ?? entry.name, uuid: entry.uuid,
+                type: entry.type, active: connection !== undefined, autoconnect: entry.autoconnect }
+        })
+        // A connection activated outside the shell can appear before the on-open
+        // profile query. Keep its name, count and disconnect action correct now.
+        for (const entry of active.values())
+            result.push({ name: entry.id, uuid: entry.uuid, type: entry.type === "wireguard" ? "WireGuard" : "VPN",
+                active: true, autoconnect: false })
+        return result
+    }
     property bool tailscaleInstalled: false
     property string tailscaleState: ""
     property string tailscaleHost: ""
@@ -84,14 +106,22 @@ Singleton {
         ?? (root.tailscaleUp ? "Tailscale" : "")
 
     property int watchers: 0
-    function keepAlive(): void { root.watchers += 1; root.refresh() }
+    function keepAlive(): void {
+        root.watchers += 1
+        if (root.watchers === 1) root.refresh()
+    }
     function releaseKeepAlive(): void { root.watchers = Math.max(0, root.watchers - 1) }
 
     function refresh(): void {
-        profilesProc.running = true
-        tailscaleProc.running = true
+        if (!profilesProc.running) profilesProc.running = true
+        if (!tailscaleProc.running) tailscaleProc.running = true
         root.readDetails()
     }
+    onNativeNetworkReadyChanged: {
+        // A native transport failure switches back to the fallback summary.
+        if (!root.nativeNetworkReady && !profilesProc.running) profilesProc.running = true
+    }
+    onActiveProfilesChanged: root.readDetails()
     readonly property var watchedInterfaces: {
         const out = root.activeProfiles.map(entry => root.profileDetails[entry.uuid]?.device ?? "").filter(dev => dev.length > 0)
         if (root.tailscaleUp) out.push("tailscale0")
@@ -106,7 +136,7 @@ Singleton {
         root.readRates()
     }
     function readRates(): void {
-        if (root.watchedInterfaces.length === 0 || ratesProc.running) return
+        if (!root.details || root.watchers === 0 || root.watchedInterfaces.length === 0 || ratesProc.running) return
         ratesProc.exec(["bash", "-c", 'for d in "$@"; do [ -r "/sys/class/net/$d/statistics/rx_bytes" ] || continue; '
             + 'echo "$d $(cat /sys/class/net/$d/statistics/rx_bytes) $(cat /sys/class/net/$d/statistics/tx_bytes)"; done',
             "_", ...root.watchedInterfaces])
@@ -196,9 +226,20 @@ Singleton {
         if (first) root.setProfile(first.uuid, true)
     }
 
+    // Native strength/connectivity updates need no VPN profile query. QML mode
+    // still refreshes the NetworkManager summary after its monitor fires, even
+    // with no viewer, so externally disconnected VPNs cannot stay marked active.
+    // NetworkManager events say nothing about Tailscale, so do not query it here.
     Connections {
         target: Network
-        function onNetworkChanged(): void { root.refresh() }
+        function onNetworkChanged(): void {
+            if (!root.nativeNetworkReady) fallbackRefresh.restart()
+        }
+    }
+    Timer {
+        id: fallbackRefresh
+        interval: 100
+        onTriggered: if (!root.nativeNetworkReady && !profilesProc.running) profilesProc.running = true
     }
 
     Timer {
@@ -328,7 +369,7 @@ Singleton {
                         autoconnect: parts[4] === "yes"
                     })
                 }
-                root.profiles = found
+                root._savedProfiles = found
             }
         }
     }

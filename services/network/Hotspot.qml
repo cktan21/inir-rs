@@ -4,7 +4,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs
 import qs.modules.common
 import qs.services
 
@@ -37,12 +36,55 @@ Singleton {
     property bool active: false
     readonly property bool busy: startProc.running || stopProc.running
 
+    // The native mirror reports active connections event-driven, so in Rust mode the
+    // hotspot's active state needs no `nmcli` poll at all.
+    readonly property var backendNetwork: NativeBackend.network
+    readonly property bool nativeNetworkReady: root.backendNetwork?.ready ?? false
+    readonly property var nativeActiveConnections: root.nativeNetworkReady
+        ? (root.backendNetwork.jsValue(root.backendNetwork.activeConnections) ?? []) : []
+    function _activeFromNative(name: string): bool {
+        return root.nativeActiveConnections.some(entry => entry.id === name && entry.state === 2)
+    }
+    function _syncNativeActive(): void {
+        root.active = root._activeFromNative(root.connectionName)
+        root.apActive = root._activeFromNative(root.apConnectionName)
+    }
+    onNativeActiveConnectionsChanged: if (root.nativeNetworkReady) root._syncNativeActive()
+    onNativeNetworkReadyChanged: {
+        if (root.nativeNetworkReady) {
+            checkProc.running = false
+            apStateProc.running = false
+            root._syncNativeActive()
+        } else {
+            if (root.watchers > 0) root.refresh()
+            if (root.apWatchers > 0) root._refreshApStatus()
+        }
+    }
+    property int watchers: 0
+    property int apWatchers: 0
+    function keepAlive(): void {
+        root.watchers += 1
+        if (root.watchers === 1) root.refresh()
+    }
+    function releaseKeepAlive(): void { root.watchers = Math.max(0, root.watchers - 1) }
+    function keepApAlive(): void {
+        root.apWatchers += 1
+        if (root.apWatchers === 1) root.refreshAp()
+    }
+    function releaseApAlive(): void { root.apWatchers = Math.max(0, root.apWatchers - 1) }
+
     // Emitted alongside the desktop notification so callers can surface their own
     // affordance; `operation` is "start" or "stop".
     signal failed(string operation, string message)
 
     function refresh(): void {
-        checkProc.running = false
+        if (root.nativeNetworkReady) {
+            root._syncNativeActive()
+            return
+        }
+        // Don't restart an in-flight check; let it finish and report.
+        if (checkProc.running)
+            return
         checkProc.running = true
     }
 
@@ -83,6 +125,7 @@ Singleton {
         stdout: StdioCollector {
             id: checkCollector
             onStreamFinished: {
+                if (root.nativeNetworkReady) return
                 const out = checkCollector.text?.trim() ?? ""
                 if (out.length === 0) {
                     root.active = false
@@ -93,7 +136,7 @@ Singleton {
         }
 
         onExited: (exitCode, exitStatus) => {
-            if (exitCode !== 0)
+            if (!root.nativeNetworkReady && exitCode !== 0)
                 root.active = false
         }
     }
@@ -131,15 +174,26 @@ Singleton {
         }
     }
 
+    // Poll only in QML mode; native mode updates `active` from the mirror binding.
     Timer {
         interval: 5000
         repeat: true
         triggeredOnStart: true
-        running: GlobalStates.sidebarRightOpen || GlobalStates.waffleActionCenterOpen
-        onTriggered: root.refresh()
+        running: !root.nativeNetworkReady && (root.watchers > 0 || root.apWatchers > 0)
+        onTriggered: {
+            if (root.watchers > 0) root.refresh()
+            if (root.apWatchers > 0) root._refreshApStatus()
+        }
     }
 
-    Component.onCompleted: root.refresh()
+    Connections {
+        target: Network
+        function onNetworkChanged(): void {
+            if (root.nativeNetworkReady) return
+            if (root.watchers > 0) root.refresh()
+            if (root.apWatchers > 0) root._refreshApStatus()
+        }
+    }
 
     // ── Persistent shared-AP profile ──
     // The link pill keeps its own always-saved AP profile instead of the one-shot
@@ -184,8 +238,16 @@ Singleton {
     }
 
     function refreshAp(): void {
-        apStateProc.running = true;
-        apReadProc.running = true;
+        root._refreshApStatus();
+        // Profile settings/secrets are on-demand details, not part of the status poll.
+        if (!apReadProc.running) apReadProc.running = true;
+    }
+    function _refreshApStatus(): void {
+        if (root.nativeNetworkReady) {
+            root._syncNativeActive();
+            return;
+        }
+        if (!apStateProc.running) apStateProc.running = true;
     }
 
     /** Eight characters from an alphabet with no look-alikes, for a first-run AP password. */
@@ -220,7 +282,7 @@ Singleton {
             "sh", root.apConnectionName]
         stdout: StdioCollector {
             id: apStateCollector
-            onStreamFinished: root.apActive = apStateCollector.text.trim() === "on"
+            onStreamFinished: if (!root.nativeNetworkReady) root.apActive = apStateCollector.text.trim() === "on"
         }
     }
 

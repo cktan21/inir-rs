@@ -96,7 +96,8 @@ DelegateChooser {
     DelegateChoice {
         roleValue: "hotspot"
         ActionCenterToggleButton {
-            toggleModel: HotspotToggle {}
+            id: hotspotButton
+            toggleModel: HotspotToggle { watching: hotspotButton.visible }
             icon: "wifi-tethering"
             menu: Component {
                 HotspotControl {}

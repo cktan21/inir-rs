@@ -20,6 +20,17 @@ Item {
 
     property real s: 1
     property bool active: false
+    property bool _holdingAp: false
+    function _syncApLease(): void {
+        const wanted = root.active && root.visible
+        if (root._holdingAp === wanted) return
+        root._holdingAp = wanted
+        if (wanted) Hotspot.keepApAlive()
+        else Hotspot.releaseApAlive()
+    }
+    onVisibleChanged: root._syncApLease()
+    Component.onCompleted: root._syncApLease()
+    Component.onDestruction: if (root._holdingAp) Hotspot.releaseApAlive()
 
     signal back()
 
@@ -188,9 +199,9 @@ Item {
     }
 
     onActiveChanged: {
+        root._syncApLease();
         if (active) {
             refresh();
-            refreshHotspot();
         } else {
             stopScan();
             expandedSsid = "";
