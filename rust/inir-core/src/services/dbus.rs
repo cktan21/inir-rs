@@ -7,6 +7,28 @@ use zbus::{proxy::CacheProperties, Connection, Proxy};
 pub type Properties = HashMap<String, OwnedValue>;
 pub type Objects = HashMap<OwnedObjectPath, HashMap<String, Properties>>;
 
+/// The system-bus connection shared by every domain and command. Connecting costs a
+/// socket and a SASL handshake, so it happens once; a worker that sees its stream
+/// fail calls `reset`, and the next caller reconnects.
+#[derive(Clone, Default)]
+pub struct SystemBus(std::sync::Arc<tokio::sync::Mutex<Option<Connection>>>);
+
+impl SystemBus {
+    pub async fn connection(&self) -> zbus::Result<Connection> {
+        let mut slot = self.0.lock().await;
+        if let Some(connection) = slot.as_ref() {
+            return Ok(connection.clone());
+        }
+        let connection = Connection::system().await?;
+        *slot = Some(connection.clone());
+        Ok(connection)
+    }
+
+    pub async fn reset(&self) {
+        *self.0.lock().await = None;
+    }
+}
+
 pub async fn proxy<'a>(
     bus: &'a Connection,
     service: &'a str,

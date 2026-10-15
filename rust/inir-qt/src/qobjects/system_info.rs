@@ -3,6 +3,8 @@ pub mod qobject {
     unsafe extern "C++" {
         include!("cxx-qt-lib/qstring.h");
         type QString = cxx_qt_lib::QString;
+        include!("cxx-qt-lib/qvariant.h");
+        type QVariant = cxx_qt_lib::QVariant;
     }
 
     #[auto_cxx_name]
@@ -38,7 +40,7 @@ pub mod qobject {
         #[qinvokable]
         fn set_resource_monitoring(self: Pin<&mut SystemInfo>, active: bool);
         #[qinvokable]
-        fn diagnostics(self: &SystemInfo) -> QString;
+        fn diagnostics(self: &SystemInfo) -> QVariant;
     }
     impl cxx_qt::Threading for SystemInfo {}
     impl cxx_qt::Initialize for SystemInfo {}
@@ -211,32 +213,52 @@ impl qobject::SystemInfo {
         }
     }
 
-    pub fn diagnostics(&self) -> QString {
-        let consumers = self
-            .rust()
-            .backend
-            .as_ref()
-            .map(|backend| backend.resource_consumers())
-            .unwrap_or_default();
+    pub fn diagnostics(&self) -> cxx_qt_lib::QVariant {
+        use crate::ipc::map;
+        use inir_types::desktop::IpcValue as V;
         let backend = self.rust().backend.as_ref();
+        let consumers = backend.map(|b| b.resource_consumers()).unwrap_or_default();
         let service_consumers = backend.map(|b| b.service_consumers()).unwrap_or_default();
-        let services = backend.map(|b| b.snapshot().desktop).unwrap_or_default();
-        QString::from(
-            serde_json::json!({
-                "backend": "rust", "tokioWorkerThreads": 1, "resourceConsumers": consumers,
-                "desktopConsumers": service_consumers,
-                "services": {
-                    "network": services.network.status, "power": services.power.status,
-                    "brightness": services.brightness.status, "niri": services.niri.status
-                },
-                "resourceSampling": consumers > 0,
-                "tasks": [
-                    {"name": "event-reducer", "active": self.rust().backend.is_some()},
-                    {"name": "resources", "active": consumers > 0},
-                    {"name": "desktop-services", "active": service_consumers > 0}
-                ]
+        let status = |status: &inir_types::desktop::ServiceStatus| {
+            map([
+                ("ready", V::Bool(status.ready)),
+                ("error", V::String(status.error.clone())),
+            ])
+        };
+        // Diagnostic metadata only. Never clone a global desktop snapshot or
+        // serialize JSON on the GUI thread, even for this explicit IPC request.
+        let services = backend
+            .map(|b| {
+                map([
+                    ("network", status(&b.network.borrow().status)),
+                    ("power", status(&b.power.borrow().status)),
+                    ("brightness", status(&b.brightness.borrow().status)),
+                    ("niri", status(&b.niri.borrow().status)),
+                    ("keyboard", status(&b.keyboard.borrow().status)),
+                ])
             })
-            .to_string(),
-        )
+            .unwrap_or(V::Null);
+        let task = |name: &str, active| {
+            map([
+                ("name", V::String(name.into())),
+                ("active", V::Bool(active)),
+            ])
+        };
+        crate::ipc::variant(&map([
+            ("backend", V::String("rust".into())),
+            ("tokioWorkerThreads", V::Number(1.0)),
+            ("resourceConsumers", V::Number(consumers as f64)),
+            ("desktopConsumers", V::Number(service_consumers as f64)),
+            ("services", services),
+            ("resourceSampling", V::Bool(consumers > 0)),
+            (
+                "tasks",
+                V::List(vec![
+                    task("event-reducer", backend.is_some()),
+                    task("resources", consumers > 0),
+                    task("desktop-services", service_consumers > 0),
+                ]),
+            ),
+        ]))
     }
 }

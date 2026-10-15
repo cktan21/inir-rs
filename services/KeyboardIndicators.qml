@@ -18,6 +18,7 @@ Singleton {
     property string _knownLayoutName: ""
     property string _lockSource: "unknown"
     property bool _destroying: false
+    property bool _initialized: false
     property bool _numLockReliable: false
     property var _lastRawNumLockState: null
     property string lockStateDaemonPath: Quickshell.shellPath("scripts/daemon/keyboard_lock_state_daemon.py")
@@ -53,11 +54,37 @@ Singleton {
         : root.numFluentIcon
     readonly property string currentLayoutCodeMultiline: root.abbreviateLayoutCode(root.currentLayoutCode, "\n").toUpperCase()
     readonly property string currentLayoutCodeInline: root.abbreviateLayoutCode(root.currentLayoutCode, " ").toUpperCase()
-    readonly property bool usingEvdev: root._lockSource === "evdev"
+    readonly property bool usingEvdev: root._lockSource === "evdev" || root._lockSource === "native"
+
+    // Native caps/num lock worker (Rust evdev). Used in place of the Python daemon
+    // when the native backend is active; QML mode keeps the daemon + sysfs fallback.
+    readonly property var backendKeyboard: NativeBackend.keyboard
+    readonly property bool nativeKeyboardReady: root.lockIndicatorsWanted
+        && NativeBackend.typedBridge && (backendKeyboard?.ready ?? false)
+    readonly property bool nativeKeyboardPending: root.lockIndicatorsWanted
+        && NativeBackend.requested && NativeBackend.typedBridge
+        && (NativeBackend.loading || (root.backendKeyboard !== null
+            && !root.nativeKeyboardReady && root.backendKeyboard.error.length === 0))
+    readonly property bool sysfsActive: root.lockIndicatorsWanted
+        && root._lockSource === "sysfs" && !root.nativeKeyboardPending && !root.nativeKeyboardReady
+    // A lock source only runs when some caps/num indicator or popup is enabled.
+    // Layout indicators come from HyprlandXkb and never need it.
+    readonly property bool lockIndicatorsWanted: Config.ready
+        && (root.showCapsPopup || root.showNumPopup || root.showCapsPanel || root.showNumPanel)
     readonly property bool layoutVisible: root.showLayoutPanel && root.hasMultipleLayouts && root.currentLayoutCode.length > 0
     readonly property bool capsLockVisible: root.showCapsPanel && root.capsLock
     readonly property bool numLockVisible: root.showNumPanel && root.numLock
     readonly property bool hasPanelIndicators: root.layoutVisible || root.capsLockVisible || root.numLockVisible
+
+    function backendDiagnostics(): var {
+        return { owner: !root.lockIndicatorsWanted ? "off"
+                : root.nativeKeyboardReady ? "rust"
+                : root._lockSource === "evdev" ? "python" : root._lockSource,
+            wanted: root.lockIndicatorsWanted, nativeReady: root.nativeKeyboardReady,
+            pending: root.nativeKeyboardPending, source: root._lockSource,
+            probeRunning: evdevProbeProc.running, monitorRunning: evdevMonitorProc.running,
+            caps: root.capsLock, num: root.numLock, devices: root.backendKeyboard?.devices ?? 0 };
+    }
 
     function _log(...args) {
         if (Quickshell.env("QS_DEBUG") === "1")
@@ -75,7 +102,7 @@ Singleton {
     }
 
     function refreshLedPaths() {
-        if (root.usingEvdev)
+        if (!root.sysfsActive)
             return;
         if (!ledDiscoveryProc.running)
             ledDiscoveryProc.running = true;
@@ -102,6 +129,7 @@ Singleton {
     }
 
     function _handleEvdevOutput(rawLine) {
+        if (!root._pythonAllowed()) return;
         const trimmed = String(rawLine).trim();
         if (!trimmed.length)
             return;
@@ -118,7 +146,7 @@ Singleton {
     }
 
     function _enableSysfsFallback() {
-        if (root.usingEvdev)
+        if (!root._pythonAllowed())
             return;
 
         root._lockSource = "sysfs";
@@ -165,7 +193,7 @@ Singleton {
     }
 
     function _setLockPaths(kind, paths) {
-        if (root.usingEvdev)
+        if (!root.sysfsActive)
             return;
 
         const uniquePaths = [...new Set(paths)].sort();
@@ -195,7 +223,7 @@ Singleton {
     }
 
     function _setLockState(kind, path, rawValue) {
-        if (root.usingEvdev)
+        if (!root.sysfsActive)
             return;
 
         const nextValue = Number(String(rawValue).trim()) > 0;
@@ -211,7 +239,7 @@ Singleton {
     }
 
     function _clearLockState(kind, path) {
-        if (root.usingEvdev)
+        if (!root.sysfsActive)
             return;
 
         if (kind === "caps") {
@@ -278,6 +306,9 @@ Singleton {
         }
 
         onExited: (exitCode, exitStatus) => {
+            // A stopped probe may deliver onExited after demand changed or the
+            // native owner became ready. It must never restart a second owner.
+            if (!root._pythonAllowed()) return;
             if (exitCode === 0) {
                 if (!evdevMonitorProc.running)
                     evdevMonitorProc.running = true;
@@ -295,7 +326,7 @@ Singleton {
         running: false
         repeat: false
         onTriggered: {
-            if (!root._destroying && root.usingEvdev && !evdevMonitorProc.running)
+            if (root._pythonAllowed() && !evdevMonitorProc.running)
                 evdevMonitorProc.running = true;
         }
     }
@@ -314,16 +345,14 @@ Singleton {
         }
 
         onExited: (exitCode, exitStatus) => {
-            if (root._destroying)
+            if (!root._pythonAllowed())
                 return;
 
             root._log("evdev monitor exited", exitCode, exitStatus);
-            if (root.usingEvdev) {
-                evdevRestartTimer.restart();
-                return;
-            }
-
             root._enableSysfsFallback();
+            // A device/permission failure uses sysfs until demand or ownership
+            // changes; do not respawn a failing interpreter every second.
+            if (exitCode === 0) evdevRestartTimer.restart();
         }
     }
 
@@ -373,13 +402,13 @@ Singleton {
 
     Timer {
         interval: 8000
-        running: !root.usingEvdev
+        running: root.sysfsActive
         repeat: true
         onTriggered: root.refreshLedPaths()
     }
 
     Instantiator {
-        model: root.capsLockPaths
+        model: root.sysfsActive ? root.capsLockPaths : []
 
         FileView {
             required property string modelData
@@ -392,7 +421,7 @@ Singleton {
     }
 
     Instantiator {
-        model: root.numLockPaths
+        model: root.sysfsActive ? root.numLockPaths : []
 
         FileView {
             required property string modelData
@@ -421,10 +450,92 @@ Singleton {
         }
     }
 
-    Component.onCompleted: {
-        root._knownLayoutName = root.currentLayoutName;
-        evdevProbeProc.running = true;
+    // Chooses the lock-state source: nothing when no caps/num indicator is enabled,
+    // the native Rust worker when the backend is active, else the Python daemon.
+    function _pythonAllowed(): bool {
+        return root._initialized && !root._destroying && root.lockIndicatorsWanted
+            && !root.nativeKeyboardReady && !root.nativeKeyboardPending;
     }
 
-    Component.onDestruction: root._destroying = true
+    function _stopPython(): void {
+        evdevRestartTimer.stop();
+        evdevProbeProc.running = false;
+        evdevMonitorProc.running = false;
+    }
+
+    function _setNativeState(allowPopup): void {
+        root._lockSource = "native";
+        root._setCapsLockValue(root.backendKeyboard.caps, allowPopup);
+        root._setNumLockRawValue(root.backendKeyboard.num, allowPopup);
+    }
+
+    function _applyLockSource() {
+        if (!root._initialized || root._destroying)
+            return;
+
+        if (!root.lockIndicatorsWanted) {
+            if (root.backendKeyboard)
+                root.backendKeyboard.setEnabled(false);
+            root._stopPython();
+            ledDiscoveryProc.running = false;
+            root._lockSource = "disabled";
+            root.capsLockPaths = [];
+            root.numLockPaths = [];
+            root._capsLockStates = ({});
+            root._numLockStates = ({});
+            root.capsLock = false;
+            root.numLock = false;
+            root._numLockReliable = false;
+            root._lastRawNumLockState = null;
+            return;
+        }
+
+        const preferNative = NativeBackend.typedBridge && root.backendKeyboard !== null;
+        if (preferNative) {
+            root.backendKeyboard.setEnabled(true);
+            if (root.nativeKeyboardReady) {
+                root._stopPython();
+                ledDiscoveryProc.running = false;
+                root._setNativeState(false);
+                return;
+            }
+        }
+        if (root.nativeKeyboardPending) {
+            root._stopPython();
+            ledDiscoveryProc.running = false;
+            root._lockSource = "pending";
+            return;
+        }
+        if (["native", "pending", "disabled"].includes(root._lockSource))
+            root._lockSource = "unknown";
+        if (root._lockSource === "unknown" && !evdevProbeProc.running && !evdevMonitorProc.running)
+            evdevProbeProc.running = true;
+    }
+
+    onLockIndicatorsWantedChanged: root._applyLockSource()
+    onBackendKeyboardChanged: root._applyLockSource()
+    onNativeKeyboardPendingChanged: root._applyLockSource()
+    onNativeKeyboardReadyChanged: root._applyLockSource()
+
+    Connections {
+        target: root.backendKeyboard
+        enabled: root.backendKeyboard !== null
+        function onErrorChanged() { root._applyLockSource() }
+        function onStateUpdated() {
+            if (root.nativeKeyboardReady)
+                root._setNativeState(true);
+        }
+    }
+
+    Component.onCompleted: {
+        root._knownLayoutName = root.currentLayoutName;
+        root._initialized = true;
+        root._applyLockSource();
+    }
+
+    Component.onDestruction: {
+        root._destroying = true;
+        if (root.backendKeyboard)
+            root.backendKeyboard.setEnabled(false);
+    }
 }

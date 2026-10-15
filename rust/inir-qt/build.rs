@@ -6,12 +6,16 @@ fn main() {
     )
     .qt_module("Qml")
     .crate_include_root(Some("include".into()))
-    .cpp_file("include/service_models.h")
-    .cpp_file("src/service_models.cpp")
+    .cpp_file("include/list_model.h")
     .files([
         "src/qobjects/system_info.rs",
         "src/qobjects/config.rs",
-        "src/qobjects/desktop.rs",
+        "src/qobjects/niri.rs",
+        "src/qobjects/workspaces.rs",
+        "src/qobjects/network.rs",
+        "src/qobjects/brightness.rs",
+        "src/qobjects/power.rs",
+        "src/qobjects/keyboard.rs",
     ]);
     // Rust cdylibs hide C++ symbols. Rename Qt's generated entry points so
     // exported Rust trampolines can keep them visible to QPluginLoader.

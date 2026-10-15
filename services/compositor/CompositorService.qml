@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import QtQuick
+import QtQml.Models
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
@@ -48,7 +49,12 @@ Singleton {
         repeat: false
         onTriggered: {
             _sortScheduled = false
-            sortedToplevels = computeSortedToplevels()
+            const next = computeSortedToplevels()
+            // Native focus/geometry getters and refreshed fallback backing rows
+            // update in place. Only publish a collection when its order changed.
+            if (!root.isNiri || next.length !== root.sortedToplevels.length
+                    || next.some((handle, index) => handle !== root.sortedToplevels[index]))
+                root.sortedToplevels = next
         }
     }
 
@@ -134,7 +140,27 @@ Singleton {
         target: NiriService
         enabled: root.isNiri && root.sortingActive
         function onWindowOrderChanged() { root.scheduleSort() }
-        function onActiveWindowChanged() { root.scheduleSort() }
+        function onWindowRolesChanged(roles) {
+            // Titles/app IDs are matching fields, focus is a live getter.
+            if ((roles & 6) !== 0) root.scheduleSort()
+        }
+        function onWindowsChanged() {
+            // QML fallback replaces snapshots even on focus-only updates. Refresh
+            // the live record backing rows; the cached join remains unchanged.
+            if (!NiriService.nativeNiriReady) root.scheduleSort()
+        }
+    }
+    Instantiator {
+        active: root.isNiri && root.sortingActive
+        model: ToplevelManager.toplevels
+        delegate: QtObject {
+            required property var modelData
+            property Connections matchingFields: Connections {
+                target: modelData
+                function onTitleChanged() { root.scheduleSort() }
+                function onAppIdChanged() { root.scheduleSort() }
+            }
+        }
     }
     Component.onCompleted: {
         detectCompositor()

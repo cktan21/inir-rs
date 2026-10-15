@@ -7,6 +7,7 @@ Item {
     property alias path: socket.path
     property alias parser: socket.parser
     property bool connected: false
+    readonly property bool socketConnected: socket.connected
 
     property int reconnectBaseMs: 400
     property int reconnectMaxMs: 15000

@@ -3,9 +3,9 @@ use inir_types::desktop::{PowerState, ServiceStatus};
 use zbus::{zvariant::Value, Connection};
 
 pub const PROFILES: &str = "org.freedesktop.UPower.PowerProfiles";
-const PROFILE_PATH: &str = "/org/freedesktop/UPower/PowerProfiles";
-const OLD_PROFILES: &str = "net.hadess.PowerProfiles";
-const OLD_PATH: &str = "/net/hadess/PowerProfiles";
+pub const PROFILE_PATH: &str = "/org/freedesktop/UPower/PowerProfiles";
+pub const OLD_PROFILES: &str = "net.hadess.PowerProfiles";
+pub const OLD_PATH: &str = "/net/hadess/PowerProfiles";
 
 async fn endpoint(bus: &Connection) -> zbus::Result<(&'static str, &'static str)> {
     if dbus::properties(bus, PROFILES, PROFILE_PATH, PROFILES)

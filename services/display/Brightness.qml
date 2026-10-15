@@ -20,27 +20,39 @@ Singleton {
     id: root
     signal brightnessChanged()
     property real lastUserChange: 0
-    readonly property var backendBrightness: NativeBackend.desktop
-    readonly property bool nativeBrightnessReady: backendBrightness?.brightnessReady ?? false
+    readonly property var backendBrightness: NativeBackend.brightness
+    readonly property bool nativeBrightnessReady: backendBrightness?.ready ?? false
+    readonly property bool nativeBrightnessPending: NativeBackend.requested && NativeBackend.typedBridge
+        && !nativeBrightnessReady && (NativeBackend.loading || (backendBrightness?.active ?? false))
+
+    function backendDiagnostics(): var {
+        return { owner: nativeBrightnessReady ? "rust" : "qml", nativeReady: nativeBrightnessReady,
+            backlightDetectRunning: backlightDetectProc.running,
+            monitors: Array.from(root.monitors).map(monitor => ({ isDdc: monitor.isDdc,
+                initRunning: monitor.initProc.running, readbackRunning: monitor.readbackProc.running,
+                writeRunning: monitor.writeProc.running })) }
+    }
 
     function _nativeBacklight(): var {
         if (!nativeBrightnessReady) return null
-        for (let i = 0; i < backendBrightness.backlights.count; ++i) {
-            const device = backendBrightness.backlights.get(i)
-            if (device.id === root.backlightDevice) return device
+        for (let i = 0; i < backendBrightness.count; ++i) {
+            if (backendBrightness.value(i, "deviceId") === root.backlightDevice)
+                return { id: root.backlightDevice, raw: backendBrightness.value(i, "raw"),
+                    maximum: backendBrightness.value(i, "maximum"), value: backendBrightness.value(i, "value") }
         }
         return null
     }
 
     onNativeBrightnessReadyChanged: {
-        if (nativeBrightnessReady) root._detectBacklight()
+        root._detectBacklight()
     }
+    onNativeBrightnessPendingChanged: root._detectBacklight()
     Connections {
         target: root.backendBrightness
-        function onBrightnessRevisionChanged() {
+        function onRowsUpdated(roles) {
             if (!root.nativeBrightnessReady) return
-            const devices = root.backendBrightness.backlights
-            const first = devices.count > 0 ? devices.get(0).id : ""
+            const devices = root.backendBrightness
+            const first = devices.count > 0 ? devices.value(0, "deviceId") : ""
             if (root.backlightDevice !== first) root._detectBacklight()
             else root.monitors.forEach(monitor => { if (!monitor.isDdc) monitor.refresh() })
         }
@@ -88,10 +100,14 @@ Singleton {
     }
 
     function _detectBacklight(): void {
+        if (root.nativeBrightnessPending) {
+            backlightDetectProc.running = false
+            return
+        }
         if (root.nativeBrightnessReady) {
             backlightDetectProc.running = false
-            const devices = root.backendBrightness.backlights
-            root.backlightDevice = devices.count > 0 ? devices.get(0).id : ""
+            const devices = root.backendBrightness
+            root.backlightDevice = devices.count > 0 ? devices.value(0, "deviceId") : ""
             root.backlightDetectionReady = true
             root.monitors.forEach(monitor => { if (!monitor.isDdc) monitor.initialize() })
             return
@@ -452,6 +468,7 @@ Singleton {
         function initialize() {
             monitor.ready = false;
             monitor._writtenRaw = -1
+            if (!monitor.isDdc && root.nativeBrightnessPending) return
             const device = root._nativeBacklight()
             if (!monitor.isDdc && device) {
                 monitor._applyNativeBrightness(device)
@@ -591,6 +608,7 @@ Singleton {
         }
 
         function _writeNext(): void {
+            if (!monitor.isDdc && root.nativeBrightnessPending) return
             if (writeProc.running || monitor._nativeWriting || monitor._wantedRaw < 0 || monitor._wantedRaw === monitor._writtenRaw)
                 return
             const raw = monitor._wantedRaw
@@ -644,6 +662,7 @@ Singleton {
         }
 
         function refresh(): void {
+            if (!monitor.isDdc && root.nativeBrightnessPending) return
             const device = root._nativeBacklight()
             if (!monitor.isDdc && device) {
                 if (!monitor._nativeWriting && !monitor.writePending && monitor._wantedRaw === monitor._writtenRaw)
@@ -751,6 +770,12 @@ Singleton {
                 function onActiveWindowChanged() {
                     screenshotTimer.interval = root.contentSwitchDelay;
                     screenshotTimer.restart();
+                }
+                function onWindowRolesChanged(roles) {
+                    if ((roles & 2) !== 0) {
+                        screenshotTimer.interval = root.contentSwitchDelay;
+                        screenshotTimer.restart();
+                    }
                 }
                 function onFocusedWorkspaceIdChanged() {
                     screenshotTimer.interval = root.workspaceAnimationDelay;

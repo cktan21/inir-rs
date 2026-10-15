@@ -47,6 +47,8 @@ singleton NativeBackend 1.0 NativeBackend.qml
 singleton Network 1.0 network/Network.qml
 singleton NiriAnimationPresets 1.0 compositor/NiriAnimationPresets.qml
 singleton NiriService 1.0 compositor/NiriService.qml
+NiriFallback 1.0 compositor/NiriFallback.qml
+NiriModelFacade 1.0 compositor/NiriModelFacade.qml
 singleton Notepad 1.0 Notepad.qml
 singleton Notifications 1.0 Notifications.qml
 singleton PolkitService 1.0 PolkitService.qml

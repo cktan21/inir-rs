@@ -6,6 +6,7 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import QtQml.Models
 import qs.modules.common.functions
 import qs.services
 import qs.services.network
@@ -15,40 +16,36 @@ import qs.services.network
  */
 Singleton {
     id: root
-    readonly property var backendNetwork: NativeBackend.desktop
-    readonly property bool nativeNetworkReady: backendNetwork?.networkReady ?? false
-    readonly property bool nativeNetworkPending: NativeBackend.requested && (NativeBackend.loading
-        || (backendNetwork && !nativeNetworkReady && backendNetwork.networkError.length === 0))
+    readonly property var backendNetwork: NativeBackend.network
+    readonly property bool nativeNetworkReady: backendNetwork?.ready ?? false
+    readonly property bool nativeNetworkPending: NativeBackend.requested && NativeBackend.typedBridge
+        && !nativeNetworkReady && (NativeBackend.loading || (backendNetwork?.active ?? false))
     property bool _started: false
 
-    function _applyNativeNetwork(): void {
+    function backendDiagnostics(): var {
+        return { owner: nativeNetworkReady ? "rust" : "qml", nativeReady: nativeNetworkReady,
+            monitorRunning: subscriber.running,
+            acquisitionProcessesRunning: [getNetworks, wifiStatusProcess, updateNetworkName,
+                updateNetworkStrength, updateConnectionType].filter(process => process.running).length }
+    }
+
+    // Copies the native summary once, when the native owner becomes ready or the
+    // access-point membership changes. Later changes come from the per-property
+    // handlers below, so an AP row update never re-derives the whole summary.
+    function _syncNativeSummary(): void {
         if (!nativeNetworkReady) return
-        const model = backendNetwork.accessPoints
-        const grouped = new Map()
-        for (let i = 0; i < model.count; ++i) {
-            const record = model.get(i)
-            if (!record.ssid) continue
-            const previous = grouped.get(record.ssid)
-            if (!previous || (record.active && !previous.active) || (!previous.active && record.strength > previous.strength))
-                grouped.set(record.ssid, record)
-        }
-        const records = Array.from(grouped.values())
-        const list = root.wifiNetworks
-        for (let i = list.length - 1; i >= 0; --i) {
-            if (!records.some(record => record.id === list[i].lastIpcObject.id))
-                list.splice(i, 1).forEach(ap => ap.destroy())
-        }
-        for (const record of records) {
-            record.rate = record.rate > 0 ? `${(record.rate / 1000).toFixed(1)} Mbit/s` : ""
-            const existing = list.find(ap => ap.lastIpcObject.id === record.id)
-            if (existing) existing.lastIpcObject = record
-            else list.push(apComp.createObject(root, { lastIpcObject: record }))
-        }
         root.wifiEnabled = backendNetwork.wifiEnabled
         root.ethernet = backendNetwork.ethernet
-        root.connectivity = ["unknown", "none", "portal", "limited", "full"][backendNetwork.connectivity] ?? "unknown"
-        root.networkName = root.active?.ssid ?? ""
-        root.networkStrength = root.active?.strength ?? 0
+        root.connectivity = _nativeConnectivity(backendNetwork.connectivity)
+        root.networkName = backendNetwork.activeSsid
+        root.networkStrength = backendNetwork.activeStrength
+        root._syncKnownProfiles()
+        _refreshNativeStatus()
+    }
+    function _nativeConnectivity(value: int): string {
+        return ["unknown", "none", "portal", "limited", "full"][value] ?? "unknown"
+    }
+    function _refreshNativeStatus(): void {
         root.wifi = root.active !== null
         root.wifiStatus = !root.wifiEnabled ? "disabled" : root.active ? (root.connectivity === "limited" ? "limited" : "connected") : "disconnected"
         root.networkChanged()
@@ -59,7 +56,7 @@ Singleton {
             subscriber.running = false
             for (const process of [getNetworks, wifiStatusProcess, updateNetworkName, updateNetworkStrength, updateConnectionType])
                 process.running = false
-            root._applyNativeNetwork()
+            root._syncNativeSummary()
         } else if (root._started && !root.nativeNetworkPending) {
             subscriber.running = true
             root.update()
@@ -73,17 +70,65 @@ Singleton {
     }
     Connections {
         target: root.backendNetwork
-        function onNetworkRevisionChanged() { root._applyNativeNetwork() }
+        function onWifiEnabledChanged() { root.wifiEnabled = root.backendNetwork.wifiEnabled; root._refreshNativeStatus() }
+        function onEthernetChanged() { root.ethernet = root.backendNetwork.ethernet }
+        function onConnectivityChanged() { root.connectivity = root._nativeConnectivity(root.backendNetwork.connectivity); root._refreshNativeStatus() }
+        function onActiveSsidChanged() { root.networkName = root.backendNetwork.activeSsid; root._refreshNativeStatus() }
+        function onActiveStrengthChanged() { root.networkStrength = root.backendNetwork.activeStrength }
     }
 
     property bool wifi: true
+    property bool _nativeNetworksQueued: false
+    function _syncNativeNetworks() {
+        if (_nativeNetworksQueued) return
+        _nativeNetworksQueued = true
+        Qt.callLater(() => {
+            _nativeNetworksQueued = false
+            const next = []
+            for (let i = 0; i < nativeNetworks.count; ++i) {
+                const ap = nativeNetworks.objectAt(i)
+                if (ap) next.push(ap)
+            }
+            // Delegates stay owned by the Instantiator. One assignment means the
+            // `active` binding is evaluated once per membership change, not per row.
+            root.wifiNetworks = next
+            const security = {};
+            for (const ap of next) {
+                if (!(ap.ssid in security)) security[ap.ssid] = ap.lastIpcObject.security ? "WPA" : "--";
+            }
+            root.wifiSecurityByName = security
+            root._syncNativeSummary()
+        })
+    }
+    Instantiator {
+        id: nativeNetworks
+        active: root.nativeNetworkReady
+        model: root.backendNetwork
+        onObjectAdded: root._syncNativeNetworks()
+        onObjectRemoved: root._syncNativeNetworks()
+        delegate: WifiAccessPoint {
+            id: nativeAp
+            required property var model
+            lastIpcObject: ({
+                get id() { return nativeAp.model.apId },
+                get device() { return nativeAp.model.device },
+                get ssid() { return nativeAp.model.ssid },
+                get bssid() { return nativeAp.model.bssid },
+                get strength() { return nativeAp.model.strength },
+                get frequency() { return nativeAp.model.frequency },
+                get rate() { return nativeAp.model.rate > 0 ? (nativeAp.model.rate / 1000).toFixed(1) + " Mbit/s" : "" },
+                get security() { return nativeAp.model.security },
+                get active() { return nativeAp.model.active }
+            })
+        }
+    }
     property bool ethernet: false
 
     property bool wifiEnabled: false
     property bool wifiScanning: false
-    property bool wifiConnecting: connectProc.running
+    property bool wifiConnecting: connectProc.running || root._nativeConnecting
     property WifiAccessPoint wifiConnectTarget
-    readonly property list<WifiAccessPoint> wifiNetworks: []
+    property list<WifiAccessPoint> wifiNetworks: []
     readonly property WifiAccessPoint active: wifiNetworks.find(n => n.active) ?? null
     property string wifiStatus: "disconnected"
 
@@ -156,8 +201,20 @@ Singleton {
         rescanProcess.running = true;
     }
 
+    property bool _nativeConnecting: false
+    property bool _nativeConnectingWithPassword: false
+
     function connectToWifiNetwork(accessPoint: WifiAccessPoint): void {
         accessPoint.askingPassword = false;
+        if (nativeNetworkReady) {
+            // Native connects wait for NetworkManager's activation result, as nmcli did.
+            root._nativeConnecting = true;
+            NativeBackend.sendCommand({ type: "wifiConnectSsid", ssid: accessPoint.ssid, password: null }, (success) => {
+                root._nativeConnecting = false;
+                accessPoint.askingPassword = !success;
+            });
+            return;
+        }
         root.wifiConnectTarget = accessPoint;
         // We use this instead of `nmcli connection up SSID` because this also creates a connection profile
         connectProc.exec(["nmcli", "dev", "wifi", "connect", accessPoint.ssid])
@@ -173,7 +230,7 @@ Singleton {
     }
 
     function refreshActiveNetworkDetails(): void {
-        if (nativeNetworkReady) { root._applyNativeNetwork(); return }
+        if (nativeNetworkReady) { root._syncNativeSummary(); return }
         if (!getNetworks.running) {
             getNetworks.running = true;
         }
@@ -213,6 +270,12 @@ Singleton {
         network.askingPassword = false;
         // changePasswordProc.onExited re-runs connectProc, whose own onExited has
         // already nulled the target — restore it so the retry can report back.
+        if (nativeNetworkReady) {
+            // Re-attempt the connection whatever the outcome, as the nmcli path does.
+            NativeBackend.sendCommand({ type: "profileSetPassword", ssid: network.ssid, password: password },
+                () => root.connectToWifiNetwork(network));
+            return;
+        }
         root.wifiConnectTarget = network;
         changePasswordProc.exec({
             "command": ["nmcli", "connection", "modify", network.ssid, "wifi-sec.psk", password]
@@ -236,12 +299,25 @@ Singleton {
     property string revealedProfilePassword: ""
     property bool revealedProfileResolved: false
 
-    readonly property bool connectingWithPassword: connectWithPasswordProc.running
+    readonly property bool connectingWithPassword: connectWithPasswordProc.running || root._nativeConnectingWithPassword
     signal connectWithPasswordFinished(string ssid, bool ok)
 
     function refreshProfileMetadata(): void {
+        if (nativeNetworkReady) { root._syncKnownProfiles(); return }
         wifiSecurityProc.running = true;
         wifiProfileProc.running = true;
+    }
+
+    // Native profile names come from NetworkManager's Settings service; security comes
+    // from the access-point rows, so neither needs an nmcli process.
+    function _syncKnownProfiles(): void {
+        const set = {};
+        for (const name of (root.backendNetwork?.knownProfiles ?? [])) set[name] = true;
+        root.knownWifiProfiles = set;
+    }
+    Connections {
+        target: root.backendNetwork
+        function onKnownProfilesChanged() { root._syncKnownProfiles() }
     }
 
     /** Forces a fresh scan without waiting on the full `nmcli dev wifi list` parse. */
@@ -260,6 +336,10 @@ Singleton {
      * element so an odd character can neither break nor inject the command.
      */
     function forgetProfile(ssid: string): void {
+        if (nativeNetworkReady) {
+            if (ssid.length) NativeBackend.sendCommand({ type: "profileForget", ssid: ssid });
+            return;
+        }
         if (forgetProfileProc.running || !ssid.length)
             return;
         forgetProfileProc.command = ["nmcli", "connection", "delete", "id", ssid];
@@ -281,6 +361,15 @@ Singleton {
         root.revealedProfileSsid = ssid;
         root.revealedProfilePassword = "";
         root.revealedProfileResolved = false;
+        if (nativeNetworkReady) {
+            NativeBackend.sendCommand({ type: "profileSecret", ssid: ssid }, (success, error, value) => {
+                // A newer reveal or a hide replaced this request; ignore the late answer.
+                if (root.revealedProfileSsid !== ssid) return;
+                root.revealedProfilePassword = success ? value : "";
+                root.revealedProfileResolved = true;
+            });
+            return;
+        }
         revealProfileProc.command = ["nmcli", "-s", "-g", "802-11-wireless-security.psk",
             "connection", "show", "id", ssid];
         revealProfileProc.running = true;
@@ -302,10 +391,21 @@ Singleton {
      * saved on the next click and fails silently from then on.
      */
     function connectWithPassword(ssid: string, password: string): void {
-        if (connectWithPasswordProc.running || !password.length)
+        if (connectWithPasswordProc.running || root._nativeConnectingWithPassword || !password.length)
             return;
         root._passwordAttemptSsid = ssid;
         root._passwordAttemptWasKnown = root.knownWifiProfiles[ssid] === true;
+        if (nativeNetworkReady) {
+            root._nativeConnectingWithPassword = true;
+            NativeBackend.sendCommand({ type: "wifiConnectSsid", ssid: ssid, password: password }, (success) => {
+                root._nativeConnectingWithPassword = false;
+                // A failed attempt leaves a profile behind; remove it unless it was known.
+                if (!success && !root._passwordAttemptWasKnown && ssid.length)
+                    NativeBackend.sendCommand({ type: "profileForget", ssid: ssid });
+                root.connectWithPasswordFinished(ssid, success);
+            });
+            return;
+        }
         root._pendingPassword = password;
         connectWithPasswordProc.command = ["nmcli", "--ask", "dev", "wifi", "connect", ssid];
         connectWithPasswordProc.running = true;
@@ -484,7 +584,7 @@ Singleton {
 
     // Actual update logic
     function _doUpdate() {
-        if (root.nativeNetworkReady) { root._applyNativeNetwork(); return }
+        if (root.nativeNetworkReady) { root._syncNativeSummary(); return }
         if (root.nativeNetworkPending) return
         root.networkChanged();
         updateConnectionType.startCheck();

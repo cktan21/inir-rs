@@ -65,29 +65,33 @@ int main(int argc, char **argv) {
                 property real uptime: SystemInfo.uptime
                 property real memory: SystemInfo.memoryTotal
                 property bool cpuAvailable: SystemInfo.cpuUsageAvailable
+                property bool diagnosticsTyped: {
+                    const value = SystemInfo.diagnostics()
+                    return value.backend === "rust" && value.tokioWorkerThreads === 1
+                        && value.desktopConsumers === 0 && !value.services.niri.ready
+                }
                 property bool configReady: ConfigService.ready
                 property string document: ConfigService.documentJson
                 property string error: ConfigService.errorString
                 property int writeCount: 0
-                property bool desktopActive: DesktopServices.active
-                property int accessPointCount: DesktopServices.accessPoints.count
-                // Phase 1 efficiency revamp: only network and power are served
-                // natively. Bluetooth/battery/audio/media are served by
-                // Quickshell's existing C++/QML and never report ready here.
-                property bool servicesReady: DesktopServices.networkReady && DesktopServices.powerReady
-                function activateServices(active) { DesktopServices.setServicesActive(active) }
+                property bool desktopActive: NativeNetwork.active
+                property int accessPointCount: NativeNetwork.count
+                property bool niriShapeValid: {
+                    const value = NativeNiri.jsValue({ layout: { tile_size: [10, 20], pos: null } })
+                    return Array.isArray(value.layout.tile_size) && value.layout.pos === null
+                }
+                property bool servicesReady: NativeNetwork.ready
+                function activateServices(active) { NativeNetwork.setEnabled(active) }
                 property int commandFailures: 0
                 property string commandIds: ""
-                property Connections commandObserver: Connections {
-                    target: DesktopServices
-                    function onCommandFinished(id, success, error) {
-                        if (!success && error.length > 0) root.commandFailures++
-                        if (id.startsWith("fifo-")) root.commandIds += id + ","
-                    }
+                function invalidCommand() {
+                    if (!NativeNetwork.scan("bad")) root.commandFailures++
                 }
-                function invalidCommand() { DesktopServices.execute("bad", '{"type":"invalid"}') }
                 function queueInactiveCommands() {
-                    for (let i = 0; i < 32; ++i) DesktopServices.execute("fifo-" + i, '{"type":"wifiScan"}')
+                    for (let i = 0; i < 32; ++i) {
+                        const id = "fifo-" + i
+                        if (!NativeNetwork.scan(id)) { root.commandFailures++; root.commandIds += id + "," }
+                    }
                 }
                 property Connections writeObserver: Connections {
                     target: ConfigService
@@ -106,6 +110,8 @@ int main(int argc, char **argv) {
         )", QUrl("file:///bridge-smoke.qml"));
         std::unique_ptr<QObject> object(component.create());
         if (!object) { qCritical() << component.errors(); return 1; }
+        if (!check(object->property("niriShapeValid").toBool(), "Niri arrays/nulls or unchanged row identity were lost")) return 1;
+        if (!check(object->property("diagnosticsTyped").toBool(), "SystemInfo diagnostics did not expose typed metadata")) return 1;
         if (!check(!object->property("desktopActive").toBool() && object->property("accessPointCount").toInt() == 0, "desktop services started without a consumer")) return 1;
         QMetaObject::invokeMethod(object.get(), "invalidCommand");
         if (!check(object->property("commandFailures").toInt() == 1, "invalid command did not report an error")) return 1;

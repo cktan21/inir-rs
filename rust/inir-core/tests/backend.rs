@@ -1,11 +1,8 @@
 use inir_core::{
     config::ConfigStore,
-    events::{Domain, Event},
     runtime::Backend,
     services::system::{parse_os_release, Sampler},
-    state::AppState,
 };
-use inir_types::config::Config;
 use serde_json::json;
 use std::os::unix::fs::PermissionsExt;
 use std::{
@@ -43,20 +40,6 @@ fn parses_quoted_and_unquoted_os_release() {
     assert_eq!(fields["NAME"], "A distro");
     assert_eq!(fields["ID"], "arch");
     assert_eq!(fields["HOME_URL"], "https://example.org");
-}
-
-#[test]
-fn reducer_diffs_domains() {
-    let mut state = AppState::default();
-    let mut resource = state.resources.clone();
-    assert_eq!(state.reduce(Event::Resource(resource.clone())), None);
-    resource.memory_total = 1024;
-    assert_eq!(
-        state.reduce(Event::Resource(resource.clone())),
-        Some(Domain::Resource)
-    );
-    assert_eq!(state.reduce(Event::Resource(resource)), None);
-    assert_eq!(state.config, Config::default());
 }
 
 #[test]

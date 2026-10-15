@@ -310,6 +310,7 @@ Item {
         function onWindowsChanged() {
             updateWorkspaceOccupied();
         }
+        function onWindowOrderChanged() { updateWorkspaceOccupied(); }
     }
     onWorkspaceGroupChanged: {
         updateWorkspaceOccupied();
@@ -488,6 +489,8 @@ Item {
         AnimatedTabIndexPair {
             id: idxPair
             index: root.workspaceIndexInGroup
+            idx1Duration: NativeBackend.benchmarkStopWorkspaceAnimations ? 0 : 100
+            idx2Duration: NativeBackend.benchmarkStopWorkspaceAnimations ? 0 : 300
         }
         property real indicatorPosition: Math.min(idxPair.idx1, idxPair.idx2) * workspaceButtonWidth + root.activeWorkspaceMargin
         property real indicatorLength: Math.abs(idxPair.idx1 - idxPair.idx2) * workspaceButtonWidth + workspaceButtonWidth - root.activeWorkspaceMargin * 2

@@ -1,5 +1,6 @@
 pub mod brightness;
 pub mod dbus;
+pub mod keyboard;
 pub mod network;
 pub mod niri;
 pub mod power;

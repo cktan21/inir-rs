@@ -1449,6 +1449,10 @@ Item {
             root.ensureKeyboardWindow()
             root.syncPreviews()
         }
+        function onWindowOrderChanged() {
+            root.ensureKeyboardWindow()
+            root.syncPreviews()
+        }
         function onAllWorkspacesChanged() {
             root.normalizeSelection()
         }

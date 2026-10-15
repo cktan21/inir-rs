@@ -42,7 +42,7 @@ use tokio::sync::mpsc;
 
 struct Patch {
     key: String,
-    value: serde_json::Value,
+    json: String,
 }
 
 #[derive(Default)]
@@ -55,6 +55,7 @@ pub struct ConfigServiceRust {
     backend: Option<Arc<Backend>>,
     store: Option<ConfigStore>,
     watcher: Option<TaskGuard>,
+    schema_task: Option<TaskGuard>,
     writer: Option<TaskGuard>,
     patches: Option<mpsc::Sender<Patch>>,
     generation: u64,
@@ -63,12 +64,20 @@ pub struct ConfigServiceRust {
 impl cxx_qt::Initialize for qobject::ConfigService {
     fn initialize(mut self: Pin<&mut Self>) {
         crate::init_logging();
-        self.as_mut().set_schema_json(QString::from(serde_json::json!({
-            "categories": inir_types::schema::CATEGORIES.iter().map(|(id, title)| serde_json::json!({"id": id, "title": title})).collect::<Vec<_>>(),
-            "fields": inir_types::schema::fields(),
-        }).to_string()));
         match Backend::shared() {
-            Ok(backend) => self.as_mut().rust_mut().backend = Some(backend),
+            Ok(backend) => {
+                let qt = self.qt_thread();
+                let task = backend.spawn(async move {
+                    let schema = serde_json::json!({
+                        "categories": inir_types::schema::CATEGORIES.iter().map(|(id,title)| serde_json::json!({"id":id,"title":title})).collect::<Vec<_>>(),
+                        "fields": inir_types::schema::fields(),
+                    }).to_string();
+                    let _ = qt.queue(move |mut object| { object.as_mut().set_schema_json(QString::from(schema)); });
+                });
+                let mut rust = self.as_mut().rust_mut();
+                rust.backend = Some(backend);
+                rust.schema_task = Some(task);
+            }
             Err(err) => self
                 .as_mut()
                 .set_error_string(QString::from(err.to_string())),
@@ -111,14 +120,21 @@ impl qobject::ConfigService {
         // One FIFO writer per QObject: quick slider/toggle changes cannot be
         // reordered by spawn_blocking scheduling or flock acquisition.
         let writer = backend.spawn(async move {
-            while let Some(Patch { key, value }) = pending.recv().await {
+            while let Some(Patch { key, json }) = pending.recv().await {
                 let store = writer_store.clone();
                 let patch_key = key.clone();
                 let result =
-                    tokio::task::spawn_blocking(move || store.set(&patch_key, value)).await;
+                    tokio::task::spawn_blocking(move || {
+                        let value = serde_json::from_str(&json).map_err(std::io::Error::other)?;
+                        store.set(&patch_key, value)
+                    }).await;
                 if let Ok(Ok(ref config)) = result {
                     let _ = writer_events.send(Event::Config(config.clone())).await;
                 }
+                let result = match result {
+                    Ok(Ok(config)) => Ok(Ok(serde_json::to_string(&config).expect("serializable config"))),
+                    result => result.map(|result| result.map(|_| String::new())),
+                };
                 if writer_qt
                     .queue(move |mut object| {
                         if object.rust().generation != generation {
@@ -176,8 +192,9 @@ impl qobject::ConfigService {
                 }
             };
             let _ = events.send(Event::Config(config.clone())).await;
+            let json = serde_json::to_string(&config).expect("serializable config");
             let _ = qt.queue(move |object| {
-                object.apply_config(generation, config);
+                object.apply_config(generation, json);
             });
             while changes.recv().await.is_some() {
                 tokio::time::sleep(std::time::Duration::from_millis(50)).await;
@@ -186,9 +203,10 @@ impl qobject::ConfigService {
                 match tokio::task::spawn_blocking(move || reader.read()).await {
                     Ok(Ok(config)) => {
                         let _ = events.send(Event::Config(config.clone())).await;
+                        let json = serde_json::to_string(&config).expect("serializable config");
                         if qt
                             .queue(move |object| {
-                                object.apply_config(generation, config);
+                                object.apply_config(generation, json);
                             })
                             .is_err()
                         {
@@ -222,31 +240,16 @@ impl qobject::ConfigService {
         rust.patches = Some(patches);
     }
 
-    fn apply_config(mut self: Pin<&mut Self>, generation: u64, config: inir_types::config::Config) {
-        if self.rust().generation != generation {
-            return;
-        }
-        if let Ok(json) = serde_json::to_string(&config) {
-            let changed = self.document_json().to_string() != json;
-            self.as_mut().set_document_json(QString::from(json));
-            self.as_mut().set_error_string(QString::default());
-            self.as_mut().set_ready(true);
-            if changed {
-                self.as_mut().config_changed();
-            }
-        }
+    fn apply_config(mut self: Pin<&mut Self>, generation: u64, json: String) {
+        if self.rust().generation != generation { return; }
+        let changed = self.document_json().to_string() != json;
+        self.as_mut().set_document_json(QString::from(json));
+        self.as_mut().set_error_string(QString::default());
+        self.as_mut().set_ready(true);
+        if changed { self.as_mut().config_changed(); }
     }
 
     pub fn set_value(mut self: Pin<&mut Self>, key: QString, json_value: QString) {
-        let value = match serde_json::from_str(&json_value.to_string()) {
-            Ok(value) => value,
-            Err(err) => {
-                self.as_mut()
-                    .set_error_string(QString::from(err.to_string()));
-                self.as_mut().write_finished(key, false);
-                return;
-            }
-        };
         if !*self.ready() {
             self.as_mut()
                 .set_error_string(QString::from("configuration is not ready"));
@@ -259,7 +262,7 @@ impl qobject::ConfigService {
         if sender
             .try_send(Patch {
                 key: key.to_string(),
-                value,
+                json: json_value.to_string(),
             })
             .is_err()
         {

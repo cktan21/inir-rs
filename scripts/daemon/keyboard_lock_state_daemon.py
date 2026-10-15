@@ -3,6 +3,8 @@
 import argparse
 import asyncio
 import json
+import os
+import signal
 import sys
 
 from evdev import InputDevice, ecodes, list_devices
@@ -170,6 +172,16 @@ async def async_main(run_once):
 
 
 def main():
+    # Quickshell may exit without stopping a Process child during a restart. The
+    # fallback daemon belongs to that shell, so do not retain it as an orphan.
+    parent_pid = os.getppid()
+    import ctypes
+    libc = ctypes.CDLL(None, use_errno=True)
+    if libc.prctl(1, signal.SIGTERM, 0, 0, 0) != 0:  # PR_SET_PDEATHSIG
+        raise OSError(ctypes.get_errno(), "cannot attach keyboard daemon to shell lifetime")
+    if os.getppid() != parent_pid:
+        return
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--once", action="store_true")
     args = parser.parse_args()

@@ -1,177 +1,128 @@
-// Phase 1 (efficiency revamp): only Network, Power and Brightness run natively.
-// Audio, Battery, Bluetooth, Media and Niri are served by Quickshell's existing
-// native C++/QML to avoid duplicate subscriptions. The disabled modules remain
-// compiled so later phases can re-enable them with the delta architecture.
-#![allow(dead_code, unused_imports)]
-use super::{brightness, network, niri, power};
+// Network, power, brightness and Niri run natively. Audio, battery, Bluetooth and
+// media stay with Quickshell's native C++/QML services so each has one owner.
+use super::{brightness, dbus::SystemBus, keyboard, network, niri, power};
 use crate::events::Event;
 use futures_util::{stream::SelectAll, StreamExt};
 use inir_types::desktop::*;
 use std::{path::Path, time::Duration};
-use tokio::{
-    sync::{mpsc, oneshot, watch},
-    task::JoinSet,
-};
+use tokio::sync::{mpsc, oneshot, watch};
 use tokio_util::sync::CancellationToken;
 use zbus::{Connection, MatchRule, MessageStream};
 
+// Network connects wait for NetworkManager to finish activating (up to 30 s).
+const COMMAND_TIMEOUT: Duration = Duration::from_secs(40);
+
 pub struct Request {
     pub command: Command,
-    pub reply: oneshot::Sender<Result<(), String>>,
+    pub reply: oneshot::Sender<Result<String, String>>,
 }
 
-async fn update(bus: &Connection, domain: &str, events: &mpsc::Sender<Event>) {
-    macro_rules! snapshot {
-        ($function:expr, $variant:ident, $state:ty) => {{
-            let start = std::time::Instant::now();
-            let result = tokio::time::timeout(Duration::from_secs(8), $function).await;
-            let elapsed = start.elapsed();
-            tracing::debug!(domain, elapsed_ms = elapsed.as_millis(), "snapshot update");
-            match result {
-                Ok(Ok(state)) => Event::$variant(state),
-                result => {
-                    let mut state = <$state>::default();
-                    state.status.error = match result {
-                        Ok(Err(e)) => e.to_string(),
-                        _ => "D-Bus snapshot timed out".into(),
-                    };
-                    Event::$variant(state)
-                }
-            }
-        }};
-    }
-    let event = match domain {
-        "network" => snapshot!(network::snapshot(bus), Network, NetworkState),
-        "power" => snapshot!(power::profiles(bus), Power, PowerState),
-        _ => return,
+async fn update_power(bus: &Connection, events: &mpsc::Sender<Event>) {
+    let start = std::time::Instant::now();
+    let result = tokio::time::timeout(Duration::from_secs(8), power::profiles(bus)).await;
+    tracing::debug!(
+        domain = "power",
+        elapsed_ms = start.elapsed().as_millis(),
+        "snapshot update"
+    );
+    let state = match result {
+        Ok(Ok(state)) => state,
+        result => {
+            let mut state = PowerState::default();
+            state.status.error = match result {
+                Ok(Err(e)) => e.to_string(),
+                _ => "D-Bus snapshot timed out".into(),
+            };
+            state
+        }
     };
-    let _ = events.send(event).await;
+    let _ = events.send(Event::Power(state)).await;
 }
 
-async fn bus_cycle(
-    session: bool,
+async fn power_cycle(
+    system: &SystemBus,
     events: &mpsc::Sender<Event>,
     stop: &CancellationToken,
 ) -> zbus::Result<()> {
-    let bus = if session {
-        Connection::session().await?
-    } else {
-        Connection::system().await?
-    };
-    let mut streams = SelectAll::new();
-    // Subscribe before initial reads. Paths also cover PropertiesChanged and
-    // ObjectManager additions/removals without a per-object subscription storm.
-    let paths: &[(&str, &str)] = if session {
-        &[] // media handled by Quickshell.Services.Mpris
-    } else {
-        // Network runs in its own delta actor (network_worker); the generic
-        // refetch loop now only drives the low-frequency power-profiles domain.
-        &[("power", "/net/hadess/PowerProfiles")]
-    };
-    for (domain, path) in paths {
+    let bus = system.connection().await?;
+    let mut messages = SelectAll::new();
+    // Subscribe before the first read so a change during the read is not lost.
+    // Both the current UPower path and the legacy net.hadess path are watched.
+    for path in [power::PROFILE_PATH, power::OLD_PATH] {
         let rule = MatchRule::builder()
             .msg_type(zbus::message::Type::Signal)
-            .path_namespace(*path)?
+            .path_namespace(path)?
             .build();
-        let stream = MessageStream::for_match_rule(rule, &bus, Some(128)).await?;
-        streams.push(stream.map(move |message| (*domain, message)).boxed());
+        messages.push(MessageStream::for_match_rule(rule, &bus, Some(128)).await?.boxed());
     }
-    // Phase 1/4: filter NameOwnerChanged at the bus with arg0 so only our own
-    // services' restarts wake the worker, not every client on the bus.
-    let owner_names: &[&str] = if session {
-        &[]
-    } else {
-        &[power::PROFILES, "net.hadess.PowerProfiles"]
-    };
-    for name in owner_names {
-        let owner_rule = MatchRule::builder()
+    // Filter NameOwnerChanged at the bus so only the profiles service restarting
+    // wakes this worker, not every client that connects to the bus.
+    for name in [power::PROFILES, power::OLD_PROFILES] {
+        let rule = MatchRule::builder()
             .msg_type(zbus::message::Type::Signal)
             .sender("org.freedesktop.DBus")?
             .interface("org.freedesktop.DBus")?
             .member("NameOwnerChanged")?
-            .arg(0, *name)?
+            .arg(0, name)?
             .build();
-        streams.push(
-            MessageStream::for_match_rule(owner_rule, &bus, Some(16))
-                .await?
-                .map(|message| ("owner", message))
-                .boxed(),
-        );
+        messages.push(MessageStream::for_match_rule(rule, &bus, Some(16)).await?.boxed());
     }
-    let domains: &[&str] = if session {
-        &[] // no session-bus domains
-    } else {
-        &["power"] // network has its own delta actor
-    };
-    for domain in domains {
-        update(&bus, domain, events).await;
-    }
-    let mut pending = std::collections::BTreeSet::new();
+    update_power(&bus, events).await;
+    let mut pending = false;
     let mut deadline = tokio::time::Instant::now();
     loop {
         tokio::select! {
             biased;
             _ = stop.cancelled() => return Ok(()),
-            message = streams.next() => {
-                let Some((mut domain, message)) = message else { return Err(zbus::Error::Failure("D-Bus stream ended".into())); };
-                let message = message?;
-                if domain == "owner" {
-                    let (name, _, _): (String, String, String) = message.body().deserialize()?;
-                    domain = if name == power::PROFILES || name == "net.hadess.PowerProfiles" { "power" }
-                        else { continue };
+            message = messages.next() => {
+                let Some(message) = message else {
+                    return Err(zbus::Error::Failure("D-Bus stream ended".into()));
+                };
+                message?;
+                if !pending {
+                    pending = true;
+                    deadline = tokio::time::Instant::now() + Duration::from_millis(50);
                 }
-                if pending.is_empty() { deadline = tokio::time::Instant::now() + Duration::from_millis(50); }
-                pending.insert(domain);
             }
-            _ = tokio::time::sleep_until(deadline), if !pending.is_empty() => {
-                let pending_count = pending.len();
-                let domains: Vec<_> = std::mem::take(&mut pending).into_iter().collect();
-                tracing::debug!(pending_count, domains_str = domains.join(","), "coalesced signal batch");
-                for domain in domains { update(&bus, domain, events).await; }
+            _ = tokio::time::sleep_until(deadline), if pending => {
+                pending = false;
+                update_power(&bus, events).await;
             }
         }
     }
 }
 
-async fn bus_worker(session: bool, events: mpsc::Sender<Event>, stop: CancellationToken) {
+async fn power_worker(system: SystemBus, events: mpsc::Sender<Event>, stop: CancellationToken) {
     loop {
-        let result = tokio::select! { biased; _ = stop.cancelled() => break, result = bus_cycle(session, &events, &stop) => result };
+        let result = tokio::select! {
+            biased;
+            _ = stop.cancelled() => break,
+            result = power_cycle(&system, &events, &stop) => result
+        };
         if let Err(error) = result {
-            tracing::warn!(%error, session, "desktop bus disconnected");
-            macro_rules! failed {
-                ($variant:ident, $state:ty) => {{
-                    let mut state = <$state>::default();
-                    state.status.error = error.to_string();
-                    let _ = events.send(Event::$variant(state)).await;
-                }};
-            }
-            if !session {
-                failed!(Power, PowerState);
-            }
+            tracing::warn!(%error, "power profiles stream disconnected");
+            system.reset().await;
+            let mut state = PowerState::default();
+            state.status.error = error.to_string();
+            let _ = events.send(Event::Power(state)).await;
         }
         tokio::select! { _ = stop.cancelled() => break, _ = tokio::time::sleep(Duration::from_secs(2)) => {} }
     }
 }
 
-async fn network_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
+async fn network_worker(system: SystemBus, events: mpsc::Sender<Event>, stop: CancellationToken) {
     loop {
-        let bus = tokio::select! {
+        let result = tokio::select! {
             biased;
             _ = stop.cancelled() => break,
-            bus = Connection::system() => bus,
-        };
-        let result = match bus {
-            Ok(bus) => {
-                tokio::select! {
-                    biased;
-                    _ = stop.cancelled() => break,
-                    result = network::stream(&bus, &events, &stop) => result,
-                }
-            }
-            Err(error) => Err(error.to_string()),
+            result = async {
+                let bus = system.connection().await.map_err(|e| e.to_string())?;
+                network::stream(&bus, &events, &stop).await
+            } => result,
         };
         if let Err(error) = result {
             tracing::warn!(%error, "network actor disconnected");
+            system.reset().await;
             let mut state = NetworkState::default();
             state.status.error = error;
             let _ = events.send(Event::Network(state)).await;
@@ -202,7 +153,11 @@ async fn brightness_worker(events: mpsc::Sender<Event>, stop: CancellationToken)
     }
 }
 
-async fn niri_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
+async fn niri_worker(
+    events: mpsc::Sender<Event>,
+    stop: CancellationToken,
+    refresh: watch::Receiver<u64>,
+) {
     let Some(path) = std::env::var_os("NIRI_SOCKET") else {
         let mut state = NiriState::default();
         state.status.error = "NIRI_SOCKET is unset".into();
@@ -210,7 +165,7 @@ async fn niri_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
         return;
     };
     loop {
-        let result = tokio::select! { biased; _ = stop.cancelled() => break, result = niri::stream(Path::new(&path), &events, &stop) => result };
+        let result = tokio::select! { biased; _ = stop.cancelled() => break, result = niri::stream_with_refresh(Path::new(&path), &events, &stop, refresh.clone()) => result };
         if let Err(error) = result {
             let mut state = NiriState::default();
             state.status.error = error;
@@ -220,20 +175,59 @@ async fn niri_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
     }
 }
 
-async fn execute(command: Command) -> Result<(), String> {
+async fn keyboard_worker(events: mpsc::Sender<Event>, stop: CancellationToken) {
+    loop {
+        let result = tokio::select! {
+            biased;
+            _ = stop.cancelled() => break,
+            result = keyboard::stream(&events, &stop) => result,
+        };
+        if let Err(error) = result {
+            let mut state = KeyboardLockState::default();
+            state.status.error = error;
+            let _ = events.send(Event::Keyboard(state)).await;
+        }
+        tokio::select! { _ = stop.cancelled() => break, _ = tokio::time::sleep(Duration::from_secs(2)) => {} }
+    }
+}
+
+async fn execute(
+    command: Command,
+    system: &SystemBus,
+    niri: &mut niri::ActionClient,
+    refresh: &watch::Sender<u64>,
+) -> Result<String, String> {
     match command {
-        // Phase 3: Niri actions go through the native backend's action socket.
-        Command::Niri { action } => niri::action(action).await,
+        // Niri actions go through the native backend's persistent action socket.
+        Command::Niri { action } => {
+            let path = std::env::var_os("NIRI_SOCKET").ok_or("NIRI_SOCKET is unset")?;
+            niri.action(Path::new(&path), action).await.map(|()| String::new())
+        }
+        Command::NiriAction { name, parameters } => {
+            let path = std::env::var_os("NIRI_SOCKET").ok_or("NIRI_SOCKET is unset")?;
+            let action = serde_json::json!({ name: parameters });
+            niri.action(Path::new(&path), action).await.map(|()| String::new())
+        }
+        Command::NiriRefreshOutputs => {
+            refresh.send_modify(|generation| *generation = generation.wrapping_add(1));
+            Ok(String::new())
+        }
         command => {
-            let bus = Connection::system().await.map_err(|e| e.to_string())?;
+            let bus = system.connection().await.map_err(|e| e.to_string())?;
             match command {
                 command @ (Command::WifiEnabled { .. }
                 | Command::WifiScan
                 | Command::WifiDisconnect { .. }
-                | Command::WifiConnect { .. }) => network::execute(&bus, command).await,
-                Command::PowerProfile { profile } => power::set_profile(&bus, &profile).await,
+                | Command::WifiConnect { .. }
+                | Command::WifiConnectSsid { .. }
+                | Command::ProfileForget { .. }
+                | Command::ProfileSetPassword { .. }
+                | Command::ProfileSecret { .. }) => network::execute(&bus, command).await,
+                Command::PowerProfile { profile } => {
+                    power::set_profile(&bus, &profile).await.map(|()| String::new())
+                }
                 Command::Brightness { device, value } => {
-                    brightness::set(&bus, &device, value).await
+                    brightness::set(&bus, &device, value).await.map(|()| String::new())
                 }
                 _ => Err("invalid system command".into()),
             }
@@ -244,42 +238,74 @@ async fn execute(command: Command) -> Result<(), String> {
 pub async fn run(
     events: mpsc::Sender<Event>,
     mut requests: mpsc::Receiver<Request>,
-    mut consumers: watch::Receiver<usize>,
+    mut consumers: watch::Receiver<[usize; 5]>,
     stop: CancellationToken,
 ) {
+    let (refresh, refresh_rx) = watch::channel(0);
+    let mut actions = niri::ActionClient::default();
+    let system = SystemBus::default();
+    let domains = std::env::var("INIR_NATIVE_DOMAINS").unwrap_or_else(|_| "network,brightness,niri,keyboard".into());
+    let names = ["network", "power", "brightness", "niri", "keyboard"];
+    let enabled: [bool; 5] = std::array::from_fn(|i| domains.split(',').any(|s| s.trim() == names[i]));
+    let mut tasks: [Option<(CancellationToken, tokio::task::JoinHandle<()>)>; 5] = std::array::from_fn(|_| None);
     loop {
-        if *consumers.borrow_and_update() == 0 {
-            tokio::select! { biased; _ = stop.cancelled() => break, changed = consumers.changed() => { if changed.is_err() { break; } }, request = requests.recv() => { if let Some(request) = request { let _ = request.reply.send(Err("desktop services are inactive".into())); } else { break; } } }
-            continue;
-        }
-        let cycle = stop.child_token();
-        let mut tasks = JoinSet::new();
-        // Natively served: network (event-driven delta actor), power profiles
-        // (generic refetch loop) and the backlight poll. Audio/battery/bluetooth/
-        // media stay on Quickshell's C++; Niri is served by QML until Phase 3.
-        tasks.spawn(network_worker(events.clone(), cycle.clone()));
-        tasks.spawn(bus_worker(false, events.clone(), cycle.clone()));
-        tasks.spawn(brightness_worker(events.clone(), cycle.clone()));
-        tasks.spawn(niri_worker(events.clone(), cycle.clone()));
-        loop {
-            tokio::select! {
-                biased;
-                _ = stop.cancelled() => break,
-                changed = consumers.changed() => { if changed.is_err() || *consumers.borrow_and_update() == 0 { break; } }
-                request = requests.recv() => {
-                    let Some(request) = request else { break; };
-                    let result = tokio::select! {
-                        _ = stop.cancelled() => Err("backend stopped".into()),
-                        result = tokio::time::timeout(Duration::from_secs(10), execute(request.command)) => result.unwrap_or_else(|_| Err("service command timed out".into()))
+        let counts = *consumers.borrow_and_update();
+        for i in 0..5 {
+            if enabled[i] && counts[i] > 0 && tasks[i].is_none() {
+                let cycle = stop.child_token();
+                let worker_stop = cycle.clone();
+                let sender = events.clone();
+                let refresh_rx = refresh_rx.clone();
+                let system = system.clone();
+                let task = tokio::spawn(async move {
+                    match i {
+                        0 => network_worker(system, sender, worker_stop).await,
+                        1 => power_worker(system, sender, worker_stop).await,
+                        2 => brightness_worker(sender, worker_stop).await,
+                        3 => niri_worker(sender, worker_stop, refresh_rx).await,
+                        4 => keyboard_worker(sender, worker_stop).await,
+                        _ => unreachable!(),
+                    }
+                });
+                tasks[i] = Some((cycle, task));
+            } else if counts[i] == 0 {
+                if let Some((cycle, task)) = tasks[i].take() {
+                    cycle.cancel(); task.abort();
+                    let reset = match i {
+                        0 => Event::Network(NetworkState::default()),
+                        1 => Event::Power(PowerState::default()),
+                        2 => Event::Brightness(BrightnessState::default()),
+                        3 => Event::Niri(NiriState::default()),
+                        4 => Event::Keyboard(KeyboardLockState::default()),
+                        _ => unreachable!(),
                     };
-                    let _ = request.reply.send(result);
+                    let _ = events.send(reset).await;
                 }
             }
         }
-        cycle.cancel();
-        tasks.abort_all();
-        if stop.is_cancelled() {
-            break;
+        tokio::select! {
+            biased;
+            _ = stop.cancelled() => break,
+            changed = consumers.changed() => { if changed.is_err() { break; } }
+            request = requests.recv() => {
+                let Some(request) = request else { break; };
+                let domain = match request.command {
+                    Command::WifiEnabled { .. } | Command::WifiScan | Command::WifiDisconnect { .. } | Command::WifiConnect { .. }
+                    | Command::WifiConnectSsid { .. } | Command::ProfileForget { .. } | Command::ProfileSetPassword { .. }
+                    | Command::ProfileSecret { .. } => 0,
+                    Command::PowerProfile { .. } => 1,
+                    Command::Brightness { .. } => 2,
+                    Command::Niri { .. } | Command::NiriAction { .. } | Command::NiriRefreshOutputs => 3,
+                };
+                let result = if tasks[domain].is_none() { Err("domain is inactive".into()) } else {
+                    tokio::select! {
+                        _ = stop.cancelled() => Err("backend stopped".into()),
+                        result = tokio::time::timeout(COMMAND_TIMEOUT, execute(request.command, &system, &mut actions, &refresh)) => result.unwrap_or_else(|_| Err("service command timed out".into()))
+                    }
+                };
+                let _ = request.reply.send(result);
+            }
         }
     }
+    for (cycle, task) in tasks.into_iter().flatten() { cycle.cancel(); task.abort(); }
 }

@@ -1,5 +1,8 @@
 //! Dynamic QML plugin. All worker-to-QObject access is queued onto Qt's thread.
 pub mod qobjects;
+pub mod model;
+pub mod rows;
+pub mod ipc;
 
 // Match Qt 6's QPluginMetaData ABI from QtCore/qplugin.h.
 #[repr(C)]
