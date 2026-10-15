@@ -1,0 +1,160 @@
+{
+  "setup": {
+    "windows": 5,
+    "titleHz": 20
+  },
+  "scenarios": {
+    "idle": {
+      "qml": {
+        "rssBytes": 766048397.2413793,
+        "pssBytes": 640622450.7586207,
+        "privateBytes": 608149857.1034483,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 29827072,
+        "gpuResidentGttBytes": 889221120,
+        "activeChildren": 3,
+        "threads": 76.55172413793103,
+        "cpuPercent": 0.9284017072421702,
+        "mainThreadCpuPercent": 0.37677876569718377,
+        "processTreeCpuPercent": 1.3225808449579788,
+        "contextSwitchesPerSecond": 96.8341027398255,
+        "gpuBusiestEnginePercent": 0.7572561180409343
+      },
+      "rust": {
+        "rssBytes": 770108451.3103449,
+        "pssBytes": 643788482.2068965,
+        "privateBytes": 611170374.6206896,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 29590492.689655174,
+        "gpuResidentGttBytes": 857288704,
+        "activeChildren": 2,
+        "threads": 81.55172413793103,
+        "cpuPercent": 0.8768000658165875,
+        "mainThreadCpuPercent": 0.380807406719691,
+        "processTreeCpuPercent": 1.3237727143563038,
+        "contextSwitchesPerSecond": 97.06800325864376,
+        "gpuBusiestEnginePercent": 0.6918662220882468
+      },
+      "rustVsQmlPercent": {
+        "cpuPercent": -5.558115740530678,
+        "mainThreadCpuPercent": 1.0692325017448212,
+        "pssBytes": 0.49421175366655135,
+        "gpuBusiestEnginePercent": -8.635109627355009
+      }
+    },
+    "workspace": {
+      "qml": {
+        "rssBytes": 835904617.9310344,
+        "pssBytes": 712622644.9655173,
+        "privateBytes": 680214528,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 31329950.89655172,
+        "gpuResidentGttBytes": 920451142.6206896,
+        "activeChildren": 3,
+        "threads": 77,
+        "cpuPercent": 32.413237841644445,
+        "mainThreadCpuPercent": 7.778139256868526,
+        "processTreeCpuPercent": 32.8473316661205,
+        "contextSwitchesPerSecond": 3651.1612078618004,
+        "gpuBusiestEnginePercent": 27.605315621763822
+      },
+      "rust": {
+        "rssBytes": 827019122.7586207,
+        "pssBytes": 703001388.137931,
+        "privateBytes": 670409268.9655173,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 29096571.586206894,
+        "gpuResidentGttBytes": 923125830.6206896,
+        "activeChildren": 2.0172413793103448,
+        "threads": 82,
+        "cpuPercent": 35.04132856623541,
+        "mainThreadCpuPercent": 7.633763849578134,
+        "processTreeCpuPercent": 35.41817826607066,
+        "contextSwitchesPerSecond": 4120.303551385445,
+        "gpuBusiestEnginePercent": 29.95075826049387
+      },
+      "rustVsQmlPercent": {
+        "cpuPercent": 8.10807836424905,
+        "mainThreadCpuPercent": -1.8561689694987171,
+        "pssBytes": -1.3501194349573087,
+        "gpuBusiestEnginePercent": 8.496344221766194
+      }
+    },
+    "wifi": {
+      "qml": {
+        "rssBytes": 719032673.1034483,
+        "pssBytes": 595777059.3103449,
+        "privateBytes": 563401339.5862069,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 33937408,
+        "gpuResidentGttBytes": 753204259.3103448,
+        "activeChildren": 3,
+        "threads": 77,
+        "cpuPercent": 1.2300215366094611,
+        "mainThreadCpuPercent": 0.5187496765462796,
+        "processTreeCpuPercent": 1.7349290304574059,
+        "contextSwitchesPerSecond": 158.71605022809186,
+        "gpuBusiestEnginePercent": 0.3523409829897938
+      },
+      "rust": {
+        "rssBytes": 719804698.4827586,
+        "pssBytes": 595885285.5172414,
+        "privateBytes": 563328176.5517242,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 28564444.689655174,
+        "gpuResidentGttBytes": 809697562.4827586,
+        "activeChildren": 2,
+        "threads": 82,
+        "cpuPercent": 1.2655686618663315,
+        "mainThreadCpuPercent": 0.5148025266922971,
+        "processTreeCpuPercent": 1.6795369032024277,
+        "contextSwitchesPerSecond": 168.5925606462289,
+        "gpuBusiestEnginePercent": 0.3647757603514977
+      },
+      "rustVsQmlPercent": {
+        "cpuPercent": 2.88995958191558,
+        "mainThreadCpuPercent": -0.7608968318325915,
+        "pssBytes": 0.018165554582072474,
+        "gpuBusiestEnginePercent": 3.529188474241174
+      }
+    },
+    "title": {
+      "qml": {
+        "rssBytes": 766692599.1724138,
+        "pssBytes": 643428563.8620689,
+        "privateBytes": 611043186.7586207,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 33932040.827586204,
+        "gpuResidentGttBytes": 885455201.1034483,
+        "activeChildren": 3,
+        "threads": 76.44827586206897,
+        "cpuPercent": 6.442623756113003,
+        "mainThreadCpuPercent": 5.566530732968509,
+        "processTreeCpuPercent": 6.854343674209122,
+        "contextSwitchesPerSecond": 251.8705101629742,
+        "gpuBusiestEnginePercent": 0.6333489307726997
+      },
+      "rust": {
+        "rssBytes": 767119783.7241379,
+        "pssBytes": 643179290.4827586,
+        "privateBytes": 610598064.5517242,
+        "swapBytes": 0,
+        "gpuResidentVramBytes": 43501073.655172415,
+        "gpuResidentGttBytes": 869696194.2068965,
+        "activeChildren": 2,
+        "threads": 81.58620689655172,
+        "cpuPercent": 2.3445431004594237,
+        "mainThreadCpuPercent": 1.0383082843075742,
+        "processTreeCpuPercent": 2.72276381247486,
+        "contextSwitchesPerSecond": 300.92113143946574,
+        "gpuBusiestEnginePercent": 0.772153567477789
+      },
+      "rustVsQmlPercent": {
+        "cpuPercent": -63.60887754410874,
+        "mainThreadCpuPercent": -81.34729988719802,
+        "pssBytes": -0.038741422639687606,
+        "gpuBusiestEnginePercent": 21.915981848385613
+      }
+    }
+  }
+}

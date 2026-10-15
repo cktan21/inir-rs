@@ -1,10 +1,15 @@
 # Native backend efficiency revamp
 
-Status: proposed (2026-10-08). Supersedes the performance assumptions in
+Status: opt-in implementation in progress; measured status below (2026-10-09).
+Supersedes the performance assumptions in
 [RUST_BACKEND_MIGRATION.md](RUST_BACKEND_MIGRATION.md); its domain inventory
 and decommissioning gates still apply.
 
 ## Why the Rust backend is not faster
+
+Historical diagnosis of the pre-revamp bridge. References to removed adapters
+describe that baseline, not the current implementation. See the status table
+and exclusive comparison for the current behavior.
 
 Turning on `INIR_RUST_BACKEND=1` makes the shell do **more** work, not less.
 The language is not the cause. There are three reasons:
@@ -147,6 +152,26 @@ Rules:
    own lease, taken by the panel or bar widget that shows it. The bar's
    network icon leases `network.summary`; the Wi-Fi list leases
    `network.accessPoints`, which is the only thing that starts AP tracking.
+
+## Status (2026-10-13)
+
+| Phase | State | Evidence |
+| --- | --- | --- |
+| 0 Measure | Exclusive live ABBA completed: idle, workspace, Wi-Fi rescan and real 20 Hz title churn; ownership, lock, display-power and concurrent-run guards. | [Results](../performance/2026-10-09-phase2-phase3-final/REPORT.md) |
+| 1 Stop paying twice | Done: Audio, Battery, Media and Bluetooth are no longer Rust domains. Niri is cut over. The `nmcli monitor` subscriber runs only in QML mode. | `scripts/test-rust-contract.py` (6/6) |
+| 2 Rebuild the bridge | Implemented: typed off-thread deltas, range compaction, per-domain QObjects/watch channels, `current_thread` runtime, removed old C++ row adapter/global publication. GUI-side diagnostics are typed too. Single-row apply in a 100-row model: 11.7–12.4 µs; all 100 titles changed: 90–111 µs (not under 50 µs). | CTest `native_models` and `native_bridge`; narrow-event gate passes, bulk interpretation remains open. |
+| 3 Niri flagship | Implementation complete behind the flag: cached rows by ID, narrow title/geometry updates, layout-key-only sorting, stable role-backed facade, persistent action socket and exclusive reconnect ownership. Title main-thread CPU **81.3% lower**; workspace only **1.9% lower**, total workspace CPU **8.1% higher**. The combined 50% gate is **not passed**. | [Exclusive ABBA](../performance/2026-10-09-phase2-phase3-final/REPORT.md); Niri/lease/model tests pass. |
+| 4 Network without refetch | AP/device/manager/profile bodies and active-connection state are native. VPN/WireGuard summaries and both hotspot status paths use the mirror. QML fallback status polling is demand-gated; unrelated network events no longer query Tailscale. **Remaining:** VPN/hotspot actions, import and detail CLI paths, plus separate Tailscale acquisition. | Mirror/signal tests, actual VPN/hotspot QML probe, CTest and contract checks. |
+| 5 Other process-heavy services | Native evdev keyboard state is implemented with its own lease, udev hotplug and interruptible shutdown. Python/sysfs fallbacks run only on demand; Python exits with its parent. Other Phase 5 candidates remain open. | Keyboard state/count/cancellation tests and live ownership checks. |
+| 6 Frontend | Scoped taskbar join caching and overview rebuild/row-identity fixes implemented. Broader list/effects/panel work is outside this five-fix round. | [Five-hotspot implementation and tradeoffs](FIVE_HOTSPOT_EFFICIENCY_FIXES.md). |
+
+The five-fix continuation also skips unchanged native collections before
+diffing/queueing and cancels an empty pending apply after a coalesced revert.
+Implementation does not imply the combined Phase 3 performance gate passes.
+The [short live check](../performance/2026-10-13-five-hotspots-quick-pair/REPORT.md)
+verified native keyboard ownership and measured idle shell-plus-helper PSS
+614.7 MiB native versus 626.0 MiB QML. One short pair is not a rollout gate;
+workspace CPU remained higher for native.
 
 ## Phases
 
@@ -315,6 +340,41 @@ sorting and layout reduction.
 - Keep one persistent action socket instead of connecting per action.
 - Gate: workspace switches and title churn show at least a 50% reduction in
   main-thread time compared with the Phase 0 QML-only baseline.
+
+Implementation status (2026-10-09): native acquisition, typed model bridge and
+facade cutover are implemented behind `INIR_RUST_BACKEND=1
+INIR_NATIVE_BRIDGE=1`. Rust owns the persistent event/action sockets, output
+geometry, layout ordering, focus/MRU, overview state, keyboard layouts and
+config reload state. Output-query failures preserve the event subscription;
+failed actions are reported without being replayed.
+
+The Niri engine caches projected records by window/workspace ID. Title and
+geometry events reconstruct only affected records; unchanged rows and
+collections share storage. Ordering is recomputed only when a layout key or
+workspace/output topology changes. Off-thread `ModelDelta` edits carry exact
+role masks; adjacent equal-mask changes are compacted into one Qt range
+notification. The GUI does not parse JSON, diff snapshots or sort Niri rows.
+
+The facade binds typed model roles directly. Legacy public collections remain
+structural membership views of stable role-backed records, not per-event JS
+snapshots. Title/focus/geometry changes do not reassign those arrays. Taskbar
+enrichment reads live title/focus/workspace fields, and spatial/policy consumers
+receive narrow signals. Configured presentation cadence (including Game Mode)
+is retained. The QML event socket, output subprocess and reducers exist only in
+`NiriFallback.qml`, unloaded whenever the native domain owns acquisition,
+including reconnects. Backend-off and missing-plugin installations retain it.
+
+Validation: focused Niri projection/transport tests, independent lease release,
+Qt model notifications and stable frontend identity, typed diagnostics and
+config writes/reloads pass. The exclusive live ABBA comparison now includes a
+real 20 Hz title-only fixture: [matched results](../performance/2026-10-09-phase2-phase3-final/REPORT.md)
+show title main-thread CPU 5.57% QML versus 1.04% Rust (81.3% lower), but
+workspace main-thread CPU 7.78% versus 7.63% (only 1.9% lower). Total workspace
+CPU is 8.1% higher. The combined 50% gate remains **not passed**; retain opt-in
+rollout, not a claim of universal performance improvement. The older
+[exclusive comparison](../performance/2026-10-09-exclusive-backends/REPORT.md)
+predates the typed bridge and cached projection and did not meet the 50% gate.
+Implementation completion is not performance-gate completion.
 
 ### Phase 4: Network without refetching
 

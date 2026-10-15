@@ -1,0 +1,125 @@
+{
+  "formatVersion": 1,
+  "capturedAt": "2026-10-12T13:17:27.917892+00:00",
+  "layout": "ii",
+  "scenario": "idle",
+  "backendRequested": "qml",
+  "tools": {
+    "qs": true,
+    "quickshell": true,
+    "niri": true,
+    "pidstat": false,
+    "perf": false,
+    "strace": true
+  },
+  "available": true,
+  "metrics": {
+    "durationSeconds": 10.000515265000104,
+    "cpuMeanPercent": 4.099788752234815,
+    "cpuMaxPercent": 5.905654337249977,
+    "rssMeanBytes": 751331737.6,
+    "rssMaxBytes": 751460352,
+    "observedChildStarts": 0,
+    "samples": [
+      {
+        "elapsedSeconds": 1.0118243309998434,
+        "intervalSeconds": 1.0118243309998434,
+        "cpuPercent": 3.9532553996278823,
+        "rssBytes": 751460352,
+        "contextSwitchesPerSecond": 365.67612446557905,
+        "gpuBusiestEnginePercent": 0.0,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 2.027799810999568,
+        "intervalSeconds": 1.0159754799997245,
+        "cpuPercent": 5.905654337249977,
+        "rssBytes": 751460352,
+        "contextSwitchesPerSecond": 821.8702286006218,
+        "gpuBusiestEnginePercent": 1.0297762304266278,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 3.0432415639998,
+        "intervalSeconds": 1.015441753000232,
+        "cpuPercent": 4.923965343385736,
+        "rssBytes": 751296512,
+        "contextSwitchesPerSecond": 573.1495659700995,
+        "gpuBusiestEnginePercent": 0.0,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 4.0595598250001785,
+        "intervalSeconds": 1.0163182610003787,
+        "cpuPercent": 2.9518312472778465,
+        "rssBytes": 751296512,
+        "contextSwitchesPerSecond": 336.50876218967454,
+        "gpuBusiestEnginePercent": 0.0,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 5.075067140000101,
+        "intervalSeconds": 1.0155073149999225,
+        "cpuPercent": 4.92364744807415,
+        "rssBytes": 751296512,
+        "contextSwitchesPerSecond": 502.2120397035632,
+        "gpuBusiestEnginePercent": 0.8261834135582411,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 6.09057285200015,
+        "intervalSeconds": 1.0155057120000492,
+        "cpuPercent": 2.954193132101117,
+        "rssBytes": 751296512,
+        "contextSwitchesPerSecond": 366.31994838053845,
+        "gpuBusiestEnginePercent": 0.0,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 7.10687018399949,
+        "intervalSeconds": 1.0162973319993398,
+        "cpuPercent": 2.9518920354717104,
+        "rssBytes": 751296512,
+        "contextSwitchesPerSecond": 352.25911623295747,
+        "gpuBusiestEnginePercent": 0.0,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 8.126488893999522,
+        "intervalSeconds": 1.0196187100000316,
+        "cpuPercent": 3.923035111821238,
+        "rssBytes": 751460352,
+        "contextSwitchesPerSecond": 478.610283642191,
+        "gpuBusiestEnginePercent": 0.7441076674632388,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 9.146205947999988,
+        "intervalSeconds": 1.0197170540004663,
+        "cpuPercent": 3.922656764744244,
+        "rssBytes": 751226880,
+        "contextSwitchesPerSecond": 409.9176319157734,
+        "gpuBusiestEnginePercent": 0.0,
+        "activeChildProcesses": 4
+      },
+      {
+        "elapsedSeconds": 10.000515265000104,
+        "intervalSeconds": 0.8543093170001157,
+        "cpuPercent": 4.6821448864047195,
+        "rssBytes": 751226880,
+        "contextSwitchesPerSecond": 324.2385333835268,
+        "gpuBusiestEnginePercent": 0.0,
+        "activeChildProcesses": 4
+      }
+    ]
+  },
+  "unavailableMetrics": {
+    "wakeupsPerSecond": "Requires scheduler tracing; context switches are reported separately.",
+    "forksPerMinute": "Short-lived processes require strace -f -e trace=clone,clone3,execve.",
+    "coldStartupMilliseconds": "Requires shell boot markers from a cold start.",
+    "settingsOpenMilliseconds": "Requires a UI interaction trace.",
+    "qmlObjectCount": "Requires the QML profiler.",
+    "frameTimes": "Supply --frame-times from a Qt profiler capture."
+  },
+  "pid": 53337
+}

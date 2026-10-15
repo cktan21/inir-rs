@@ -1,0 +1,234 @@
+{
+  "source": "results.json",
+  "completedRuns": 2,
+  "notes": [
+    "Each fresh shell launch is a repeat; one-second samples are not independent repeats.",
+    "CPU percentages use one logical core as 100%.",
+    "Native apply wall time includes synchronous QML signal/binding work and is not isolated Rust CPU.",
+    "Thread totals can omit short-lived/new threads; inspect accounted versus process CPU.",
+    "At 100 Hz and 20 seconds, one CPU tick is 0.05 percentage points; zero is below sampling resolution.",
+    "Three pairs do not establish a statistically robust population difference."
+  ],
+  "variants": {
+    "baseline": {
+      "owners": {
+        "rust": {
+          "cpuPercent": {
+            "mean": 31.097940262133847,
+            "min": 31.097940262133847,
+            "max": 31.097940262133847,
+            "runs": 1
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 34.31596352990247,
+            "min": 34.31596352990247,
+            "max": 34.31596352990247,
+            "runs": 1
+          },
+          "mainThreadCpuPercent": {
+            "mean": 9.899344327817527,
+            "min": 9.899344327817527,
+            "max": 9.899344327817527,
+            "runs": 1
+          },
+          "nativeApplyWallPercent": {
+            "mean": 0.47128752517350025,
+            "min": 0.47128752517350025,
+            "max": 0.47128752517350025,
+            "runs": 1
+          },
+          "niri.applyCalls": {
+            "mean": 30.0,
+            "min": 30,
+            "max": 30,
+            "runs": 1
+          },
+          "niri.applyMeanUs": {
+            "mean": 697.5079333333332,
+            "min": 697.5079333333332,
+            "max": 697.5079333333332,
+            "runs": 1
+          },
+          "pssBytes": {
+            "mean": 667890837.8931199,
+            "min": 667890837.8931199,
+            "max": 667890837.8931199,
+            "runs": 1
+          },
+          "threadCpu.accounted": {
+            "mean": 30.59797337689054,
+            "min": 30.59797337689054,
+            "max": 30.59797337689054,
+            "runs": 1
+          },
+          "threadCpu.main": {
+            "mean": 9.899344327817527,
+            "min": 9.899344327817527,
+            "max": 9.899344327817527,
+            "runs": 1
+          },
+          "threadCpu.mesaWorkers": {
+            "mean": 4.9996688524330954,
+            "min": 4.9996688524330954,
+            "max": 4.9996688524330954,
+            "runs": 1
+          },
+          "threadCpu.other": {
+            "mean": 3.7997483278491515,
+            "min": 3.7997483278491515,
+            "max": 3.7997483278491515,
+            "runs": 1
+          },
+          "threadCpu.qtRender": {
+            "mean": 11.799218491742103,
+            "min": 11.799218491742103,
+            "max": 11.799218491742103,
+            "runs": 1
+          },
+          "threadCpu.rustBlocking": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "runs": 1
+          },
+          "threadCpu.rustExecutor": {
+            "mean": 0.09999337704866189,
+            "min": 0.09999337704866189,
+            "max": 0.09999337704866189,
+            "runs": 1
+          },
+          "workspaces.applyCalls": {
+            "mean": 20.0,
+            "min": 20,
+            "max": 20,
+            "runs": 1
+          },
+          "workspaces.applyMeanUs": {
+            "mean": 1317.7009999999996,
+            "min": 1317.7009999999996,
+            "max": 1317.7009999999996,
+            "runs": 1
+          }
+        },
+        "qml": {
+          "cpuPercent": {
+            "mean": 31.597354053370367,
+            "min": 31.597354053370367,
+            "max": 31.597354053370367,
+            "runs": 1
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 32.78007511290021,
+            "min": 32.78007511290021,
+            "max": 32.78007511290021,
+            "runs": 1
+          },
+          "mainThreadCpuPercent": {
+            "mean": 11.099070569380098,
+            "min": 11.099070569380098,
+            "max": 11.099070569380098,
+            "runs": 1
+          },
+          "pssBytes": {
+            "mean": 658434571.100924,
+            "min": 658434571.100924,
+            "max": 658434571.100924,
+            "runs": 1
+          },
+          "threadCpu.accounted": {
+            "mean": 31.097395919614506,
+            "min": 31.097395919614506,
+            "max": 31.097395919614506,
+            "runs": 1
+          },
+          "threadCpu.main": {
+            "mean": 11.099070569380098,
+            "min": 11.099070569380098,
+            "max": 11.099070569380098,
+            "runs": 1
+          },
+          "threadCpu.mesaWorkers": {
+            "mean": 4.9995813375586025,
+            "min": 4.9995813375586025,
+            "max": 4.9995813375586025,
+            "runs": 1
+          },
+          "threadCpu.other": {
+            "mean": 3.4997069362910214,
+            "min": 3.4997069362910214,
+            "max": 3.4997069362910214,
+            "runs": 1
+          },
+          "threadCpu.qtRender": {
+            "mean": 11.499037076384786,
+            "min": 11.499037076384786,
+            "max": 11.499037076384786,
+            "runs": 1
+          },
+          "threadCpu.rustBlocking": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "runs": 1
+          },
+          "threadCpu.rustExecutor": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "runs": 1
+          }
+        }
+      },
+      "pairedDifferences": [
+        {
+          "round": 1,
+          "cpuDifferencePoints": -0.4994137912365204,
+          "mainDifferencePoints": -1.199726241562571,
+          "gpuDifferencePoints": 1.535888417002262
+        }
+      ]
+    }
+  },
+  "ablations": {
+    "qml": {},
+    "rust": {}
+  },
+  "perRun": {
+    "1-rust": {
+      "baseline": {
+        "cpuPercent": 31.097940262133847,
+        "mainThreadCpuPercent": 9.899344327817527,
+        "gpuBusiestEnginePercent": 34.31596352990247,
+        "pssBytes": 667890837.8931199,
+        "threadCpu.main": 9.899344327817527,
+        "threadCpu.rustExecutor": 0.09999337704866189,
+        "threadCpu.rustBlocking": 0.0,
+        "threadCpu.qtRender": 11.799218491742103,
+        "threadCpu.mesaWorkers": 4.9996688524330954,
+        "threadCpu.other": 3.7997483278491515,
+        "threadCpu.accounted": 30.59797337689054,
+        "niri.applyCalls": 30,
+        "niri.applyMeanUs": 697.5079333333332,
+        "workspaces.applyCalls": 20,
+        "workspaces.applyMeanUs": 1317.7009999999996,
+        "nativeApplyWallPercent": 0.47128752517350025
+      }
+    },
+    "1-qml": {
+      "baseline": {
+        "cpuPercent": 31.597354053370367,
+        "mainThreadCpuPercent": 11.099070569380098,
+        "gpuBusiestEnginePercent": 32.78007511290021,
+        "pssBytes": 658434571.100924,
+        "threadCpu.main": 11.099070569380098,
+        "threadCpu.rustExecutor": 0.0,
+        "threadCpu.rustBlocking": 0.0,
+        "threadCpu.qtRender": 11.499037076384786,
+        "threadCpu.mesaWorkers": 4.9995813375586025,
+        "threadCpu.other": 3.4997069362910214,
+        "threadCpu.accounted": 31.097395919614506
+      }
+    }
+  },
+  "otherScenarios": {}
+}

@@ -1,0 +1,4977 @@
+{
+  "capturedAt": "2026-10-09T03:01:48.688282+00:00",
+  "layout": "ii",
+  "runs": [
+    {
+      "name": "1-rust",
+      "mode": "rust",
+      "pid": 362347,
+      "ownershipBefore": {
+        "requested": true,
+        "available": true,
+        "desktopActive": true,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "rust",
+          "nativeReady": true,
+          "nativeRevision": 3,
+          "fallbackLoaded": false,
+          "fallback": null,
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "2"
+        },
+        "network": {
+          "owner": "rust",
+          "nativeReady": true,
+          "monitorRunning": false,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "rust",
+          "nativeReady": true,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "ownershipAfter": {
+        "requested": true,
+        "available": true,
+        "desktopActive": true,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "rust",
+          "nativeReady": true,
+          "nativeRevision": 79,
+          "fallbackLoaded": false,
+          "fallback": null,
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "1"
+        },
+        "network": {
+          "owner": "rust",
+          "nativeReady": true,
+          "monitorRunning": false,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "rust",
+          "nativeReady": true,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "niriEventsDuringActivity": 76,
+      "idle": {
+        "summary": {
+          "rssBytes": {
+            "mean": 700265130.6666666,
+            "min": 695992320,
+            "max": 705519616
+          },
+          "pssBytes": {
+            "mean": 606989653.3333334,
+            "min": 605550592,
+            "max": 608888832
+          },
+          "privateBytes": {
+            "mean": 577319594.6666666,
+            "min": 576114688,
+            "max": 578920448
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 3829248.0,
+            "min": 3825664,
+            "max": 3829760
+          },
+          "gpuResidentGttBytes": {
+            "mean": 629032277.3333334,
+            "min": 626585600,
+            "max": 632877056
+          },
+          "activeChildren": {
+            "mean": 3.0,
+            "min": 3,
+            "max": 3
+          },
+          "threads": {
+            "mean": 79.625,
+            "min": 79,
+            "max": 80
+          },
+          "cpuPercent": {
+            "mean": 1.4185245726617748,
+            "min": 0.0,
+            "max": 4.057939380213541
+          },
+          "mainThreadCpuPercent": {
+            "mean": 0.7085513727877126,
+            "min": 0.0,
+            "max": 3.0151122460988478
+          },
+          "processTreeCpuPercent": {
+            "mean": 1.7098082942949693,
+            "min": 0.0,
+            "max": 4.057939380213541
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 165.34676330769807,
+            "min": 94.4277382427967,
+            "max": 437.43525260617395
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 0.41997343398248455,
+            "min": 0.2995975358584706,
+            "max": 0.47592997944679677
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 704921600,
+            "pssBytes": 608290816,
+            "privateBytes": 578170880,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 626585600,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 1.0385841000024811,
+            "intervalSeconds": 1.0385841000024811,
+            "cpuPercent": 0.9628493253436202,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.9628493253436202,
+            "contextSwitchesPerSecond": 155.9815907056665,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.41712914726786693,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.41712914726786693
+          },
+          {
+            "rssBytes": 704843776,
+            "pssBytes": 608212992,
+            "privateBytes": 578093056,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 626585600,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 2.026168089003477,
+            "intervalSeconds": 0.9875839890009956,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 1.0125721064104776,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 98.21949432181631,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.46953424231701724,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.46953424231701724
+          },
+          {
+            "rssBytes": 704823296,
+            "pssBytes": 608192512,
+            "privateBytes": 578072576,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 626585600,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 3.0116214110021247,
+            "intervalSeconds": 0.9854533219986479,
+            "cpuPercent": 2.029522814884523,
+            "mainThreadCpuPercent": 1.0147614074422615,
+            "processTreeCpuPercent": 2.029522814884523,
+            "contextSwitchesPerSecond": 138.00755141214756,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.41665636599331834,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.41665636599331834
+          },
+          {
+            "rssBytes": 705519616,
+            "pssBytes": 608888832,
+            "privateBytes": 578768896,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 630779904,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 4.049258450002526,
+            "intervalSeconds": 1.0376370390004013,
+            "cpuPercent": 2.8911843807060165,
+            "mainThreadCpuPercent": 1.9274562538040112,
+            "processTreeCpuPercent": 2.8911843807060165,
+            "contextSwitchesPerSecond": 213.94764417224522,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.2995975358584706,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.2995975358584706
+          },
+          {
+            "rssBytes": 702992384,
+            "pssBytes": 608618496,
+            "privateBytes": 578920448,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 5.037397181004053,
+            "intervalSeconds": 0.988138731001527,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0120036474903185,
+            "contextSwitchesPerSecond": 106.26038298648344,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.41410470732714116,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.41410470732714116
+          },
+          {
+            "rssBytes": 702332928,
+            "pssBytes": 607959040,
+            "privateBytes": 578260992,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 6.023037008002575,
+            "intervalSeconds": 0.985639826998522,
+            "cpuPercent": 2.0291387839819897,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 2.0291387839819897,
+            "contextSwitchesPerSecond": 108.55892494303646,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4378631911762705,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4378631911762705
+          },
+          {
+            "rssBytes": 701513728,
+            "pssBytes": 607139840,
+            "privateBytes": 577441792,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 7.0090220810016035,
+            "intervalSeconds": 0.9859850729990285,
+            "cpuPercent": 2.028428274189472,
+            "mainThreadCpuPercent": 1.014214137094736,
+            "processTreeCpuPercent": 2.028428274189472,
+            "contextSwitchesPerSecond": 164.30269020934725,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4246245825269329,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4246245825269329
+          },
+          {
+            "rssBytes": 701480960,
+            "pssBytes": 607107072,
+            "privateBytes": 577409024,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 8.045521070001996,
+            "intervalSeconds": 1.0364989890003926,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 98.408200183938,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4291641426770669,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4291641426770669
+          },
+          {
+            "rssBytes": 701509632,
+            "pssBytes": 607135744,
+            "privateBytes": 577437696,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 9.03080974399927,
+            "intervalSeconds": 0.9852886739972746,
+            "cpuPercent": 3.0447929415742965,
+            "mainThreadCpuPercent": 1.0149309805247655,
+            "processTreeCpuPercent": 3.0447929415742965,
+            "contextSwitchesPerSecond": 437.43525260617395,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4357245864384995,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4357245864384995
+          },
+          {
+            "rssBytes": 701460480,
+            "pssBytes": 607086592,
+            "privateBytes": 577388544,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 10.018704155998421,
+            "intervalSeconds": 0.9878944119991502,
+            "cpuPercent": 2.0245078580338407,
+            "mainThreadCpuPercent": 1.0122539290169204,
+            "processTreeCpuPercent": 4.049015716067681,
+            "contextSwitchesPerSecond": 164.997390429758,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4338337121805368,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4338337121805368
+          },
+          {
+            "rssBytes": 701378560,
+            "pssBytes": 607004672,
+            "privateBytes": 577306624,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 11.005980255002214,
+            "intervalSeconds": 0.9872760990037932,
+            "cpuPercent": 1.0128878851711753,
+            "mainThreadCpuPercent": 1.0128878851711753,
+            "processTreeCpuPercent": 2.0257757703423507,
+            "contextSwitchesPerSecond": 103.31456428745989,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4284967502270858,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4284967502270858
+          },
+          {
+            "rssBytes": 701374464,
+            "pssBytes": 607000576,
+            "privateBytes": 577302528,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 12.044089296003222,
+            "intervalSeconds": 1.0381090410010074,
+            "cpuPercent": 0.963289944027209,
+            "mainThreadCpuPercent": 0.963289944027209,
+            "processTreeCpuPercent": 0.963289944027209,
+            "contextSwitchesPerSecond": 137.75046199589087,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.43621072750060036,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.43621072750060036
+          },
+          {
+            "rssBytes": 702103552,
+            "pssBytes": 607729664,
+            "privateBytes": 578031616,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 13.02981126600207,
+            "intervalSeconds": 0.9857219699988491,
+            "cpuPercent": 4.057939380213541,
+            "mainThreadCpuPercent": 1.0144848450533852,
+            "processTreeCpuPercent": 4.057939380213541,
+            "contextSwitchesPerSecond": 353.040726078578,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.390324464413073,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.390324464413073
+          },
+          {
+            "rssBytes": 701562880,
+            "pssBytes": 607188992,
+            "privateBytes": 577490944,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 14.017236792002223,
+            "intervalSeconds": 0.9874255260001519,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 108.3626027305917,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4400272107204298,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4400272107204298
+          },
+          {
+            "rssBytes": 701575168,
+            "pssBytes": 607201280,
+            "privateBytes": 577503232,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 15.002916413002822,
+            "intervalSeconds": 0.9856796210005996,
+            "cpuPercent": 1.0145284316468501,
+            "mainThreadCpuPercent": 1.0145284316468501,
+            "processTreeCpuPercent": 2.0290568632937003,
+            "contextSwitchesPerSecond": 262.7628637965342,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.39202727921648384,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.39202727921648384
+          },
+          {
+            "rssBytes": 697434112,
+            "pssBytes": 606992384,
+            "privateBytes": 577556480,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 16.039477930004068,
+            "intervalSeconds": 1.036561517001246,
+            "cpuPercent": 1.9294561559510375,
+            "mainThreadCpuPercent": 0.9647280779755187,
+            "processTreeCpuPercent": 1.9294561559510375,
+            "contextSwitchesPerSecond": 163.03904517786265,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4204117101131742,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4204117101131742
+          },
+          {
+            "rssBytes": 696205312,
+            "pssBytes": 605763584,
+            "privateBytes": 576327680,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 17.026231584000925,
+            "intervalSeconds": 0.9867536539968569,
+            "cpuPercent": 1.0134241671662312,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0134241671662312,
+            "contextSwitchesPerSecond": 130.7317175644438,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4749289735100315,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4749289735100315
+          },
+          {
+            "rssBytes": 696184832,
+            "pssBytes": 605743104,
+            "privateBytes": 576307200,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 18.014710763003677,
+            "intervalSeconds": 0.9884791790027521,
+            "cpuPercent": 1.0116550972867946,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0116550972867946,
+            "contextSwitchesPerSecond": 104.20047502053984,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4178187146204423,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4178187146204423
+          },
+          {
+            "rssBytes": 696172544,
+            "pssBytes": 605730816,
+            "privateBytes": 576294912,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 19.001812713999243,
+            "intervalSeconds": 0.9871019509955659,
+            "cpuPercent": 2.026133164849741,
+            "mainThreadCpuPercent": 1.0130665824248706,
+            "processTreeCpuPercent": 2.026133164849741,
+            "contextSwitchesPerSecond": 190.4565174958757,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4359239687106372,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4359239687106372
+          },
+          {
+            "rssBytes": 696152064,
+            "pssBytes": 605710336,
+            "privateBytes": 576274432,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 20.03975926300336,
+            "intervalSeconds": 1.0379465490041184,
+            "cpuPercent": 0.9634407484272411,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 2.890322245281723,
+            "contextSwitchesPerSecond": 112.72256756598722,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.44864949977125673,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.44864949977125673
+          },
+          {
+            "rssBytes": 696156160,
+            "pssBytes": 605714432,
+            "privateBytes": 576278528,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 628682752,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 21.02893166300055,
+            "intervalSeconds": 0.9891723999971873,
+            "cpuPercent": 1.0109461202140733,
+            "mainThreadCpuPercent": 1.0109461202140733,
+            "processTreeCpuPercent": 1.0109461202140733,
+            "contextSwitchesPerSecond": 162.76232535446582,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.47592997944679677,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.47592997944679677
+          },
+          {
+            "rssBytes": 696606720,
+            "pssBytes": 606164992,
+            "privateBytes": 576729088,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3825664,
+            "gpuResidentGttBytes": 632877056,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 22.023919496001326,
+            "intervalSeconds": 0.9949878330007778,
+            "cpuPercent": 3.0151122460988478,
+            "mainThreadCpuPercent": 3.0151122460988478,
+            "processTreeCpuPercent": 3.0151122460988478,
+            "contextSwitchesPerSecond": 221.10823138058214,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.31541812833379107,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.31541812833379107
+          },
+          {
+            "rssBytes": 696066048,
+            "pssBytes": 605624320,
+            "privateBytes": 576188416,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3825664,
+            "gpuResidentGttBytes": 632877056,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 23.00879959300073,
+            "intervalSeconds": 0.9848800969994045,
+            "cpuPercent": 1.0153520241160936,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0153520241160936,
+            "contextSwitchesPerSecond": 94.4277382427967,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.4145472136597018,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4145472136597018
+          },
+          {
+            "rssBytes": 695992320,
+            "pssBytes": 605550592,
+            "privateBytes": 576114688,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3825664,
+            "gpuResidentGttBytes": 632877056,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 24.048622931004502,
+            "intervalSeconds": 1.039823338003771,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 137.5233607225321,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.41041558157300406,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.41041558157300406
+          }
+        ],
+        "actions": 0,
+        "durationSeconds": 25.00112223099859
+      },
+      "workspaceSwitches": {
+        "summary": {
+          "rssBytes": {
+            "mean": 766922069.3333334,
+            "min": 736489472,
+            "max": 797970432
+          },
+          "pssBytes": {
+            "mean": 679014400.0,
+            "min": 648669184,
+            "max": 710150144
+          },
+          "privateBytes": {
+            "mean": 649592149.3333334,
+            "min": 619233280,
+            "max": 680714240
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 3840000.0,
+            "min": 3809280,
+            "max": 3842048
+          },
+          "gpuResidentGttBytes": {
+            "mean": 1024476842.6666666,
+            "min": 845717504,
+            "max": 1102123008
+          },
+          "activeChildren": {
+            "mean": 3.0,
+            "min": 3,
+            "max": 3
+          },
+          "threads": {
+            "mean": 79.0,
+            "min": 79,
+            "max": 79
+          },
+          "cpuPercent": {
+            "mean": 11.742017426401134,
+            "min": 9.579280362928824,
+            "max": 15.180669811893777
+          },
+          "mainThreadCpuPercent": {
+            "mean": 6.4958173986092405,
+            "min": 4.045531530959914,
+            "max": 9.108401887136267
+          },
+          "processTreeCpuPercent": {
+            "mean": 12.032533509036115,
+            "min": 9.579280362928824,
+            "max": 16.192714466020032
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 325.37333732821367,
+            "min": 253.8509296176138,
+            "max": 455.1222972329903
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 0.7200940304634127,
+            "min": 0.6140099347117064,
+            "max": 0.833226105217581
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 741847040,
+            "pssBytes": 653502464,
+            "privateBytes": 624066560,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3809280,
+            "gpuResidentGttBytes": 845717504,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 1.0369360149998101,
+            "intervalSeconds": 1.0369360149998101,
+            "cpuPercent": 11.572555901631208,
+            "mainThreadCpuPercent": 5.786277950815604,
+            "processTreeCpuPercent": 11.572555901631208,
+            "contextSwitchesPerSecond": 326.92470422108164,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7517952783230726,
+              "0000:c4:00.0/733/drm-engine-compute": 0.04137371966968266
+            },
+            "gpuBusiestEnginePercent": 0.7517952783230726
+          },
+          {
+            "rssBytes": 779358208,
+            "pssBytes": 691013632,
+            "privateBytes": 661577728,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3829760,
+            "gpuResidentGttBytes": 1011118080,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 2.0301767389973975,
+            "intervalSeconds": 0.9932407239975873,
+            "cpuPercent": 11.074858022058628,
+            "mainThreadCpuPercent": 7.047636923128218,
+            "processTreeCpuPercent": 11.074858022058628,
+            "contextSwitchesPerSecond": 335.2661564859566,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.833226105217581,
+              "0000:c4:00.0/733/drm-engine-compute": 0.04099912439766104
+            },
+            "gpuBusiestEnginePercent": 0.833226105217581
+          },
+          {
+            "rssBytes": 783917056,
+            "pssBytes": 695572480,
+            "privateBytes": 666136576,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3837952,
+            "gpuResidentGttBytes": 1086799872,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 3.0208791889963322,
+            "intervalSeconds": 0.9907024499989348,
+            "cpuPercent": 12.112617668415883,
+            "mainThreadCpuPercent": 7.065693639909265,
+            "processTreeCpuPercent": 12.112617668415883,
+            "contextSwitchesPerSecond": 306.8529809332024,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7176540241732161,
+              "0000:c4:00.0/733/drm-engine-compute": 0.046551817854139345
+            },
+            "gpuBusiestEnginePercent": 0.7176540241732161
+          },
+          {
+            "rssBytes": 783921152,
+            "pssBytes": 695576576,
+            "privateBytes": 666140672,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1102123008,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 4.008223887998611,
+            "intervalSeconds": 0.9873446990022785,
+            "cpuPercent": 11.140992614955657,
+            "mainThreadCpuPercent": 5.0640875522525715,
+            "processTreeCpuPercent": 11.140992614955657,
+            "contextSwitchesPerSecond": 289.66580798884706,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.8142403567997936,
+              "0000:c4:00.0/733/drm-engine-compute": 0.05796324227782979
+            },
+            "gpuBusiestEnginePercent": 0.8142403567997936
+          },
+          {
+            "rssBytes": 785391616,
+            "pssBytes": 697047040,
+            "privateBytes": 667611136,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 5.047111670995946,
+            "intervalSeconds": 1.0388877829973353,
+            "cpuPercent": 10.58824656524834,
+            "mainThreadCpuPercent": 5.775407217408186,
+            "processTreeCpuPercent": 12.513382304384404,
+            "contextSwitchesPerSecond": 298.3960395660896,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7434006950892992,
+              "0000:c4:00.0/733/drm-engine-compute": 0.019330769240599985
+            },
+            "gpuBusiestEnginePercent": 0.7434006950892992
+          },
+          {
+            "rssBytes": 759853056,
+            "pssBytes": 671508480,
+            "privateBytes": 642072576,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 6.035856899994542,
+            "intervalSeconds": 0.9887452289985958,
+            "cpuPercent": 10.113828827399784,
+            "mainThreadCpuPercent": 4.045531530959914,
+            "processTreeCpuPercent": 10.113828827399784,
+            "contextSwitchesPerSecond": 455.1222972329903,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7608730519609601,
+              "0000:c4:00.0/733/drm-engine-compute": 0.05871199000251504
+            },
+            "gpuBusiestEnginePercent": 0.7608730519609601
+          },
+          {
+            "rssBytes": 740675584,
+            "pssBytes": 652331008,
+            "privateBytes": 622895104,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 7.0264841280004475,
+            "intervalSeconds": 0.9906272280059056,
+            "cpuPercent": 13.122998876346756,
+            "mainThreadCpuPercent": 9.08515306824006,
+            "processTreeCpuPercent": 13.122998876346756,
+            "contextSwitchesPerSecond": 287.6965138276019,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7778413294283149,
+              "0000:c4:00.0/733/drm-engine-compute": 0.059576395975710204
+            },
+            "gpuBusiestEnginePercent": 0.7778413294283149
+          },
+          {
+            "rssBytes": 742424576,
+            "pssBytes": 654080000,
+            "privateBytes": 624644096,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 8.017804095994506,
+            "intervalSeconds": 0.991319967994059,
+            "cpuPercent": 12.105072416005157,
+            "mainThreadCpuPercent": 5.043780173335484,
+            "processTreeCpuPercent": 12.105072416005157,
+            "contextSwitchesPerSecond": 430.7388268028502,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7689740190975035,
+              "0000:c4:00.0/733/drm-engine-compute": 0.03142083384341419
+            },
+            "gpuBusiestEnginePercent": 0.7689740190975035
+          },
+          {
+            "rssBytes": 781246464,
+            "pssBytes": 692901888,
+            "privateBytes": 663465984,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 9.010437803000968,
+            "intervalSeconds": 0.9926337070064619,
+            "cpuPercent": 10.074209579440467,
+            "mainThreadCpuPercent": 6.04452574766428,
+            "processTreeCpuPercent": 10.074209579440467,
+            "contextSwitchesPerSecond": 300.2114454673259,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.8170145686929816,
+              "0000:c4:00.0/733/drm-engine-compute": 0.017583021689476418
+            },
+            "gpuBusiestEnginePercent": 0.8170145686929816
+          },
+          {
+            "rssBytes": 789094400,
+            "pssBytes": 701274112,
+            "privateBytes": 671838208,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 10.002087515997118,
+            "intervalSeconds": 0.9916497129961499,
+            "cpuPercent": 11.092626615869053,
+            "mainThreadCpuPercent": 5.042103007213206,
+            "processTreeCpuPercent": 13.109467818754336,
+            "contextSwitchesPerSecond": 279.33250659961163,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7865188581999097,
+              "0000:c4:00.0/733/drm-engine-compute": 0.01775818594934477
+            },
+            "gpuBusiestEnginePercent": 0.7865188581999097
+          },
+          {
+            "rssBytes": 779440128,
+            "pssBytes": 691619840,
+            "privateBytes": 662183936,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 11.0460072700007,
+            "intervalSeconds": 1.043919754003582,
+            "cpuPercent": 9.579280362928824,
+            "mainThreadCpuPercent": 5.747568217757292,
+            "processTreeCpuPercent": 9.579280362928824,
+            "contextSwitchesPerSecond": 253.8509296176138,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6140099347117064,
+              "0000:c4:00.0/733/drm-engine-compute": 0.05496974243463075
+            },
+            "gpuBusiestEnginePercent": 0.6140099347117064
+          },
+          {
+            "rssBytes": 739524608,
+            "pssBytes": 651704320,
+            "privateBytes": 622268416,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 12.034649743000045,
+            "intervalSeconds": 0.988642472999345,
+            "cpuPercent": 12.13785602756311,
+            "mainThreadCpuPercent": 6.068928013781555,
+            "processTreeCpuPercent": 12.13785602756311,
+            "contextSwitchesPerSecond": 302.4349126867808,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7885009204945582,
+              "0000:c4:00.0/733/drm-engine-compute": 0.058076606627882596
+            },
+            "gpuBusiestEnginePercent": 0.7885009204945582
+          },
+          {
+            "rssBytes": 736489472,
+            "pssBytes": 648669184,
+            "privateBytes": 619233280,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 13.029175165000197,
+            "intervalSeconds": 0.9945254220001516,
+            "cpuPercent": 13.071561281817107,
+            "mainThreadCpuPercent": 7.03853299790152,
+            "processTreeCpuPercent": 13.071561281817107,
+            "contextSwitchesPerSecond": 273.4972822041733,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.7907423808417037,
+              "0000:c4:00.0/733/drm-engine-compute": 0.057993992636209565
+            },
+            "gpuBusiestEnginePercent": 0.7907423808417037
+          },
+          {
+            "rssBytes": 738004992,
+            "pssBytes": 650184704,
+            "privateBytes": 620748800,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 14.02175346599688,
+            "intervalSeconds": 0.9925783009966835,
+            "cpuPercent": 13.09720350217835,
+            "mainThreadCpuPercent": 8.059817539802062,
+            "processTreeCpuPercent": 13.09720350217835,
+            "contextSwitchesPerSecond": 396.9460138352515,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6700024565641014,
+              "0000:c4:00.0/733/drm-engine-compute": 0.01881252086737124
+            },
+            "gpuBusiestEnginePercent": 0.6700024565641014
+          },
+          {
+            "rssBytes": 780472320,
+            "pssBytes": 692652032,
+            "privateBytes": 663216128,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 15.012654817997827,
+            "intervalSeconds": 0.9909013520009466,
+            "cpuPercent": 12.110186322551849,
+            "mainThreadCpuPercent": 7.064275354821913,
+            "processTreeCpuPercent": 14.128550709643825,
+            "contextSwitchesPerSecond": 337.0668526443598,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6637952392251572,
+              "0000:c4:00.0/733/drm-engine-compute": 0.03473726212048514
+            },
+            "gpuBusiestEnginePercent": 0.6637952392251572
+          },
+          {
+            "rssBytes": 781418496,
+            "pssBytes": 693598208,
+            "privateBytes": 664162304,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 16.05152095900121,
+            "intervalSeconds": 1.038866141003382,
+            "cpuPercent": 11.55105506510192,
+            "mainThreadCpuPercent": 5.77552753255096,
+            "processTreeCpuPercent": 11.55105506510192,
+            "contextSwitchesPerSecond": 307.0655471472927,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6310711978415183,
+              "0000:c4:00.0/733/drm-engine-compute": 0.02497472867384128
+            },
+            "gpuBusiestEnginePercent": 0.6310711978415183
+          },
+          {
+            "rssBytes": 782426112,
+            "pssBytes": 694605824,
+            "privateBytes": 665169920,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 17.042693076000432,
+            "intervalSeconds": 0.9911721169992234,
+            "cpuPercent": 12.106878103401494,
+            "mainThreadCpuPercent": 7.062345560317539,
+            "processTreeCpuPercent": 12.106878103401494,
+            "contextSwitchesPerSecond": 289.55616797301906,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6643132799109157,
+              "0000:c4:00.0/733/drm-engine-compute": 0.02085268506399701
+            },
+            "gpuBusiestEnginePercent": 0.6643132799109157
+          },
+          {
+            "rssBytes": 794124288,
+            "pssBytes": 706304000,
+            "privateBytes": 676868096,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 18.034480796995922,
+            "intervalSeconds": 0.9917877209954895,
+            "cpuPercent": 12.099363347587335,
+            "mainThreadCpuPercent": 7.05796195275928,
+            "processTreeCpuPercent": 12.099363347587335,
+            "contextSwitchesPerSecond": 322.6496892689956,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6602451171130985,
+              "0000:c4:00.0/733/drm-engine-compute": 0.02300341042446094
+            },
+            "gpuBusiestEnginePercent": 0.6602451171130985
+          },
+          {
+            "rssBytes": 797970432,
+            "pssBytes": 710150144,
+            "privateBytes": 680714240,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 19.024202567998145,
+            "intervalSeconds": 0.9897217710022232,
+            "cpuPercent": 13.135004585011597,
+            "mainThreadCpuPercent": 8.083079744622522,
+            "processTreeCpuPercent": 13.135004585011597,
+            "contextSwitchesPerSecond": 284.92856099794386,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.664923334295858,
+              "0000:c4:00.0/733/drm-engine-compute": 0.021407531511148707
+            },
+            "gpuBusiestEnginePercent": 0.664923334295858
+          },
+          {
+            "rssBytes": 738070528,
+            "pssBytes": 650774528,
+            "privateBytes": 621404160,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 20.012301260998356,
+            "intervalSeconds": 0.9880986930002109,
+            "cpuPercent": 15.180669811893777,
+            "mainThreadCpuPercent": 9.108401887136267,
+            "processTreeCpuPercent": 16.192714466020032,
+            "contextSwitchesPerSecond": 436.19124592841456,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6499751538481823,
+              "0000:c4:00.0/733/drm-engine-compute": 0.0590039238114725
+            },
+            "gpuBusiestEnginePercent": 0.6499751538481823
+          },
+          {
+            "rssBytes": 788463616,
+            "pssBytes": 701167616,
+            "privateBytes": 671797248,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 21.004885465998086,
+            "intervalSeconds": 0.99258420499973,
+            "cpuPercent": 12.08965439864446,
+            "mainThreadCpuPercent": 6.04482719932223,
+            "processTreeCpuPercent": 12.08965439864446,
+            "contextSwitchesPerSecond": 325.4131975635134,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6761869639061832,
+              "0000:c4:00.0/733/drm-engine-compute": 0.04329325389578579
+            },
+            "gpuBusiestEnginePercent": 0.6761869639061832
+          },
+          {
+            "rssBytes": 738910208,
+            "pssBytes": 651614208,
+            "privateBytes": 622243840,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 22.0471313359958,
+            "intervalSeconds": 1.0422458699977142,
+            "cpuPercent": 9.594665028532981,
+            "mainThreadCpuPercent": 5.756799017119788,
+            "processTreeCpuPercent": 9.594665028532981,
+            "contextSwitchesPerSecond": 267.6911542960702,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.621605821284205,
+              "0000:c4:00.0/733/drm-engine-compute": 0.04767742567318495
+            },
+            "gpuBusiestEnginePercent": 0.621605821284205
+          },
+          {
+            "rssBytes": 779857920,
+            "pssBytes": 692561920,
+            "privateBytes": 663191552,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 23.042559471999994,
+            "intervalSeconds": 0.9954281360041932,
+            "cpuPercent": 11.050521481295224,
+            "mainThreadCpuPercent": 6.027557171615576,
+            "processTreeCpuPercent": 11.050521481295224,
+            "contextSwitchesPerSecond": 268.22629413689316,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.6576785167314602,
+              "0000:c4:00.0/733/drm-engine-compute": 0.048542027548030296
+            },
+            "gpuBusiestEnginePercent": 0.6576785167314602
+          },
+          {
+            "rssBytes": 743227392,
+            "pssBytes": 655931392,
+            "privateBytes": 626561024,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 3842048,
+            "gpuResidentGttBytes": 1027084288,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 24.042017113999464,
+            "intervalSeconds": 0.9994576419994701,
+            "cpuPercent": 12.006511827748236,
+            "mainThreadCpuPercent": 7.003798566186472,
+            "processTreeCpuPercent": 12.006511827748236,
+            "contextSwitchesPerSecond": 433.23496845124885,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/733/drm-engine-gfx": 0.757668127370626,
+              "0000:c4:00.0/733/drm-engine-compute": 0.059181397504419066
+            },
+            "gpuBusiestEnginePercent": 0.757668127370626
+          }
+        ],
+        "actions": 50,
+        "durationSeconds": 25.000272209996183
+      }
+    },
+    {
+      "name": "1-qml",
+      "mode": "qml",
+      "pid": 363283,
+      "ownershipBefore": {
+        "requested": false,
+        "available": false,
+        "desktopActive": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "qml",
+          "nativeReady": false,
+          "nativeRevision": 0,
+          "fallbackLoaded": true,
+          "fallback": {
+            "loaded": true,
+            "eventSocketConnected": true,
+            "actionSocketConnected": true,
+            "eventsRead": 13,
+            "outputsProcessRunning": false,
+            "windowsTimerRunning": false
+          },
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "2"
+        },
+        "network": {
+          "owner": "qml",
+          "nativeReady": false,
+          "monitorRunning": true,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "qml",
+          "nativeReady": false,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "ownershipAfter": {
+        "requested": false,
+        "available": false,
+        "desktopActive": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "qml",
+          "nativeReady": false,
+          "nativeRevision": 0,
+          "fallbackLoaded": true,
+          "fallback": {
+            "loaded": true,
+            "eventSocketConnected": true,
+            "actionSocketConnected": true,
+            "eventsRead": 94,
+            "outputsProcessRunning": false,
+            "windowsTimerRunning": true
+          },
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "2"
+        },
+        "network": {
+          "owner": "qml",
+          "nativeReady": false,
+          "monitorRunning": true,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "qml",
+          "nativeReady": false,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "niriEventsDuringActivity": 81,
+      "idle": {
+        "summary": {
+          "rssBytes": {
+            "mean": 713403392.0,
+            "min": 710074368,
+            "max": 720347136
+          },
+          "pssBytes": {
+            "mean": 626784170.6666666,
+            "min": 625387520,
+            "max": 628698112
+          },
+          "privateBytes": {
+            "mean": 597688149.3333334,
+            "min": 596398080,
+            "max": 599445504
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 1097728.0,
+            "min": 1097728,
+            "max": 1097728
+          },
+          "gpuResidentGttBytes": {
+            "mean": 1056419840.0,
+            "min": 1056419840,
+            "max": 1056419840
+          },
+          "activeChildren": {
+            "mean": 4.0,
+            "min": 4,
+            "max": 4
+          },
+          "threads": {
+            "mean": 58.333333333333336,
+            "min": 51,
+            "max": 61
+          },
+          "cpuPercent": {
+            "mean": 1.170463830676628,
+            "min": 0.0,
+            "max": 3.0498597848356273
+          },
+          "mainThreadCpuPercent": {
+            "mean": 0.6675800647508908,
+            "min": 0.0,
+            "max": 2.033239856557085
+          },
+          "processTreeCpuPercent": {
+            "mean": 1.5018889468857777,
+            "min": 0.0,
+            "max": 4.061904047277077
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 111.0909764958149,
+            "min": 0.0,
+            "max": 166.72566823768096
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 0.887828056051995,
+            "min": 0.8088676780968557,
+            "max": 0.9495702139365746
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 720318464,
+            "pssBytes": 628669440,
+            "privateBytes": 599416832,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 61,
+            "elapsedSeconds": 1.036154016997898,
+            "intervalSeconds": 1.036154016997898,
+            "cpuPercent": 0.965107487492401,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.930214974984802,
+            "contextSwitchesPerSecond": 101.33628618670211,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9079174375308227,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9079174375308227
+          },
+          {
+            "rssBytes": 720347136,
+            "pssBytes": 628698112,
+            "privateBytes": 599445504,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 2.022825620995718,
+            "intervalSeconds": 0.9866716039978201,
+            "cpuPercent": 2.027016883729451,
+            "mainThreadCpuPercent": 1.0135084418647256,
+            "processTreeCpuPercent": 2.027016883729451,
+            "contextSwitchesPerSecond": 157.09380848903245,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8954871067739293,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8954871067739293
+          },
+          {
+            "rssBytes": 720162816,
+            "pssBytes": 628513792,
+            "privateBytes": 599261184,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 3.010573941995972,
+            "intervalSeconds": 0.9877483210002538,
+            "cpuPercent": 1.0124036444702225,
+            "mainThreadCpuPercent": 1.0124036444702225,
+            "processTreeCpuPercent": 1.0124036444702225,
+            "contextSwitchesPerSecond": 96.17834622467113,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9179250227242524,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9179250227242524
+          },
+          {
+            "rssBytes": 720158720,
+            "pssBytes": 628509696,
+            "privateBytes": 599257088,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 4.047183898001094,
+            "intervalSeconds": 1.0366099560051225,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 82.96273781840372,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8451228882425192,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8451228882425192
+          },
+          {
+            "rssBytes": 720195584,
+            "pssBytes": 628546560,
+            "privateBytes": 599293952,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 5.030835675999697,
+            "intervalSeconds": 0.9836517779986025,
+            "cpuPercent": 3.0498597848356273,
+            "mainThreadCpuPercent": 2.033239856557085,
+            "processTreeCpuPercent": 3.0498597848356273,
+            "contextSwitchesPerSecond": 166.72566823768096,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.940031341051786,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.940031341051786
+          },
+          {
+            "rssBytes": 714366976,
+            "pssBytes": 628546560,
+            "privateBytes": 599420928,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 6.0218080669947085,
+            "intervalSeconds": 0.9909723909950117,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.009109849161311,
+            "contextSwitchesPerSecond": 100.91098491613111,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8624052574682698,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8624052574682698
+          },
+          {
+            "rssBytes": 714338304,
+            "pssBytes": 628517888,
+            "privateBytes": 599392256,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 7.009709316997032,
+            "intervalSeconds": 0.9879012500023236,
+            "cpuPercent": 1.0122469224506476,
+            "mainThreadCpuPercent": 1.0122469224506476,
+            "processTreeCpuPercent": 1.0122469224506476,
+            "contextSwitchesPerSecond": 91.10222302055828,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8786412609539246,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8786412609539246
+          },
+          {
+            "rssBytes": 712212480,
+            "pssBytes": 626392064,
+            "privateBytes": 597266432,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 8.04472636799619,
+            "intervalSeconds": 1.0350170509991585,
+            "cpuPercent": 1.9323353157025682,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.9323353157025682,
+            "contextSwitchesPerSecond": 162.31616651901572,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8632818166014219,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8632818166014219
+          },
+          {
+            "rssBytes": 712192000,
+            "pssBytes": 626371584,
+            "privateBytes": 597245952,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 9.033761801001674,
+            "intervalSeconds": 0.9890354330054834,
+            "cpuPercent": 1.0110861215165947,
+            "mainThreadCpuPercent": 2.0221722430331894,
+            "processTreeCpuPercent": 1.0110861215165947,
+            "contextSwitchesPerSecond": 88.97557869346033,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8816378775735587,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8816378775735587
+          },
+          {
+            "rssBytes": 712192000,
+            "pssBytes": 626371584,
+            "privateBytes": 597245952,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 10.02316911899834,
+            "intervalSeconds": 0.9894073179966654,
+            "cpuPercent": 1.0107060881910421,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0107060881910421,
+            "contextSwitchesPerSecond": 86.92072358442961,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8088676780968557,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8088676780968557
+          },
+          {
+            "rssBytes": 712216576,
+            "pssBytes": 626396160,
+            "privateBytes": 597270528,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 11.007928963997983,
+            "intervalSeconds": 0.984759844999644,
+            "cpuPercent": 2.0309520236385383,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 4.061904047277077,
+            "contextSwitchesPerSecond": 158.41425784380596,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8808378046733959,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8808378046733959
+          },
+          {
+            "rssBytes": 712200192,
+            "pssBytes": 626379776,
+            "privateBytes": 597254144,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 12.047937217001163,
+            "intervalSeconds": 1.0400082530031796,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.9615308312336467,
+            "processTreeCpuPercent": 0.9615308312336467,
+            "contextSwitchesPerSecond": 82.69165148609362,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8347194337094803,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8347194337094803
+          },
+          {
+            "rssBytes": 712187904,
+            "pssBytes": 626367488,
+            "privateBytes": 597241856,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 13.03521172299952,
+            "intervalSeconds": 0.9872745059983572,
+            "cpuPercent": 1.012889519504785,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.012889519504785,
+            "contextSwitchesPerSecond": 101.2889519504785,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9218504017579833,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9218504017579833
+          },
+          {
+            "rssBytes": 712228864,
+            "pssBytes": 626408448,
+            "privateBytes": 597282816,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 14.022009232998244,
+            "intervalSeconds": 0.9867975099987234,
+            "cpuPercent": 2.026758255604625,
+            "mainThreadCpuPercent": 1.0133791278023125,
+            "processTreeCpuPercent": 2.026758255604625,
+            "contextSwitchesPerSecond": 143.89983614792837,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9102881704688959,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9102881704688959
+          },
+          {
+            "rssBytes": 712163328,
+            "pssBytes": 626342912,
+            "privateBytes": 597217280,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 60,
+            "elapsedSeconds": 15.009484636997513,
+            "intervalSeconds": 0.9874754039992695,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 1.012683451101674,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 102.28102856126908,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.859624651471955,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.859624651471955
+          },
+          {
+            "rssBytes": 710967296,
+            "pssBytes": 626203648,
+            "privateBytes": 597254144,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 59,
+            "elapsedSeconds": 16.04407114499918,
+            "intervalSeconds": 1.0345865080016665,
+            "cpuPercent": 1.93313945671209,
+            "mainThreadCpuPercent": 0.966569728356045,
+            "processTreeCpuPercent": 2.899709185068135,
+            "contextSwitchesPerSecond": 125.65406468628585,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8952827944654659,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8952827944654659
+          },
+          {
+            "rssBytes": 710717440,
+            "pssBytes": 625953792,
+            "privateBytes": 597004288,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 59,
+            "elapsedSeconds": 17.031066842995642,
+            "intervalSeconds": 0.9869956979964627,
+            "cpuPercent": 2.026351284063214,
+            "mainThreadCpuPercent": 1.013175642031607,
+            "processTreeCpuPercent": 2.026351284063214,
+            "contextSwitchesPerSecond": 160.08175144099388,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9045887452319977,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9045887452319977
+          },
+          {
+            "rssBytes": 710586368,
+            "pssBytes": 625822720,
+            "privateBytes": 596873216,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 59,
+            "elapsedSeconds": 18.02006144599727,
+            "intervalSeconds": 0.988994603001629,
+            "cpuPercent": 1.0111278635545324,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0111278635545324,
+            "contextSwitchesPerSecond": 102.12391421900776,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8597802226819629,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8597802226819629
+          },
+          {
+            "rssBytes": 710565888,
+            "pssBytes": 625879040,
+            "privateBytes": 596889600,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 59,
+            "elapsedSeconds": 19.007677114997932,
+            "intervalSeconds": 0.987615669000661,
+            "cpuPercent": 1.0125396258768051,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0125396258768051,
+            "contextSwitchesPerSecond": 87.07840782540525,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8438305771750998,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8438305771750998
+          },
+          {
+            "rssBytes": 710610944,
+            "pssBytes": 625924096,
+            "privateBytes": 596934656,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 59,
+            "elapsedSeconds": 20.04328362999513,
+            "intervalSeconds": 1.0356065149971982,
+            "cpuPercent": 0.9656177182341359,
+            "mainThreadCpuPercent": 1.9312354364682718,
+            "processTreeCpuPercent": 0.9656177182341359,
+            "contextSwitchesPerSecond": 142.9114222986521,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9495702139365746,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9495702139365746
+          },
+          {
+            "rssBytes": 710422528,
+            "pssBytes": 625735680,
+            "privateBytes": 596746240,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 21.032925606996287,
+            "intervalSeconds": 0.9896419770011562,
+            "cpuPercent": 1.0104664345688237,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 3.0313993037064706,
+            "contextSwitchesPerSecond": 0.0,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.921356026916929,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.921356026916929
+          },
+          {
+            "rssBytes": 710074368,
+            "pssBytes": 625387520,
+            "privateBytes": 596398080,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 22.022288690001005,
+            "intervalSeconds": 0.9893630830047186,
+            "cpuPercent": 1.0107512774410146,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0107512774410146,
+            "contextSwitchesPerSecond": 85.91385858248624,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.93544757824321,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.93544757824321
+          },
+          {
+            "rssBytes": 710131712,
+            "pssBytes": 625444864,
+            "privateBytes": 596455424,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 23.00761897999473,
+            "intervalSeconds": 0.9853302899937262,
+            "cpuPercent": 2.0297762286519525,
+            "mainThreadCpuPercent": 2.0297762286519525,
+            "processTreeCpuPercent": 2.0297762286519525,
+            "contextSwitchesPerSecond": 157.3076577205263,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8443083587791633,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8443083587791633
+          },
+          {
+            "rssBytes": 710123520,
+            "pssBytes": 625436672,
+            "privateBytes": 596447232,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 24.044026014998963,
+            "intervalSeconds": 1.0364070350042311,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 82.01410944653901,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9450706787184258,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9450706787184258
+          }
+        ],
+        "actions": 0,
+        "durationSeconds": 25.000311069001327
+      },
+      "workspaceSwitches": {
+        "summary": {
+          "rssBytes": {
+            "mean": 730170880.0,
+            "min": 709218304,
+            "max": 764694528
+          },
+          "pssBytes": {
+            "mean": 642231125.3333334,
+            "min": 621511680,
+            "max": 672601088
+          },
+          "privateBytes": {
+            "mean": 612843520.0,
+            "min": 591659008,
+            "max": 642748416
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 36191232.0,
+            "min": 1097728,
+            "max": 124669952
+          },
+          "gpuResidentGttBytes": {
+            "mean": 963254613.3333334,
+            "min": 826105856,
+            "max": 1058590720
+          },
+          "activeChildren": {
+            "mean": 4.041666666666667,
+            "min": 4,
+            "max": 5
+          },
+          "threads": {
+            "mean": 62.125,
+            "min": 51,
+            "max": 74
+          },
+          "cpuPercent": {
+            "mean": 15.917207209779372,
+            "min": 0.0,
+            "max": 48.25261435459562
+          },
+          "mainThreadCpuPercent": {
+            "mean": 5.663978881870104,
+            "min": 0.0,
+            "max": 21.110518780135582
+          },
+          "processTreeCpuPercent": {
+            "mean": 18.003755534326768,
+            "min": 0.0,
+            "max": 48.25537037204705
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 2713.0899772498656,
+            "min": 95.41944361264204,
+            "max": 6187.111814484331
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 12.553930974261567,
+            "min": 0.8491614883180517,
+            "max": 32.777607270164694
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 709406720,
+            "pssBytes": 625375232,
+            "privateBytes": 596516864,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 1.0358147360020666,
+            "intervalSeconds": 1.0358147360020666,
+            "cpuPercent": 0.9654236083372393,
+            "mainThreadCpuPercent": 0.9654236083372393,
+            "processTreeCpuPercent": 2.8962708250117175,
+            "contextSwitchesPerSecond": 143.84811764224864,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8837829470676439,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8837829470676439
+          },
+          {
+            "rssBytes": 709218304,
+            "pssBytes": 625186816,
+            "privateBytes": 596328448,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 2.0192359590000706,
+            "intervalSeconds": 0.9834212229980039,
+            "cpuPercent": 1.0168582664419779,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0168582664419779,
+            "contextSwitchesPerSecond": 115.92184237438548,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9624607216778778,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9624607216778778
+          },
+          {
+            "rssBytes": 709218304,
+            "pssBytes": 625186816,
+            "privateBytes": 596328448,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 3.0043601270008367,
+            "intervalSeconds": 0.9851241680007661,
+            "cpuPercent": 1.015100463964277,
+            "mainThreadCpuPercent": 1.015100463964277,
+            "processTreeCpuPercent": 1.015100463964277,
+            "contextSwitchesPerSecond": 95.41944361264204,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.879000970768313,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.879000970768313
+          },
+          {
+            "rssBytes": 709267456,
+            "pssBytes": 625235968,
+            "privateBytes": 596377600,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 4.041810850001639,
+            "intervalSeconds": 1.037450723000802,
+            "cpuPercent": 1.927802406089271,
+            "mainThreadCpuPercent": 0.9639012030446354,
+            "processTreeCpuPercent": 1.927802406089271,
+            "contextSwitchesPerSecond": 136.87397083233824,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8491614883180517,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8491614883180517
+          },
+          {
+            "rssBytes": 709263360,
+            "pssBytes": 625231872,
+            "privateBytes": 596373504,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 5.026181168999756,
+            "intervalSeconds": 0.984370318998117,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 98.5401511280081,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.878953462230158,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.878953462230158
+          },
+          {
+            "rssBytes": 709238784,
+            "pssBytes": 625207296,
+            "privateBytes": 596348928,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 6.007928022001579,
+            "intervalSeconds": 0.9817468530018232,
+            "cpuPercent": 1.0185925189801885,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 2.037185037960377,
+            "contextSwitchesPerSecond": 105.93362197393961,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8738098801915964,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8738098801915964
+          },
+          {
+            "rssBytes": 709296128,
+            "pssBytes": 625264640,
+            "privateBytes": 596406272,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 7.043751657001849,
+            "intervalSeconds": 1.0358236350002699,
+            "cpuPercent": 1.9308306283235939,
+            "mainThreadCpuPercent": 1.9308306283235939,
+            "processTreeCpuPercent": 1.9308306283235939,
+            "contextSwitchesPerSecond": 139.98522055346055,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.8667921542452216,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.8667921542452216
+          },
+          {
+            "rssBytes": 709267456,
+            "pssBytes": 625235968,
+            "privateBytes": 596377600,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 1097728,
+            "gpuResidentGttBytes": 1056419840,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 8.030419474001974,
+            "intervalSeconds": 0.9866678170001251,
+            "cpuPercent": 1.013512331881271,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.013512331881271,
+            "contextSwitchesPerSecond": 138.85118946773414,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 0.9147093727491931,
+              "0000:c4:00.0/745/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.9147093727491931
+          },
+          {
+            "rssBytes": 709279744,
+            "pssBytes": 625183744,
+            "privateBytes": 596353024,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 38780928,
+            "gpuResidentGttBytes": 981053440,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 9.342293106004945,
+            "intervalSeconds": 1.3118736320029711,
+            "cpuPercent": 0.7622685414243735,
+            "mainThreadCpuPercent": 0.7622685414243735,
+            "processTreeCpuPercent": 0.7622685414243735,
+            "contextSwitchesPerSecond": 116.62708683792913,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 1.3624213921207557,
+              "0000:c4:00.0/745/drm-engine-compute": 0.007300855636054363
+            },
+            "gpuBusiestEnginePercent": 1.3624213921207557
+          },
+          {
+            "rssBytes": 714711040,
+            "pssBytes": 630482944,
+            "privateBytes": 601571328,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 120438784,
+            "gpuResidentGttBytes": 924540928,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 10.046877896005753,
+            "intervalSeconds": 0.7045847900008084,
+            "cpuPercent": 19.869858388489963,
+            "mainThreadCpuPercent": 4.257826797533562,
+            "processTreeCpuPercent": 48.25537037204705,
+            "contextSwitchesPerSecond": 2258.067478291966,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 20.549360993136663,
+              "0000:c4:00.0/745/drm-engine-compute": 0.16497205396651643
+            },
+            "gpuBusiestEnginePercent": 20.549360993136663
+          },
+          {
+            "rssBytes": 712155136,
+            "pssBytes": 628542464,
+            "privateBytes": 599633920,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 120373248,
+            "gpuResidentGttBytes": 826105856,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 11.029123120002623,
+            "intervalSeconds": 0.9822452239968698,
+            "cpuPercent": 2.036151412232648,
+            "mainThreadCpuPercent": 1.018075706116324,
+            "processTreeCpuPercent": 4.072302824465296,
+            "contextSwitchesPerSecond": 235.17548811287085,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 1.5373796309798218,
+              "0000:c4:00.0/745/drm-engine-compute": 0.01791680892922935
+            },
+            "gpuBusiestEnginePercent": 1.5373796309798218
+          },
+          {
+            "rssBytes": 715010048,
+            "pssBytes": 630722560,
+            "privateBytes": 601403392,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 124669952,
+            "gpuResidentGttBytes": 911958016,
+            "activeChildren": 4,
+            "threads": 51,
+            "elapsedSeconds": 12.00981161800155,
+            "intervalSeconds": 0.9806884979989263,
+            "cpuPercent": 17.334760257398894,
+            "mainThreadCpuPercent": 10.196917798469936,
+            "processTreeCpuPercent": 17.334760257398894,
+            "contextSwitchesPerSecond": 2096.4862993654187,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 23.707602003531864,
+              "0000:c4:00.0/745/drm-engine-compute": 0.018036308201933623
+            },
+            "gpuBusiestEnginePercent": 23.707602003531864
+          },
+          {
+            "rssBytes": 742408192,
+            "pssBytes": 652571648,
+            "privateBytes": 622485504,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 120479744,
+            "gpuResidentGttBytes": 1058590720,
+            "activeChildren": 5,
+            "threads": 65,
+            "elapsedSeconds": 13.043452222002088,
+            "intervalSeconds": 1.0336406040005386,
+            "cpuPercent": 25.153810617898724,
+            "mainThreadCpuPercent": 16.446722327087627,
+            "processTreeCpuPercent": 35.79580741777896,
+            "contextSwitchesPerSecond": 1912.6570612148378,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 21.238099311343,
+              "0000:c4:00.0/745/drm-engine-compute": 0.02951403019766056
+            },
+            "gpuBusiestEnginePercent": 21.238099311343
+          },
+          {
+            "rssBytes": 754634752,
+            "pssBytes": 662541312,
+            "privateBytes": 632688640,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 51425280,
+            "gpuResidentGttBytes": 909885440,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 14.034406885002682,
+            "intervalSeconds": 0.9909546630005934,
+            "cpuPercent": 40.36511607794518,
+            "mainThreadCpuPercent": 17.155174333126702,
+            "processTreeCpuPercent": 42.383371881842436,
+            "contextSwitchesPerSecond": 4747.946778668302,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 11.500680430213764,
+              "0000:c4:00.0/745/drm-engine-compute": 0.09631631351427714
+            },
+            "gpuBusiestEnginePercent": 11.500680430213764
+          },
+          {
+            "rssBytes": 713605120,
+            "pssBytes": 621511680,
+            "privateBytes": 591659008,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 49324032,
+            "gpuResidentGttBytes": 862740480,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 15.02000407200103,
+            "intervalSeconds": 0.9855971869983478,
+            "cpuPercent": 21.30687899379648,
+            "mainThreadCpuPercent": 5.0730664270944015,
+            "processTreeCpuPercent": 21.30687899379648,
+            "contextSwitchesPerSecond": 6187.111814484331,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 18.71219666948067,
+              "0000:c4:00.0/745/drm-engine-compute": 0.06310793173976892
+            },
+            "gpuBusiestEnginePercent": 18.71219666948067
+          },
+          {
+            "rssBytes": 746520576,
+            "pssBytes": 654427136,
+            "privateBytes": 624574464,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 51417088,
+            "gpuResidentGttBytes": 864837632,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 16.001935169006174,
+            "intervalSeconds": 0.9819310970051447,
+            "cpuPercent": 25.460034900869438,
+            "mainThreadCpuPercent": 6.110408376208666,
+            "processTreeCpuPercent": 27.496837692938996,
+            "contextSwitchesPerSecond": 5105.24619832234,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 20.484959852427007,
+              "0000:c4:00.0/745/drm-engine-compute": 0.014981091896229993
+            },
+            "gpuBusiestEnginePercent": 20.484959852427007
+          },
+          {
+            "rssBytes": 760909824,
+            "pssBytes": 668816384,
+            "privateBytes": 638963712,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 51417088,
+            "gpuResidentGttBytes": 901808128,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 17.034467650002625,
+            "intervalSeconds": 1.0325324809964513,
+            "cpuPercent": 24.212313375239884,
+            "mainThreadCpuPercent": 5.810955210057571,
+            "processTreeCpuPercent": 24.212313375239884,
+            "contextSwitchesPerSecond": 4954.80780910909,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 19.268196464677004,
+              "0000:c4:00.0/745/drm-engine-compute": 0.015690741258197454
+            },
+            "gpuBusiestEnginePercent": 19.268196464677004
+          },
+          {
+            "rssBytes": 759869440,
+            "pssBytes": 667776000,
+            "privateBytes": 637923328,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 51417088,
+            "gpuResidentGttBytes": 858546176,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 18.018122939000023,
+            "intervalSeconds": 0.9836552889973973,
+            "cpuPercent": 24.398791190826913,
+            "mainThreadCpuPercent": 6.099697797706728,
+            "processTreeCpuPercent": 24.398791190826913,
+            "contextSwitchesPerSecond": 5639.170613979871,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 18.810984200430564,
+              "0000:c4:00.0/745/drm-engine-compute": 0.028197682979238668
+            },
+            "gpuBusiestEnginePercent": 18.810984200430564
+          },
+          {
+            "rssBytes": 764694528,
+            "pssBytes": 672601088,
+            "privateBytes": 642748416,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 13725696,
+            "gpuResidentGttBytes": 910909440,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 19.00264154600154,
+            "intervalSeconds": 0.9845186070015188,
+            "cpuPercent": 25.39312088386099,
+            "mainThreadCpuPercent": 7.110073847481078,
+            "processTreeCpuPercent": 25.39312088386099,
+            "contextSwitchesPerSecond": 5434.127869146252,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 18.941690555546028,
+              "0000:c4:00.0/745/drm-engine-compute": 0.10349017202459315
+            },
+            "gpuBusiestEnginePercent": 18.941690555546028
+          },
+          {
+            "rssBytes": 752783360,
+            "pssBytes": 660689920,
+            "privateBytes": 630837248,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 13725696,
+            "gpuResidentGttBytes": 939491328,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 20.0358497720008,
+            "intervalSeconds": 1.0332082259992603,
+            "cpuPercent": 29.035773472463116,
+            "mainThreadCpuPercent": 7.742872925990165,
+            "processTreeCpuPercent": 29.035773472463116,
+            "contextSwitchesPerSecond": 5495.504059221519,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 22.393240798700884,
+              "0000:c4:00.0/745/drm-engine-compute": 0.033142206128762
+            },
+            "gpuBusiestEnginePercent": 22.393240798700884
+          },
+          {
+            "rssBytes": 759209984,
+            "pssBytes": 667313152,
+            "privateBytes": 637460480,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 11628544,
+            "gpuResidentGttBytes": 941588480,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 21.03136930600158,
+            "intervalSeconds": 0.9955195340007776,
+            "cpuPercent": 27.1215170349223,
+            "mainThreadCpuPercent": 9.040505678307433,
+            "processTreeCpuPercent": 29.130518296768393,
+            "contextSwitchesPerSecond": 4869.8190587149375,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 23.388028667232373,
+              "0000:c4:00.0/745/drm-engine-compute": 0.02709771036996942
+            },
+            "gpuBusiestEnginePercent": 23.388028667232373
+          },
+          {
+            "rssBytes": 747266048,
+            "pssBytes": 655369216,
+            "privateBytes": 625516544,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 11628544,
+            "gpuResidentGttBytes": 941588480,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 22.02613405900047,
+            "intervalSeconds": 0.9947647529988899,
+            "cpuPercent": 48.25261435459562,
+            "mainThreadCpuPercent": 21.110518780135582,
+            "processTreeCpuPercent": 48.25261435459562,
+            "contextSwitchesPerSecond": 5832.5347601117455,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 32.777607270164694,
+              "0000:c4:00.0/745/drm-engine-compute": 0.013235792643745485
+            },
+            "gpuBusiestEnginePercent": 32.777607270164694
+          },
+          {
+            "rssBytes": 750518272,
+            "pssBytes": 658621440,
+            "privateBytes": 628768768,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 13725696,
+            "gpuResidentGttBytes": 937394176,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 23.021529306002776,
+            "intervalSeconds": 0.9953952470023069,
+            "cpuPercent": 21.097147151589052,
+            "mainThreadCpuPercent": 7.032382383863019,
+            "processTreeCpuPercent": 21.097147151589052,
+            "contextSwitchesPerSecond": 4273.67923727904,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 20.909139121046824,
+              "0000:c4:00.0/745/drm-engine-compute": 0.028407509564825625
+            },
+            "gpuBusiestEnginePercent": 20.909139121046824
+          },
+          {
+            "rssBytes": 746348544,
+            "pssBytes": 654451712,
+            "privateBytes": 624599040,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 15630336,
+            "gpuResidentGttBytes": 895713280,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 24.006303009002295,
+            "intervalSeconds": 0.9847737029995187,
+            "cpuPercent": 21.324696157133534,
+            "mainThreadCpuPercent": 6.092770330609581,
+            "processTreeCpuPercent": 21.324696157133534,
+            "contextSwitchesPerSecond": 4979.824283551565,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/745/drm-engine-gfx": 18.604085023997595,
+              "0000:c4:00.0/745/drm-engine-compute": 0.02677396839465857
+            },
+            "gpuBusiestEnginePercent": 18.604085023997595
+          }
+        ],
+        "actions": 50,
+        "durationSeconds": 25.000175602006493
+      }
+    },
+    {
+      "name": "2-qml",
+      "mode": "qml",
+      "pid": 365399,
+      "ownershipBefore": {
+        "requested": false,
+        "available": false,
+        "desktopActive": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "qml",
+          "nativeReady": false,
+          "nativeRevision": 0,
+          "fallbackLoaded": true,
+          "fallback": {
+            "loaded": true,
+            "eventSocketConnected": true,
+            "actionSocketConnected": true,
+            "eventsRead": 15,
+            "outputsProcessRunning": false,
+            "windowsTimerRunning": false
+          },
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "1"
+        },
+        "network": {
+          "owner": "qml",
+          "nativeReady": false,
+          "monitorRunning": true,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "qml",
+          "nativeReady": false,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "ownershipAfter": {
+        "requested": false,
+        "available": false,
+        "desktopActive": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "qml",
+          "nativeReady": false,
+          "nativeRevision": 0,
+          "fallbackLoaded": true,
+          "fallback": {
+            "loaded": true,
+            "eventSocketConnected": true,
+            "actionSocketConnected": true,
+            "eventsRead": 141,
+            "outputsProcessRunning": false,
+            "windowsTimerRunning": true
+          },
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "2"
+        },
+        "network": {
+          "owner": "qml",
+          "nativeReady": false,
+          "monitorRunning": true,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "qml",
+          "nativeReady": false,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "niriEventsDuringActivity": 126,
+      "idle": {
+        "summary": {
+          "rssBytes": {
+            "mean": 727402496.0,
+            "min": 721207296,
+            "max": 738934784
+          },
+          "pssBytes": {
+            "mean": 636740053.3333334,
+            "min": 634328064,
+            "max": 640207872
+          },
+          "privateBytes": {
+            "mean": 608025088.0,
+            "min": 605859840,
+            "max": 611278848
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 76451840.0,
+            "min": 76451840,
+            "max": 76451840
+          },
+          "gpuResidentGttBytes": {
+            "mean": 800477184.0,
+            "min": 797855744,
+            "max": 804147200
+          },
+          "activeChildren": {
+            "mean": 4.0,
+            "min": 4,
+            "max": 4
+          },
+          "threads": {
+            "mean": 73.0,
+            "min": 66,
+            "max": 76
+          },
+          "cpuPercent": {
+            "mean": 0.5783936450004293,
+            "min": 0.0,
+            "max": 2.034131578600859
+          },
+          "mainThreadCpuPercent": {
+            "mean": 0.24849186101761678,
+            "min": 0.0,
+            "max": 1.0209361268446253
+          },
+          "processTreeCpuPercent": {
+            "mean": 0.9055150154976389,
+            "min": 0.0,
+            "max": 2.904105059855231
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 77.90539640761564,
+            "min": 0.0,
+            "max": 234.3116105916746
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 0.15249544185554018,
+            "min": 0.0,
+            "max": 0.5540042510537988
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 738226176,
+            "pssBytes": 639500288,
+            "privateBytes": 610570240,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 76,
+            "elapsedSeconds": 1.0320237730047666,
+            "intervalSeconds": 1.0320237730047666,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.9689699270090181,
+            "processTreeCpuPercent": 1.9379398540180361,
+            "contextSwitchesPerSecond": 26.162188029243485,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 738222080,
+            "pssBytes": 639495168,
+            "privateBytes": 610566144,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 2.01146553199942,
+            "intervalSeconds": 0.9794417589946534,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 29.60870284902597,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 738934784,
+            "pssBytes": 640207872,
+            "privateBytes": 611278848,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 3.039566673003719,
+            "intervalSeconds": 1.0281011410042993,
+            "cpuPercent": 1.9453338978364547,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.9453338978364547,
+            "contextSwitchesPerSecond": 213.98672876201002,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.499462435668917,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.499462435668917
+          },
+          {
+            "rssBytes": 738467840,
+            "pssBytes": 639740928,
+            "privateBytes": 610811904,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 4.018420970998704,
+            "intervalSeconds": 0.9788542979949852,
+            "cpuPercent": 1.021602502076487,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.021602502076487,
+            "contextSwitchesPerSecond": 18.388845037376765,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 738439168,
+            "pssBytes": 639712256,
+            "privateBytes": 610783232,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 5.046846182005538,
+            "intervalSeconds": 1.0284252110068337,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 3.8894417962429944,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 729686016,
+            "pssBytes": 639681536,
+            "privateBytes": 610832384,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 6.026339388001361,
+            "intervalSeconds": 0.9794932059958228,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 1.0209361268446253,
+            "processTreeCpuPercent": 1.0209361268446253,
+            "contextSwitchesPerSecond": 167.43352480251855,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.5540042510537988,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.5540042510537988
+          },
+          {
+            "rssBytes": 727486464,
+            "pssBytes": 637481984,
+            "privateBytes": 608632832,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 7.0056680730049266,
+            "intervalSeconds": 0.9793286850035656,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 5.105538188112805,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 726392832,
+            "pssBytes": 636388352,
+            "privateBytes": 607539200,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 8.035830699001963,
+            "intervalSeconds": 1.0301626259970362,
+            "cpuPercent": 0.9707205200073692,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.9707205200073692,
+            "contextSwitchesPerSecond": 7.7657641600589535,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 726466560,
+            "pssBytes": 636462080,
+            "privateBytes": 607612928,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 9.014326435004477,
+            "intervalSeconds": 0.9784957360025146,
+            "cpuPercent": 1.0219768602010852,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0219768602010852,
+            "contextSwitchesPerSecond": 204.39537204021707,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.429678213742282,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.429678213742282
+          },
+          {
+            "rssBytes": 726401024,
+            "pssBytes": 636396544,
+            "privateBytes": 607547392,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 10.043894277005165,
+            "intervalSeconds": 1.029567842000688,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 11.65537569304926,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 726372352,
+            "pssBytes": 636367872,
+            "privateBytes": 607518720,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 11.025285891002568,
+            "intervalSeconds": 0.9813916139974026,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0189612237736594,
+            "contextSwitchesPerSecond": 15.284418356604888,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 726446080,
+            "pssBytes": 636441600,
+            "privateBytes": 607592448,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 12.006884709000587,
+            "intervalSeconds": 0.9815988179980195,
+            "cpuPercent": 1.0187461330072807,
+            "mainThreadCpuPercent": 1.0187461330072807,
+            "processTreeCpuPercent": 1.0187461330072807,
+            "contextSwitchesPerSecond": 234.3116105916746,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.5093718440082808,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.5093718440082808
+          },
+          {
+            "rssBytes": 726355968,
+            "pssBytes": 636351488,
+            "privateBytes": 607502336,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 13.03726492900023,
+            "intervalSeconds": 1.0303802199996426,
+            "cpuPercent": 0.9705155248422246,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.9705155248422246,
+            "contextSwitchesPerSecond": 20.38082602168672,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 726343680,
+            "pssBytes": 636339200,
+            "privateBytes": 607490048,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 797855744,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 14.020739450999827,
+            "intervalSeconds": 0.9834745219995966,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 32.53770106310199,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 726810624,
+            "pssBytes": 636806144,
+            "privateBytes": 607956992,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 75,
+            "elapsedSeconds": 15.003960016001656,
+            "intervalSeconds": 0.9832205650018295,
+            "cpuPercent": 2.034131578600859,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 2.034131578600859,
+            "contextSwitchesPerSecond": 196.29369733498288,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.46288820250535867,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.46288820250535867
+          },
+          {
+            "rssBytes": 723644416,
+            "pssBytes": 636688384,
+            "privateBytes": 608268288,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 16.036980495002354,
+            "intervalSeconds": 1.0330204790006974,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 2.904105059855231,
+            "contextSwitchesPerSecond": 24.200875498793593,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 722518016,
+            "pssBytes": 635561984,
+            "privateBytes": 607141888,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 17.019711763001396,
+            "intervalSeconds": 0.9827312679990428,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 1.0175721812903322,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 11.193293994193654,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 721825792,
+            "pssBytes": 634869760,
+            "privateBytes": 606449664,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 18.04874622100033,
+            "intervalSeconds": 1.0290344579989323,
+            "cpuPercent": 1.9435695126178905,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.9435695126178905,
+            "contextSwitchesPerSecond": 204.07479882487848,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.39213429333035865,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.39213429333035865
+          },
+          {
+            "rssBytes": 721743872,
+            "pssBytes": 634787840,
+            "privateBytes": 606367744,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 19.03105477400095,
+            "intervalSeconds": 0.982308553000621,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 5.0900503560990975,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 721571840,
+            "pssBytes": 634692608,
+            "privateBytes": 606224384,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 66,
+            "elapsedSeconds": 20.01362739700562,
+            "intervalSeconds": 0.9825726230046712,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 0.0,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 721563648,
+            "pssBytes": 634684416,
+            "privateBytes": 606216192,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 66,
+            "elapsedSeconds": 21.045650423999177,
+            "intervalSeconds": 1.0320230269935564,
+            "cpuPercent": 0.9689706274414782,
+            "mainThreadCpuPercent": 0.9689706274414782,
+            "processTreeCpuPercent": 1.9379412548829564,
+            "contextSwitchesPerSecond": 206.39074364503486,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.42210172506424104,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.42210172506424104
+          },
+          {
+            "rssBytes": 721219584,
+            "pssBytes": 634340352,
+            "privateBytes": 605872128,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 66,
+            "elapsedSeconds": 22.028672981003183,
+            "intervalSeconds": 0.9830225570040056,
+            "cpuPercent": 1.0172706545491053,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0172706545491053,
+            "contextSwitchesPerSecond": 17.29360112733479,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 721207296,
+            "pssBytes": 634328064,
+            "privateBytes": 605859840,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 66,
+            "elapsedSeconds": 23.010713083000155,
+            "intervalSeconds": 0.9820401019969722,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 24.438920519840437,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 721313792,
+            "pssBytes": 634434560,
+            "privateBytes": 605966336,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76451840,
+            "gpuResidentGttBytes": 804147200,
+            "activeChildren": 4,
+            "threads": 66,
+            "elapsedSeconds": 24.043120700000145,
+            "intervalSeconds": 1.0324076169999898,
+            "cpuPercent": 0.9686096688300682,
+            "mainThreadCpuPercent": 0.9686096688300682,
+            "processTreeCpuPercent": 0.9686096688300682,
+            "contextSwitchesPerSecond": 189.84749509069337,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 0.3902496391597273,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.3902496391597273
+          }
+        ],
+        "actions": 0,
+        "durationSeconds": 25.000213362000068
+      },
+      "workspaceSwitches": {
+        "summary": {
+          "rssBytes": {
+            "mean": 733370368.0,
+            "min": 726151168,
+            "max": 745750528
+          },
+          "pssBytes": {
+            "mean": 646629376.0,
+            "min": 639641600,
+            "max": 658778112
+          },
+          "privateBytes": {
+            "mean": 618272768.0,
+            "min": 611356672,
+            "max": 630349824
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 76021418.66666667,
+            "min": 72273920,
+            "max": 80470016
+          },
+          "gpuResidentGttBytes": {
+            "mean": 839806976.0,
+            "min": 803631104,
+            "max": 857894912
+          },
+          "activeChildren": {
+            "mean": 4.0,
+            "min": 4,
+            "max": 4
+          },
+          "threads": {
+            "mean": 74.0,
+            "min": 74,
+            "max": 74
+          },
+          "cpuPercent": {
+            "mean": 20.837051878336478,
+            "min": 18.176582536635706,
+            "max": 24.117361393484508
+          },
+          "mainThreadCpuPercent": {
+            "mean": 6.077999339484417,
+            "min": 4.055443714876741,
+            "max": 8.682250101654422
+          },
+          "processTreeCpuPercent": {
+            "mean": 21.242967308745637,
+            "min": 18.176582536635706,
+            "max": 26.04675030496327
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 4890.490684057485,
+            "min": 4493.655127112716,
+            "max": 5316.025661177331
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 19.5431416262789,
+            "min": 16.76975075212942,
+            "max": 26.657506361641886
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 737193984,
+            "pssBytes": 650684416,
+            "privateBytes": 622399488,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78364672,
+            "gpuResidentGttBytes": 849506304,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 1.035205552005209,
+            "intervalSeconds": 1.035205552005209,
+            "cpuPercent": 18.353842831693388,
+            "mainThreadCpuPercent": 4.829958639919312,
+            "processTreeCpuPercent": 19.319834559677247,
+            "contextSwitchesPerSecond": 4800.978888079796,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 21.585778937058443,
+              "0000:c4:00.0/757/drm-engine-compute": 0.04827649919689431
+            },
+            "gpuBusiestEnginePercent": 21.585778937058443
+          },
+          {
+            "rssBytes": 734650368,
+            "pssBytes": 648140800,
+            "privateBytes": 619855872,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78368768,
+            "gpuResidentGttBytes": 841117696,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 2.0254907150010695,
+            "intervalSeconds": 0.9902851629958604,
+            "cpuPercent": 18.176582536635706,
+            "mainThreadCpuPercent": 5.049050704621029,
+            "processTreeCpuPercent": 18.176582536635706,
+            "contextSwitchesPerSecond": 4493.655127112716,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 21.671297321143154,
+              "0000:c4:00.0/757/drm-engine-compute": 0.02330146998284014
+            },
+            "gpuBusiestEnginePercent": 21.671297321143154
+          },
+          {
+            "rssBytes": 726151168,
+            "pssBytes": 639641600,
+            "privateBytes": 611356672,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 72278016,
+            "gpuResidentGttBytes": 805531648,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 3.0253240390011342,
+            "intervalSeconds": 0.9998333240000647,
+            "cpuPercent": 23.003834187065475,
+            "mainThreadCpuPercent": 6.001000222712732,
+            "processTreeCpuPercent": 23.003834187065475,
+            "contextSwitchesPerSecond": 5014.835852780273,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 18.01278239851789,
+              "0000:c4:00.0/757/drm-engine-compute": 0.028822604036348492
+            },
+            "gpuBusiestEnginePercent": 18.01278239851789
+          },
+          {
+            "rssBytes": 737624064,
+            "pssBytes": 651114496,
+            "privateBytes": 622829568,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 74375168,
+            "gpuResidentGttBytes": 805531648,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 4.020095637002669,
+            "intervalSeconds": 0.9947715980015346,
+            "cpuPercent": 22.115629400957285,
+            "mainThreadCpuPercent": 6.031535291170169,
+            "processTreeCpuPercent": 22.115629400957285,
+            "contextSwitchesPerSecond": 4684.492409475498,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 16.960317658741573,
+              "0000:c4:00.0/757/drm-engine-compute": 0.05586779931358099
+            },
+            "gpuBusiestEnginePercent": 16.960317658741573
+          },
+          {
+            "rssBytes": 731557888,
+            "pssBytes": 645048320,
+            "privateBytes": 616763392,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 74371072,
+            "gpuResidentGttBytes": 847212544,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 5.006270894002228,
+            "intervalSeconds": 0.9861752569995588,
+            "cpuPercent": 22.30840800745201,
+            "mainThreadCpuPercent": 6.084111274759638,
+            "processTreeCpuPercent": 22.30840800745201,
+            "contextSwitchesPerSecond": 4819.630148155427,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 19.460203917901165,
+              "0000:c4:00.0/757/drm-engine-compute": 0.052631618600854045
+            },
+            "gpuBusiestEnginePercent": 19.460203917901165
+          },
+          {
+            "rssBytes": 740872192,
+            "pssBytes": 654362624,
+            "privateBytes": 626077696,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 74371072,
+            "gpuResidentGttBytes": 845115392,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 6.0427422750071855,
+            "intervalSeconds": 1.036471381004958,
+            "cpuPercent": 19.29623949732996,
+            "mainThreadCpuPercent": 6.7536838240654875,
+            "processTreeCpuPercent": 21.225863447062956,
+            "contextSwitchesPerSecond": 5003.514901657659,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 19.215259161993913,
+              "0000:c4:00.0/757/drm-engine-compute": 0.04131228395180858
+            },
+            "gpuBusiestEnginePercent": 19.215259161993913
+          },
+          {
+            "rssBytes": 733216768,
+            "pssBytes": 646707200,
+            "privateBytes": 618422272,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 74371072,
+            "gpuResidentGttBytes": 839020544,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 7.029033704005997,
+            "intervalSeconds": 0.9862914289988112,
+            "cpuPercent": 22.30578037399382,
+            "mainThreadCpuPercent": 6.0833946474528595,
+            "processTreeCpuPercent": 22.30578037399382,
+            "contextSwitchesPerSecond": 4938.702554623813,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 19.62802041142277,
+              "0000:c4:00.0/757/drm-engine-compute": 0.04567108531575234
+            },
+            "gpuBusiestEnginePercent": 19.62802041142277
+          },
+          {
+            "rssBytes": 734998528,
+            "pssBytes": 648488960,
+            "privateBytes": 620204032,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 74371072,
+            "gpuResidentGttBytes": 845115392,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 8.017302287000348,
+            "intervalSeconds": 0.9882685829943512,
+            "cpuPercent": 21.24928421418819,
+            "mainThreadCpuPercent": 7.083094738062731,
+            "processTreeCpuPercent": 21.24928421418819,
+            "contextSwitchesPerSecond": 4920.727101599866,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 18.92077813841309,
+              "0000:c4:00.0/757/drm-engine-compute": 0.04576033355525427
+            },
+            "gpuBusiestEnginePercent": 18.92077813841309
+          },
+          {
+            "rssBytes": 737767424,
+            "pssBytes": 651257856,
+            "privateBytes": 622972928,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 72273920,
+            "gpuResidentGttBytes": 847212544,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 9.002738614006375,
+            "intervalSeconds": 0.9854363270060276,
+            "cpuPercent": 21.310357071778164,
+            "mainThreadCpuPercent": 5.0738945408995635,
+            "processTreeCpuPercent": 21.310357071778164,
+            "contextSwitchesPerSecond": 5104.33790814496,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 20.37489521114152,
+              "0000:c4:00.0/757/drm-engine-compute": 0.03207097113622714
+            },
+            "gpuBusiestEnginePercent": 20.37489521114152
+          },
+          {
+            "rssBytes": 739524608,
+            "pssBytes": 653015040,
+            "privateBytes": 624730112,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 72273920,
+            "gpuResidentGttBytes": 847212544,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 10.002457345006405,
+            "intervalSeconds": 0.99971873100003,
+            "cpuPercent": 22.006189658958526,
+            "mainThreadCpuPercent": 7.0019694369413505,
+            "processTreeCpuPercent": 22.006189658958526,
+            "contextSwitchesPerSecond": 5037.4168692052335,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 17.63113409145424,
+              "0000:c4:00.0/757/drm-engine-compute": 0.031565978531214546
+            },
+            "gpuBusiestEnginePercent": 17.63113409145424
+          },
+          {
+            "rssBytes": 729194496,
+            "pssBytes": 642684928,
+            "privateBytes": 614400000,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 76271616,
+            "gpuResidentGttBytes": 845312000,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 11.039054989007127,
+            "intervalSeconds": 1.0365976440007216,
+            "cpuPercent": 24.117361393484508,
+            "mainThreadCpuPercent": 8.682250101654422,
+            "processTreeCpuPercent": 26.04675030496327,
+            "contextSwitchesPerSecond": 5037.634447871043,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 18.79747673822268,
+              "0000:c4:00.0/757/drm-engine-compute": 0.05390162742831885
+            },
+            "gpuBusiestEnginePercent": 18.79747673822268
+          },
+          {
+            "rssBytes": 726437888,
+            "pssBytes": 639928320,
+            "privateBytes": 611643392,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78368768,
+            "gpuResidentGttBytes": 843214848,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 12.03485486300633,
+            "intervalSeconds": 0.9957998739992036,
+            "cpuPercent": 19.080138987861726,
+            "mainThreadCpuPercent": 5.021089207332034,
+            "processTreeCpuPercent": 19.080138987861726,
+            "contextSwitchesPerSecond": 5037.156692795496,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 17.87252455508368,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0392860061760073
+            },
+            "gpuBusiestEnginePercent": 17.87252455508368
+          },
+          {
+            "rssBytes": 735498240,
+            "pssBytes": 648525824,
+            "privateBytes": 620097536,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78364672,
+            "gpuResidentGttBytes": 857894912,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 13.022058525006287,
+            "intervalSeconds": 0.9872036619999562,
+            "cpuPercent": 22.285168549142774,
+            "mainThreadCpuPercent": 6.0777732406753024,
+            "processTreeCpuPercent": 24.31109296270121,
+            "contextSwitchesPerSecond": 5316.025661177331,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 26.657506361641886,
+              "0000:c4:00.0/757/drm-engine-compute": 0.0326723869061189
+            },
+            "gpuBusiestEnginePercent": 26.657506361641886
+          },
+          {
+            "rssBytes": 727166976,
+            "pssBytes": 640194560,
+            "privateBytes": 611766272,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78364672,
+            "gpuResidentGttBytes": 803631104,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 14.01997069400386,
+            "intervalSeconds": 0.9979121689975727,
+            "cpuPercent": 21.04393618237466,
+            "mainThreadCpuPercent": 6.012553194964189,
+            "processTreeCpuPercent": 21.04393618237466,
+            "contextSwitchesPerSecond": 4724.864719042692,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 18.31303572373257,
+              "0000:c4:00.0/757/drm-engine-compute": 0.03672517596094085
+            },
+            "gpuBusiestEnginePercent": 18.31303572373257
+          },
+          {
+            "rssBytes": 727146496,
+            "pssBytes": 640174080,
+            "privateBytes": 611745792,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 80461824,
+            "gpuResidentGttBytes": 843214848,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 15.007994982006494,
+            "intervalSeconds": 0.9880242880026344,
+            "cpuPercent": 19.230296492417136,
+            "mainThreadCpuPercent": 6.072725208131727,
+            "processTreeCpuPercent": 19.230296492417136,
+            "contextSwitchesPerSecond": 4886.519550809997,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 18.133064255149396,
+              "0000:c4:00.0/757/drm-engine-compute": 0.024764269762500776
+            },
+            "gpuBusiestEnginePercent": 18.133064255149396
+          },
+          {
+            "rssBytes": 727224320,
+            "pssBytes": 640251904,
+            "privateBytes": 611823616,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 74366976,
+            "gpuResidentGttBytes": 843214848,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 16.050547925005958,
+            "intervalSeconds": 1.042552942999464,
+            "cpuPercent": 19.183678041768555,
+            "mainThreadCpuPercent": 5.755103412530565,
+            "processTreeCpuPercent": 20.14286194385698,
+            "contextSwitchesPerSecond": 4796.8786943442265,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 16.76975075212942,
+              "0000:c4:00.0/757/drm-engine-compute": 0.017212842878147463
+            },
+            "gpuBusiestEnginePercent": 16.76975075212942
+          },
+          {
+            "rssBytes": 727945216,
+            "pssBytes": 640972800,
+            "privateBytes": 612544512,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78372864,
+            "gpuResidentGttBytes": 845312000,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 17.039798915000574,
+            "intervalSeconds": 0.9892509899946162,
+            "cpuPercent": 22.239047746739914,
+            "mainThreadCpuPercent": 6.065194840019976,
+            "processTreeCpuPercent": 22.239047746739914,
+            "contextSwitchesPerSecond": 5211.01323338383,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 19.658748180889702,
+              "0000:c4:00.0/757/drm-engine-compute": 0.03443787304189143
+            },
+            "gpuBusiestEnginePercent": 19.658748180889702
+          },
+          {
+            "rssBytes": 728453120,
+            "pssBytes": 641480704,
+            "privateBytes": 613052416,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 74379264,
+            "gpuResidentGttBytes": 843214848,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 18.02455549700244,
+            "intervalSeconds": 0.9847565820018644,
+            "cpuPercent": 20.309587532121856,
+            "mainThreadCpuPercent": 5.077396883030464,
+            "processTreeCpuPercent": 20.309587532121856,
+            "contextSwitchesPerSecond": 4837.743750151426,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 18.383994715930445,
+              "0000:c4:00.0/757/drm-engine-compute": 0.026313406250430056
+            },
+            "gpuBusiestEnginePercent": 18.383994715930445
+          },
+          {
+            "rssBytes": 732954624,
+            "pssBytes": 645982208,
+            "privateBytes": 617553920,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 72278016,
+            "gpuResidentGttBytes": 845312000,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 19.010731815003965,
+            "intervalSeconds": 0.9861763180015259,
+            "cpuPercent": 20.280349096731253,
+            "mainThreadCpuPercent": 6.084104729019376,
+            "processTreeCpuPercent": 20.280349096731253,
+            "contextSwitchesPerSecond": 4756.755880638316,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 19.51996691525725,
+              "0000:c4:00.0/757/drm-engine-compute": 0.026503171413572273
+            },
+            "gpuBusiestEnginePercent": 19.51996691525725
+          },
+          {
+            "rssBytes": 734760960,
+            "pssBytes": 647788544,
+            "privateBytes": 619360256,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 72278016,
+            "gpuResidentGttBytes": 847409152,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 20.00613048600644,
+            "intervalSeconds": 0.9953986710024765,
+            "cpuPercent": 21.097074581032622,
+            "mainThreadCpuPercent": 6.027735594580749,
+            "processTreeCpuPercent": 21.097074581032622,
+            "contextSwitchesPerSecond": 4594.139145669627,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 20.307582267155457,
+              "0000:c4:00.0/757/drm-engine-compute": 0.02929218297090479
+            },
+            "gpuBusiestEnginePercent": 20.307582267155457
+          },
+          {
+            "rssBytes": 736440320,
+            "pssBytes": 649467904,
+            "privateBytes": 621039616,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78372864,
+            "gpuResidentGttBytes": 845312000,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 21.04140357300639,
+            "intervalSeconds": 1.0352730869999505,
+            "cpuPercent": 20.2845029622614,
+            "mainThreadCpuPercent": 6.761500987420467,
+            "processTreeCpuPercent": 22.21636038723868,
+            "contextSwitchesPerSecond": 4564.979095221303,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 19.862305664284097,
+              "0000:c4:00.0/757/drm-engine-compute": 0.03581692643769245
+            },
+            "gpuBusiestEnginePercent": 19.862305664284097
+          },
+          {
+            "rssBytes": 745750528,
+            "pssBytes": 658778112,
+            "privateBytes": 630349824,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 80470016,
+            "gpuResidentGttBytes": 839217152,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 22.02813769200293,
+            "intervalSeconds": 0.9867341189965373,
+            "cpuPercent": 20.26888461132678,
+            "mainThreadCpuPercent": 6.080665383398033,
+            "processTreeCpuPercent": 20.26888461132678,
+            "contextSwitchesPerSecond": 5024.656495147909,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 19.156274660110675,
+              "0000:c4:00.0/757/drm-engine-compute": 0.03289406880245306
+            },
+            "gpuBusiestEnginePercent": 19.156274660110675
+          },
+          {
+            "rssBytes": 739110912,
+            "pssBytes": 652138496,
+            "privateBytes": 623710208,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78372864,
+            "gpuResidentGttBytes": 839217152,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 23.014466262000496,
+            "intervalSeconds": 0.9863285699975677,
+            "cpuPercent": 18.249496716945334,
+            "mainThreadCpuPercent": 4.055443714876741,
+            "processTreeCpuPercent": 18.249496716945334,
+            "contextSwitchesPerSecond": 5020.639319017406,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 20.619996539337958,
+              "0000:c4:00.0/757/drm-engine-compute": 0.05127530676732269
+            },
+            "gpuBusiestEnginePercent": 20.619996539337958
+          },
+          {
+            "rssBytes": 729247744,
+            "pssBytes": 642275328,
+            "privateBytes": 613847040,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 78372864,
+            "gpuResidentGttBytes": 841314304,
+            "activeChildren": 4,
+            "threads": 74,
+            "elapsedSeconds": 24.001297696006077,
+            "intervalSeconds": 0.9868314340055804,
+            "cpuPercent": 22.29357440581447,
+            "mainThreadCpuPercent": 8.106754329387082,
+            "processTreeCpuPercent": 22.29357440581447,
+            "contextSwitchesPerSecond": 4744.477971273789,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/757/drm-engine-gfx": 21.522704453980634,
+              "0000:c4:00.0/757/drm-engine-compute": 0.029580938541358757
+            },
+            "gpuBusiestEnginePercent": 21.522704453980634
+          }
+        ],
+        "actions": 50,
+        "durationSeconds": 25.000248831005592
+      }
+    },
+    {
+      "name": "2-rust",
+      "mode": "rust",
+      "pid": 366459,
+      "ownershipBefore": {
+        "requested": true,
+        "available": true,
+        "desktopActive": true,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "rust",
+          "nativeReady": true,
+          "nativeRevision": 2,
+          "fallbackLoaded": false,
+          "fallback": null,
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "1"
+        },
+        "network": {
+          "owner": "rust",
+          "nativeReady": true,
+          "monitorRunning": false,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "rust",
+          "nativeReady": true,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "ownershipAfter": {
+        "requested": true,
+        "available": true,
+        "desktopActive": true,
+        "selectedNativeDomains": "network,brightness,niri",
+        "niri": {
+          "owner": "rust",
+          "nativeReady": true,
+          "nativeRevision": 77,
+          "fallbackLoaded": false,
+          "fallback": null,
+          "windows": 2,
+          "workspaces": 2,
+          "focusedWorkspaceId": "2"
+        },
+        "network": {
+          "owner": "rust",
+          "nativeReady": true,
+          "monitorRunning": false,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "rust",
+          "nativeReady": true,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "nativePowerReady": false
+      },
+      "niriEventsDuringActivity": 75,
+      "idle": {
+        "summary": {
+          "rssBytes": {
+            "mean": 745344341.3333334,
+            "min": 740999168,
+            "max": 750829568
+          },
+          "pssBytes": {
+            "mean": 650207061.3333334,
+            "min": 648700928,
+            "max": 651418624
+          },
+          "privateBytes": {
+            "mean": 621205845.3333334,
+            "min": 619667456,
+            "max": 622428160
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 10162176.0,
+            "min": 10162176,
+            "max": 10162176
+          },
+          "gpuResidentGttBytes": {
+            "mean": 844398592.0,
+            "min": 844398592,
+            "max": 844398592
+          },
+          "activeChildren": {
+            "mean": 3.0,
+            "min": 3,
+            "max": 3
+          },
+          "threads": {
+            "mean": 76.625,
+            "min": 70,
+            "max": 80
+          },
+          "cpuPercent": {
+            "mean": 0.6662913920919407,
+            "min": 0.0,
+            "max": 1.9424229325268079
+          },
+          "mainThreadCpuPercent": {
+            "mean": 0.24799973936999867,
+            "min": 0.0,
+            "max": 1.0180175588681728
+          },
+          "processTreeCpuPercent": {
+            "mean": 0.9972109844557272,
+            "min": 0.0,
+            "max": 3.8848458650536157
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 115.25528444008133,
+            "min": 0.0,
+            "max": 219.4970846216841
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 0.15393165045053156,
+            "min": 0.0,
+            "max": 0.48190347502230585
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 750534656,
+            "pssBytes": 651086848,
+            "privateBytes": 622096384,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 80,
+            "elapsedSeconds": 1.0394244279959821,
+            "intervalSeconds": 1.0394244279959821,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.9620709048833952,
+            "processTreeCpuPercent": 0.9620709048833952,
+            "contextSwitchesPerSecond": 25.013843526968277,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 750702592,
+            "pssBytes": 651254784,
+            "privateBytes": 622264320,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 2.023032830999,
+            "intervalSeconds": 0.9836084030030179,
+            "cpuPercent": 1.016664759010738,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.016664759010738,
+            "contextSwitchesPerSecond": 206.38294607917982,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 750694400,
+            "pssBytes": 651246592,
+            "privateBytes": 622256128,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 3.0058479809958953,
+            "intervalSeconds": 0.9828151499968953,
+            "cpuPercent": 1.0174853328249558,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0174853328249558,
+            "contextSwitchesPerSecond": 187.21730123979188,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.4724106053935642,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4724106053935642
+          },
+          {
+            "rssBytes": 750829568,
+            "pssBytes": 651381760,
+            "privateBytes": 622391296,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 4.039056462002918,
+            "intervalSeconds": 1.0332084810070228,
+            "cpuPercent": 0.9678588768699847,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.9678588768699847,
+            "contextSwitchesPerSecond": 207.12179965017674,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 750809088,
+            "pssBytes": 651361280,
+            "privateBytes": 622370816,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 5.023276134998014,
+            "intervalSeconds": 0.9842196729950956,
+            "cpuPercent": 1.0160333383266797,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0160333383266797,
+            "contextSwitchesPerSecond": 17.272566751553555,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 746934272,
+            "pssBytes": 651418624,
+            "privateBytes": 622428160,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 6.006281640002271,
+            "intervalSeconds": 0.9830055050042574,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 1.0172883009395446,
+            "processTreeCpuPercent": 2.034576601879089,
+            "contextSwitchesPerSecond": 212.61325489636482,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.4745389498077935,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4745389498077935
+          },
+          {
+            "rssBytes": 745627648,
+            "pssBytes": 650112000,
+            "privateBytes": 621121536,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 7.0392430200008675,
+            "intervalSeconds": 1.0329613799985964,
+            "cpuPercent": 0.968090404310526,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.968090404310526,
+            "contextSwitchesPerSecond": 30.97889293793683,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 745766912,
+            "pssBytes": 650251264,
+            "privateBytes": 621260800,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 8.023310759999731,
+            "intervalSeconds": 0.9840677399988635,
+            "cpuPercent": 1.016190206581871,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.016190206581871,
+            "contextSwitchesPerSecond": 219.4970846216841,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 745820160,
+            "pssBytes": 650304512,
+            "privateBytes": 621314048,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 9.006706583000778,
+            "intervalSeconds": 0.9833958230010467,
+            "cpuPercent": 1.0168845307358354,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0168845307358354,
+            "contextSwitchesPerSecond": 176.93790834803536,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.4446826900947032,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4446826900947032
+          },
+          {
+            "rssBytes": 745787392,
+            "pssBytes": 650271744,
+            "privateBytes": 621281280,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 10.039935301996593,
+            "intervalSeconds": 1.0332287189958151,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.967839919289013,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 27.099517740092363,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 745738240,
+            "pssBytes": 650222592,
+            "privateBytes": 621232128,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 11.022274825998466,
+            "intervalSeconds": 0.9823395240018726,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 1.0179779756047906,
+            "processTreeCpuPercent": 2.0359559512095813,
+            "contextSwitchesPerSecond": 52.934854731449114,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 745861120,
+            "pssBytes": 650345472,
+            "privateBytes": 621355008,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 12.005299104996084,
+            "intervalSeconds": 0.9830242789976182,
+            "cpuPercent": 1.017268872565072,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.017268872565072,
+            "contextSwitchesPerSecond": 210.57465662096993,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.46754348780546606,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.46754348780546606
+          },
+          {
+            "rssBytes": 745816064,
+            "pssBytes": 650300416,
+            "privateBytes": 621309952,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 13.038333161995979,
+            "intervalSeconds": 1.0330340569998953,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 16.456379036883703,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 745844736,
+            "pssBytes": 650329088,
+            "privateBytes": 621338624,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 14.02181584900245,
+            "intervalSeconds": 0.9834826870064717,
+            "cpuPercent": 1.0167947165839837,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0167947165839837,
+            "contextSwitchesPerSecond": 203.3589433167967,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 745873408,
+            "pssBytes": 650357760,
+            "privateBytes": 621367296,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 79,
+            "elapsedSeconds": 15.005398528999649,
+            "intervalSeconds": 0.9835826799971983,
+            "cpuPercent": 1.0166913471909127,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0166913471909127,
+            "contextSwitchesPerSecond": 188.08789923031887,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.4725992125047628,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.4725992125047628
+          },
+          {
+            "rssBytes": 742510592,
+            "pssBytes": 650140672,
+            "privateBytes": 621150208,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 16.03947782600153,
+            "intervalSeconds": 1.034079297001881,
+            "cpuPercent": 0.967043826232004,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.934087652464008,
+            "contextSwitchesPerSecond": 47.3851474853682,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 741453824,
+            "pssBytes": 649083904,
+            "privateBytes": 620093440,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 17.021983288999763,
+            "intervalSeconds": 0.9825054629982333,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 18.32050881943276,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 741535744,
+            "pssBytes": 649165824,
+            "privateBytes": 620175360,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 77,
+            "elapsedSeconds": 18.0042846169963,
+            "intervalSeconds": 0.982301327996538,
+            "cpuPercent": 1.0180175588681728,
+            "mainThreadCpuPercent": 1.0180175588681728,
+            "processTreeCpuPercent": 1.0180175588681728,
+            "contextSwitchesPerSecond": 120.1260719464444,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.42200859164618876,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.42200859164618876
+          },
+          {
+            "rssBytes": 741253120,
+            "pssBytes": 648954880,
+            "privateBytes": 619921408,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 70,
+            "elapsedSeconds": 19.03774339699885,
+            "intervalSeconds": 1.0334587800025474,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 0.0,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 740999168,
+            "pssBytes": 648700928,
+            "privateBytes": 619667456,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 70,
+            "elapsedSeconds": 20.013593429001048,
+            "intervalSeconds": 0.9758500320021994,
+            "cpuPercent": 1.0247476222839804,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 1.0247476222839804,
+            "contextSwitchesPerSecond": 37.91566202450727,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 742596608,
+            "pssBytes": 650298368,
+            "privateBytes": 621264896,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 70,
+            "elapsedSeconds": 21.04323530900001,
+            "intervalSeconds": 1.0296418799989624,
+            "cpuPercent": 1.9424229325268079,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 3.8848458650536157,
+            "contextSwitchesPerSecond": 176.7604868599395,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.48190347502230585,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.48190347502230585
+          },
+          {
+            "rssBytes": 741957632,
+            "pssBytes": 649659392,
+            "privateBytes": 620625920,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 70,
+            "elapsedSeconds": 22.024766324997472,
+            "intervalSeconds": 0.9815310159974615,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 19.357513609176806,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 741261312,
+            "pssBytes": 648963072,
+            "privateBytes": 619929600,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 70,
+            "elapsedSeconds": 23.006500967996544,
+            "intervalSeconds": 0.9817346429990721,
+            "cpuPercent": 0.0,
+            "mainThreadCpuPercent": 0.0,
+            "processTreeCpuPercent": 0.0,
+            "contextSwitchesPerSecond": 187.4233544798866,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.0,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.0
+          },
+          {
+            "rssBytes": 742055936,
+            "pssBytes": 649757696,
+            "privateBytes": 620724224,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10162176,
+            "gpuResidentGttBytes": 844398592,
+            "activeChildren": 3,
+            "threads": 70,
+            "elapsedSeconds": 24.03870673199708,
+            "intervalSeconds": 1.0322057640005369,
+            "cpuPercent": 0.9687990852950517,
+            "mainThreadCpuPercent": 0.9687990852950517,
+            "processTreeCpuPercent": 0.9687990852950517,
+            "contextSwitchesPerSecond": 177.29023260899444,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 0.45867259853797304,
+              "0000:c4:00.0/769/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 0.45867259853797304
+          }
+        ],
+        "actions": 0,
+        "durationSeconds": 25.00014750700211
+      },
+      "workspaceSwitches": {
+        "summary": {
+          "rssBytes": {
+            "mean": 738760874.6666666,
+            "min": 734568448,
+            "max": 752496640
+          },
+          "pssBytes": {
+            "mean": 648679936.0,
+            "min": 644826112,
+            "max": 662754304
+          },
+          "privateBytes": {
+            "mean": 619602773.3333334,
+            "min": 615727104,
+            "max": 633655296
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 15129770.666666666,
+            "min": 8044544,
+            "max": 47833088
+          },
+          "gpuResidentGttBytes": {
+            "mean": 896921600.0,
+            "min": 859402240,
+            "max": 911568896
+          },
+          "activeChildren": {
+            "mean": 3.0,
+            "min": 3,
+            "max": 3
+          },
+          "threads": {
+            "mean": 78.0,
+            "min": 78,
+            "max": 78
+          },
+          "cpuPercent": {
+            "mean": 20.866908341091904,
+            "min": 17.33010022723515,
+            "max": 26.44332756959787
+          },
+          "mainThreadCpuPercent": {
+            "mean": 5.876086305007814,
+            "min": 3.8511333838300326,
+            "max": 10.170510603691488
+          },
+          "processTreeCpuPercent": {
+            "mean": 21.28543405432015,
+            "min": 17.33010022723515,
+            "max": 27.11761928397823
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 4627.822061856817,
+            "min": 4222.0873239015245,
+            "max": 5046.229001838746
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 20.26762222166249,
+            "min": 16.43102140461158,
+            "max": 23.357556635533108
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 743038976,
+            "pssBytes": 652313600,
+            "privateBytes": 623280128,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10141696,
+            "gpuResidentGttBytes": 896888832,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 1.0343946530047106,
+            "intervalSeconds": 1.0343946530047106,
+            "cpuPercent": 21.268478076616482,
+            "mainThreadCpuPercent": 5.800494020895404,
+            "processTreeCpuPercent": 22.23522708009905,
+            "contextSwitchesPerSecond": 4820.210531364081,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 18.724577455749664,
+              "0000:c4:00.0/769/drm-engine-compute": 0.02977238901085054
+            },
+            "gpuBusiestEnginePercent": 18.724577455749664
+          },
+          {
+            "rssBytes": 745156608,
+            "pssBytes": 654431232,
+            "privateBytes": 625397760,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10141696,
+            "gpuResidentGttBytes": 898985984,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 2.0224796410038834,
+            "intervalSeconds": 0.9880849879991729,
+            "cpuPercent": 21.253232520538585,
+            "mainThreadCpuPercent": 6.07235214872531,
+            "processTreeCpuPercent": 21.253232520538585,
+            "contextSwitchesPerSecond": 4743.519086845921,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 18.83836211062401,
+              "0000:c4:00.0/769/drm-engine-compute": 0.027011542857305653
+            },
+            "gpuBusiestEnginePercent": 18.83836211062401
+          },
+          {
+            "rssBytes": 737349632,
+            "pssBytes": 646624256,
+            "privateBytes": 617590784,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 8044544,
+            "gpuResidentGttBytes": 902983680,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 3.0057144450038322,
+            "intervalSeconds": 0.9832348039999488,
+            "cpuPercent": 26.44332756959787,
+            "mainThreadCpuPercent": 10.170510603691488,
+            "processTreeCpuPercent": 26.44332756959787,
+            "contextSwitchesPerSecond": 4737.423839199495,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 20.340470982759314,
+              "0000:c4:00.0/769/drm-engine-compute": 0.056276791438724216
+            },
+            "gpuBusiestEnginePercent": 20.340470982759314
+          },
+          {
+            "rssBytes": 737284096,
+            "pssBytes": 646558720,
+            "privateBytes": 617525248,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 8044544,
+            "gpuResidentGttBytes": 901083136,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 4.044369719005772,
+            "intervalSeconds": 1.0386552740019397,
+            "cpuPercent": 17.33010022723515,
+            "mainThreadCpuPercent": 3.8511333838300326,
+            "processTreeCpuPercent": 17.33010022723515,
+            "contextSwitchesPerSecond": 4624.248410633912,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 19.17555544994306,
+              "0000:c4:00.0/769/drm-engine-compute": 0.057892451427428764
+            },
+            "gpuBusiestEnginePercent": 19.17555544994306
+          },
+          {
+            "rssBytes": 736530432,
+            "pssBytes": 645739520,
+            "privateBytes": 616640512,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10145792,
+            "gpuResidentGttBytes": 911568896,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 5.028216297003382,
+            "intervalSeconds": 0.9838465779976104,
+            "cpuPercent": 19.3119541449949,
+            "mainThreadCpuPercent": 5.082093196051289,
+            "processTreeCpuPercent": 19.3119541449949,
+            "contextSwitchesPerSecond": 4980.451332130264,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 22.28239757119249,
+              "0000:c4:00.0/769/drm-engine-compute": 0.032800236054770705
+            },
+            "gpuBusiestEnginePercent": 22.28239757119249
+          },
+          {
+            "rssBytes": 736108544,
+            "pssBytes": 645317632,
+            "privateBytes": 616218624,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10145792,
+            "gpuResidentGttBytes": 903180288,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 6.023878922002041,
+            "intervalSeconds": 0.9956626249986584,
+            "cpuPercent": 24.10455047464731,
+            "mainThreadCpuPercent": 6.026137618661828,
+            "processTreeCpuPercent": 27.11761928397823,
+            "contextSwitchesPerSecond": 4246.418308617035,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 22.46152415335479,
+              "0000:c4:00.0/769/drm-engine-compute": 0.01857004525004131
+            },
+            "gpuBusiestEnginePercent": 22.46152415335479
+          },
+          {
+            "rssBytes": 737157120,
+            "pssBytes": 646366208,
+            "privateBytes": 617267200,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 12242944,
+            "gpuResidentGttBytes": 901083136,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 7.015906830005406,
+            "intervalSeconds": 0.9920279080033652,
+            "cpuPercent": 23.1848316105256,
+            "mainThreadCpuPercent": 6.048216941876243,
+            "processTreeCpuPercent": 24.19286776750497,
+            "contextSwitchesPerSecond": 5046.229001838746,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 19.706244191603616,
+              "0000:c4:00.0/769/drm-engine-compute": 0.027929052979733325
+            },
+            "gpuBusiestEnginePercent": 19.706244191603616
+          },
+          {
+            "rssBytes": 737218560,
+            "pssBytes": 646427648,
+            "privateBytes": 617328640,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 16244736,
+            "gpuResidentGttBytes": 901083136,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 8.00651248000213,
+            "intervalSeconds": 0.9906056499967235,
+            "cpuPercent": 22.208635696831294,
+            "mainThreadCpuPercent": 5.047417203825294,
+            "processTreeCpuPercent": 22.208635696831294,
+            "contextSwitchesPerSecond": 4588.102238277193,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 21.324735024547728,
+              "0000:c4:00.0/769/drm-engine-compute": 0.03147004057578625
+            },
+            "gpuBusiestEnginePercent": 21.324735024547728
+          },
+          {
+            "rssBytes": 736944128,
+            "pssBytes": 646153216,
+            "privateBytes": 617054208,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 14147584,
+            "gpuResidentGttBytes": 897085440,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 9.045808843002305,
+            "intervalSeconds": 1.039296363000176,
+            "cpuPercent": 18.281599624915444,
+            "mainThreadCpuPercent": 5.773136723657508,
+            "processTreeCpuPercent": 18.281599624915444,
+            "contextSwitchesPerSecond": 4222.0873239015245,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 20.694718528516933,
+              "0000:c4:00.0/769/drm-engine-compute": 0.04976694025050798
+            },
+            "gpuBusiestEnginePercent": 20.694718528516933
+          },
+          {
+            "rssBytes": 737042432,
+            "pssBytes": 646251520,
+            "privateBytes": 617152512,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 14147584,
+            "gpuResidentGttBytes": 859402240,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 10.032833724006196,
+            "intervalSeconds": 0.9870248810038902,
+            "cpuPercent": 19.24976803084776,
+            "mainThreadCpuPercent": 5.065728429170464,
+            "processTreeCpuPercent": 19.24976803084776,
+            "contextSwitchesPerSecond": 4639.19409543431,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 18.365862045506585,
+              "0000:c4:00.0/769/drm-engine-compute": 0.04303863136336942
+            },
+            "gpuBusiestEnginePercent": 18.365862045506585
+          },
+          {
+            "rssBytes": 741826560,
+            "pssBytes": 652084224,
+            "privateBytes": 622985216,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 12255232,
+            "gpuResidentGttBytes": 901083136,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 11.018835551003576,
+            "intervalSeconds": 0.9860018269973807,
+            "cpuPercent": 21.298134978055963,
+            "mainThreadCpuPercent": 6.085181422301704,
+            "processTreeCpuPercent": 23.326528785489867,
+            "contextSwitchesPerSecond": 4504.048449406978,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 20.563054697112502,
+              "0000:c4:00.0/769/drm-engine-compute": 0.04333450388232749
+            },
+            "gpuBusiestEnginePercent": 20.563054697112502
+          },
+          {
+            "rssBytes": 752496640,
+            "pssBytes": 662754304,
+            "privateBytes": 633655296,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 12255232,
+            "gpuResidentGttBytes": 901083136,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 12.00539402400318,
+            "intervalSeconds": 0.9865584729996044,
+            "cpuPercent": 21.28611792887457,
+            "mainThreadCpuPercent": 6.081747979678449,
+            "processTreeCpuPercent": 21.28611792887457,
+            "contextSwitchesPerSecond": 4584.624352014271,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 20.758822168676677,
+              "0000:c4:00.0/769/drm-engine-compute": 0.055162163712947826
+            },
+            "gpuBusiestEnginePercent": 20.758822168676677
+          },
+          {
+            "rssBytes": 741724160,
+            "pssBytes": 651981824,
+            "privateBytes": 622882816,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10158080,
+            "gpuResidentGttBytes": 901083136,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 13.041204576999007,
+            "intervalSeconds": 1.0358105529958266,
+            "cpuPercent": 19.308550141871923,
+            "mainThreadCpuPercent": 5.792565042561576,
+            "processTreeCpuPercent": 19.308550141871923,
+            "contextSwitchesPerSecond": 4386.9025922333,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 20.45866093824725,
+              "0000:c4:00.0/769/drm-engine-compute": 0.027244943506685534
+            },
+            "gpuBusiestEnginePercent": 20.45866093824725
+          },
+          {
+            "rssBytes": 743866368,
+            "pssBytes": 654124032,
+            "privateBytes": 625025024,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10145792,
+            "gpuResidentGttBytes": 903180288,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 14.027381380001316,
+            "intervalSeconds": 0.9861768030023086,
+            "cpuPercent": 21.29435607901927,
+            "mainThreadCpuPercent": 6.084101736862649,
+            "processTreeCpuPercent": 21.29435607901927,
+            "contextSwitchesPerSecond": 4603.6369808927375,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 22.797240141479346,
+              "0000:c4:00.0/769/drm-engine-compute": 0.03778784887917584
+            },
+            "gpuBusiestEnginePercent": 22.797240141479346
+          },
+          {
+            "rssBytes": 745480192,
+            "pssBytes": 655737856,
+            "privateBytes": 626638848,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 14147584,
+            "gpuResidentGttBytes": 897085440,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 15.014997595004388,
+            "intervalSeconds": 0.9876162150030723,
+            "cpuPercent": 21.263320388005855,
+            "mainThreadCpuPercent": 6.075234396573101,
+            "processTreeCpuPercent": 21.263320388005855,
+            "contextSwitchesPerSecond": 4572.626422487354,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 20.19181438807985,
+              "0000:c4:00.0/769/drm-engine-compute": 0.027252691471774056
+            },
+            "gpuBusiestEnginePercent": 20.19181438807985
+          },
+          {
+            "rssBytes": 736010240,
+            "pssBytes": 646267904,
+            "privateBytes": 617168896,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 14151680,
+            "gpuResidentGttBytes": 898985984,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 16.003995354003564,
+            "intervalSeconds": 0.9889977589991759,
+            "cpuPercent": 24.26699128649896,
+            "mainThreadCpuPercent": 10.111246369374568,
+            "processTreeCpuPercent": 26.289240560373877,
+            "contextSwitchesPerSecond": 4956.532970267413,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 21.412334666389924,
+              "0000:c4:00.0/769/drm-engine-compute": 0.04049018274876937
+            },
+            "gpuBusiestEnginePercent": 21.412334666389924
+          },
+          {
+            "rssBytes": 736047104,
+            "pssBytes": 646304768,
+            "privateBytes": 617205760,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 47833088,
+            "gpuResidentGttBytes": 871591936,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 17.002375989999564,
+            "intervalSeconds": 0.9983806359959999,
+            "cpuPercent": 22.035683793138137,
+            "mainThreadCpuPercent": 6.009731943583128,
+            "processTreeCpuPercent": 22.035683793138137,
+            "contextSwitchesPerSecond": 4274.922655868799,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 16.43102140461158,
+              "0000:c4:00.0/769/drm-engine-compute": 0.025259103683278005
+            },
+            "gpuBusiestEnginePercent": 16.43102140461158
+          },
+          {
+            "rssBytes": 735584256,
+            "pssBytes": 645841920,
+            "privateBytes": 616742912,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 45735936,
+            "gpuResidentGttBytes": 867594240,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 18.044525606004754,
+            "intervalSeconds": 1.0421496160051902,
+            "cpuPercent": 18.23154728284751,
+            "mainThreadCpuPercent": 4.797775600749345,
+            "processTreeCpuPercent": 18.23154728284751,
+            "contextSwitchesPerSecond": 4814.088037791892,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 17.327377876143714,
+              "0000:c4:00.0/769/drm-engine-compute": 0.047243696340578796
+            },
+            "gpuBusiestEnginePercent": 17.327377876143714
+          },
+          {
+            "rssBytes": 734568448,
+            "pssBytes": 644826112,
+            "privateBytes": 615727104,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10149888,
+            "gpuResidentGttBytes": 903180288,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 19.03887888800091,
+            "intervalSeconds": 0.9943532819961547,
+            "cpuPercent": 18.102218120973234,
+            "mainThreadCpuPercent": 4.022715137994052,
+            "processTreeCpuPercent": 18.102218120973234,
+            "contextSwitchesPerSecond": 4468.230839526894,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 22.718702908738788,
+              "0000:c4:00.0/769/drm-engine-compute": 0.031679585686852314
+            },
+            "gpuBusiestEnginePercent": 22.718702908738788
+          },
+          {
+            "rssBytes": 734937088,
+            "pssBytes": 645194752,
+            "privateBytes": 616095744,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 10149888,
+            "gpuResidentGttBytes": 909275136,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 20.031501006000326,
+            "intervalSeconds": 0.9926221179994172,
+            "cpuPercent": 23.170952553782914,
+            "mainThreadCpuPercent": 6.044596318378151,
+            "processTreeCpuPercent": 23.170952553782914,
+            "contextSwitchesPerSecond": 4499.194526312804,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 20.593455686035803,
+              "0000:c4:00.0/769/drm-engine-compute": 0.022802635151449736
+            },
+            "gpuBusiestEnginePercent": 20.593455686035803
+          },
+          {
+            "rssBytes": 734851072,
+            "pssBytes": 645633024,
+            "privateBytes": 616599552,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 14147584,
+            "gpuResidentGttBytes": 905277440,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 21.0254181670025,
+            "intervalSeconds": 0.9939171610021731,
+            "cpuPercent": 20.122401327524994,
+            "mainThreadCpuPercent": 5.030600331881248,
+            "processTreeCpuPercent": 21.12852139390124,
+            "contextSwitchesPerSecond": 4797.180476481958,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 16.752116427098894,
+              "0000:c4:00.0/769/drm-engine-compute": 0.054981342655256275
+            },
+            "gpuBusiestEnginePercent": 16.752116427098894
+          },
+          {
+            "rssBytes": 735080448,
+            "pssBytes": 645862400,
+            "privateBytes": 616828928,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 14147584,
+            "gpuResidentGttBytes": 897085440,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 22.013530551004806,
+            "intervalSeconds": 0.9881123840023065,
+            "cpuPercent": 19.228581998984083,
+            "mainThreadCpuPercent": 6.072183789152868,
+            "processTreeCpuPercent": 19.228581998984083,
+            "contextSwitchesPerSecond": 4608.787495967027,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 22.929293435459172,
+              "0000:c4:00.0/769/drm-engine-compute": 0.025402778475794724
+            },
+            "gpuBusiestEnginePercent": 22.929293435459172
+          },
+          {
+            "rssBytes": 736845824,
+            "pssBytes": 647627776,
+            "privateBytes": 618594304,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 16244736,
+            "gpuResidentGttBytes": 899182592,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 23.050640854002268,
+            "intervalSeconds": 1.037110302997462,
+            "cpuPercent": 18.320134266419004,
+            "mainThreadCpuPercent": 4.8210879648471066,
+            "processTreeCpuPercent": 18.320134266419004,
+            "contextSwitchesPerSecond": 4530.858469363311,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 18.217034432494916,
+              "0000:c4:00.0/769/drm-engine-compute": 0.03155315293409064
+            },
+            "gpuBusiestEnginePercent": 18.217034432494916
+          },
+          {
+            "rssBytes": 737112064,
+            "pssBytes": 647894016,
+            "privateBytes": 618860544,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 18145280,
+            "gpuResidentGttBytes": 897085440,
+            "activeChildren": 3,
+            "threads": 78,
+            "elapsedSeconds": 24.03876693500206,
+            "intervalSeconds": 0.9881260809997912,
+            "cpuPercent": 20.24033206345884,
+            "mainThreadCpuPercent": 5.06008301586471,
+            "processTreeCpuPercent": 20.24033206345884,
+            "contextSwitchesPerSecond": 4818.211047706377,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/769/drm-engine-gfx": 23.357556635533108,
+              "0000:c4:00.0/769/drm-engine-compute": 0.021669299507139035
+            },
+            "gpuBusiestEnginePercent": 23.357556635533108
+          }
+        ],
+        "actions": 50,
+        "durationSeconds": 25.000132881003083
+      }
+    }
+  ],
+  "durationSeconds": 25.0,
+  "warmupSeconds": 15.0,
+  "nativeDomains": [
+    "network",
+    "brightness",
+    "niri"
+  ],
+  "commonServices": "Quickshell audio, battery, Bluetooth, media and power profiles remain identical in both modes.",
+  "notes": [
+    "CPU 100% means one fully occupied core; main-thread CPU is counted separately.",
+    "GPU usage is per-shell DRM client engine time, not whole-device utilization.",
+    "Driver-reported resident VRAM/GTT can include shared buffers; do not add them to RSS.",
+    "Process-tree CPU includes reaped helper ticks; sampled process starts can miss short-lived helpers.",
+    "Context switches are not scheduler wakeups; no frame-time or latency claims."
+  ]
+}

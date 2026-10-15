@@ -1,0 +1,214 @@
+{
+  "source": "display-on/results.json",
+  "activity": {
+    "cpuPercent": {
+      "qml": {
+        "mean": 22.258227525270367,
+        "min": 21.62392433690808,
+        "max": 22.892530713632656
+      },
+      "rust": {
+        "mean": 25.052432419417897,
+        "min": 21.16574393731203,
+        "max": 28.939120901523765
+      }
+    },
+    "mainThreadCpuPercent": {
+      "qml": {
+        "mean": 6.152303288753704,
+        "min": 6.031175794939864,
+        "max": 6.273430782567544
+      },
+      "rust": {
+        "mean": 7.531373753908907,
+        "min": 5.757688197642564,
+        "max": 9.30505931017525
+      }
+    },
+    "pssBytes": {
+      "qml": {
+        "mean": 645889836.1379311,
+        "min": 645481683.862069,
+        "max": 646297988.4137931
+      },
+      "rust": {
+        "mean": 659849463.1724138,
+        "min": 639634820.4137931,
+        "max": 680064105.9310344
+      }
+    },
+    "rssBytes": {
+      "qml": {
+        "mean": 736164263.7241379,
+        "min": 734990053.5172414,
+        "max": 737338473.9310344
+      },
+      "rust": {
+        "mean": 749011791.4482758,
+        "min": 728318516.9655173,
+        "max": 769705065.9310344
+      }
+    },
+    "gpuBusiestEnginePercent": {
+      "qml": {
+        "mean": 20.73613771715481,
+        "min": 19.88989882191063,
+        "max": 21.582376612398996
+      },
+      "rust": {
+        "mean": 21.66665205531751,
+        "min": 19.07469024616247,
+        "max": 24.25861386447255
+      }
+    },
+    "gpuResidentVramBytes": {
+      "qml": {
+        "mean": 65294689.10344827,
+        "min": 32577465.379310343,
+        "max": 98011912.8275862
+      },
+      "rust": {
+        "mean": 93890489.37931034,
+        "min": 62422333.79310345,
+        "max": 125358644.96551724
+      }
+    },
+    "gpuResidentGttBytes": {
+      "qml": {
+        "mean": 870114339.3103448,
+        "min": 852497372.6896552,
+        "max": 887731305.9310344
+      },
+      "rust": {
+        "mean": 806307204.4137931,
+        "min": 751184507.5862069,
+        "max": 861429901.2413793
+      }
+    },
+    "contextSwitchesPerSecond": {
+      "qml": {
+        "mean": 4707.175211321188,
+        "min": 4592.2197448873085,
+        "max": 4822.130677755067
+      },
+      "rust": {
+        "mean": 4341.711856603952,
+        "min": 4076.70830681558,
+        "max": 4606.7154063923235
+      }
+    },
+    "threads": {
+      "qml": {
+        "mean": 77.10344827586206,
+        "min": 75.20689655172414,
+        "max": 79
+      },
+      "rust": {
+        "mean": 82,
+        "min": 80,
+        "max": 84
+      }
+    },
+    "activeChildren": {
+      "qml": {
+        "mean": 3,
+        "min": 3,
+        "max": 3
+      },
+      "rust": {
+        "mean": 2,
+        "min": 2,
+        "max": 2
+      }
+    },
+    "processTreeCpuPercent": {
+      "qml": {
+        "mean": 22.689957365871003,
+        "min": 22.03857090080646,
+        "max": 23.341343830935543
+      },
+      "rust": {
+        "mean": 25.618221909748314,
+        "min": 21.64880994322809,
+        "max": 29.58763387626854
+      }
+    }
+  },
+  "matchedIdle": {
+    "qml": {
+      "cpuPercent": 0.785655158516369,
+      "mainThreadCpuPercent": 0.3081704022733351,
+      "pssBytes": 638848670.8965517,
+      "rssBytes": 731480487.7241379,
+      "gpuBusiestEnginePercent": 0.9083721376189141,
+      "gpuResidentVramBytes": 96713622.06896552,
+      "gpuResidentGttBytes": 781422027.0344827,
+      "contextSwitchesPerSecond": 115.87361279870176,
+      "threads": 71.27586206896552,
+      "activeChildren": 3,
+      "processTreeCpuPercent": 1.2262606624088075
+    },
+    "rust": {
+      "cpuPercent": 1.3099024875445453,
+      "mainThreadCpuPercent": 0.48432109247143285,
+      "pssBytes": 661039880.8275862,
+      "rssBytes": 751087474.7586207,
+      "gpuBusiestEnginePercent": 0.26876367192335915,
+      "gpuResidentVramBytes": 64100705.10344828,
+      "gpuResidentGttBytes": 801104719.4482758,
+      "contextSwitchesPerSecond": 105.14625641239425,
+      "threads": 76.27586206896552,
+      "activeChildren": 2,
+      "processTreeCpuPercent": 1.7542816242687265
+    }
+  },
+  "runs": [
+    {
+      "name": "1-rust",
+      "idleCpu": 1.938013135888809,
+      "activityCpu": 21.16574393731203,
+      "activityMainCpu": 5.757688197642564,
+      "activityGpu": 19.07469024616247,
+      "idlePssMiB": 579.3560748922414,
+      "idleWorkspace": "2",
+      "actions": 60
+    },
+    {
+      "name": "1-qml",
+      "idleCpu": 0.7931142915927147,
+      "activityCpu": 22.892530713632656,
+      "activityMainCpu": 6.273430782567544,
+      "activityGpu": 19.88989882191063,
+      "idlePssMiB": 603.3388671875,
+      "idleWorkspace": "1",
+      "actions": 60
+    },
+    {
+      "name": "2-qml",
+      "idleCpu": 0.785655158516369,
+      "activityCpu": 21.62392433690808,
+      "activityMainCpu": 6.031175794939864,
+      "activityGpu": 21.582376612398996,
+      "idlePssMiB": 609.2535695043103,
+      "idleWorkspace": "1",
+      "actions": 60
+    },
+    {
+      "name": "2-rust",
+      "idleCpu": 1.3099024875445453,
+      "activityCpu": 28.939120901523765,
+      "activityMainCpu": 9.30505931017525,
+      "activityGpu": 24.25861386447255,
+      "idlePssMiB": 630.4167564655172,
+      "idleWorkspace": "1",
+      "actions": 60
+    }
+  ],
+  "limitations": [
+    "Two activity repeats per mode; one matched idle pair.",
+    "First Rust idle started on a different workspace and is excluded from matched-idle comparison.",
+    "Per-process resource cost, not latency or FPS.",
+    "Background desktop activity not controlled.",
+    "Exploratory display-unverified series excluded."
+  ]
+}

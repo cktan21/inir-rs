@@ -1,0 +1,4261 @@
+{
+  "capturedAt": "2026-10-13T06:38:43.541381+00:00",
+  "layout": "ii",
+  "runs": [
+    {
+      "name": "1-rust",
+      "mode": "rust",
+      "pid": 44636,
+      "ownershipBefore": {
+        "requested": true,
+        "available": true,
+        "typedBridge": true,
+        "desktopActive": true,
+        "idleInhibited": true,
+        "gameMode": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "ui": {
+          "overviewOpen": false,
+          "mediaControlsOpen": false,
+          "sidebarLeftOpen": false,
+          "sidebarRightOpen": false,
+          "controlPanelOpen": false,
+          "dashboardOpen": false,
+          "mediaPlaying": true
+        },
+        "nativeFocus": {
+          "workspaceId": 1,
+          "workspaceIndex": 0,
+          "windowId": 7
+        },
+        "niri": {
+          "owner": "rust",
+          "nativeReady": true,
+          "nativeApplyCalls": 10,
+          "fallbackLoaded": false,
+          "fallback": null,
+          "windows": 3,
+          "workspaces": 2,
+          "focusedWorkspaceId": "1"
+        },
+        "network": {
+          "owner": "rust",
+          "nativeReady": true,
+          "monitorRunning": false,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "rust",
+          "nativeReady": true,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "keyboard": {
+          "owner": "python",
+          "wanted": true,
+          "nativeReady": false,
+          "pending": false,
+          "source": "evdev",
+          "probeRunning": false,
+          "monitorRunning": true,
+          "caps": false,
+          "num": false,
+          "devices": 0
+        },
+        "nativePowerReady": false,
+        "models": {
+          "niri": {
+            "count": 3,
+            "applyCalls": 10,
+            "applyTotalUs": 7433.546,
+            "applyMaxUs": 2127.278
+          },
+          "workspaces": {
+            "count": 2,
+            "applyCalls": 4,
+            "applyTotalUs": 6398.6759999999995,
+            "applyMaxUs": 2688.3250000000003
+          }
+        }
+      },
+      "ownershipAfter": {
+        "requested": true,
+        "available": true,
+        "typedBridge": true,
+        "desktopActive": true,
+        "idleInhibited": true,
+        "gameMode": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "ui": {
+          "overviewOpen": false,
+          "mediaControlsOpen": false,
+          "sidebarLeftOpen": false,
+          "sidebarRightOpen": false,
+          "controlPanelOpen": false,
+          "dashboardOpen": false,
+          "mediaPlaying": true
+        },
+        "nativeFocus": {
+          "workspaceId": 1,
+          "workspaceIndex": 0,
+          "windowId": 7
+        },
+        "niri": {
+          "owner": "rust",
+          "nativeReady": true,
+          "nativeApplyCalls": 27,
+          "fallbackLoaded": false,
+          "fallback": null,
+          "windows": 3,
+          "workspaces": 2,
+          "focusedWorkspaceId": "1"
+        },
+        "network": {
+          "owner": "rust",
+          "nativeReady": true,
+          "monitorRunning": false,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "rust",
+          "nativeReady": true,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "keyboard": {
+          "owner": "python",
+          "wanted": true,
+          "nativeReady": false,
+          "pending": false,
+          "source": "evdev",
+          "probeRunning": false,
+          "monitorRunning": true,
+          "caps": false,
+          "num": false,
+          "devices": 0
+        },
+        "nativePowerReady": false,
+        "models": {
+          "niri": {
+            "count": 3,
+            "applyCalls": 27,
+            "applyTotalUs": 19560.359000000004,
+            "applyMaxUs": 2127.278
+          },
+          "workspaces": {
+            "count": 2,
+            "applyCalls": 16,
+            "applyTotalUs": 25181.713999999996,
+            "applyMaxUs": 3395.775
+          }
+        }
+      },
+      "niriEventsDuringActivity": 16,
+      "idle": null,
+      "workspaceSwitches": {
+        "summary": {
+          "rssBytes": {
+            "mean": 858763264.0,
+            "min": 858206208,
+            "max": 859996160
+          },
+          "pssBytes": {
+            "mean": 715254169.6,
+            "min": 714809344,
+            "max": 715579392
+          },
+          "privateBytes": {
+            "mean": 682420633.6,
+            "min": 681975808,
+            "max": 682745856
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 49913856.0,
+            "min": 49913856,
+            "max": 49913856
+          },
+          "gpuResidentGttBytes": {
+            "mean": 829305651.2,
+            "min": 828047360,
+            "max": 830144512
+          },
+          "activeChildren": {
+            "mean": 3.0,
+            "min": 3,
+            "max": 3
+          },
+          "threads": {
+            "mean": 82.2,
+            "min": 82,
+            "max": 83
+          },
+          "cpuPercent": {
+            "mean": 29.184354176551427,
+            "min": 27.9295803339657,
+            "max": 30.385956463357516
+          },
+          "mainThreadCpuPercent": {
+            "mean": 9.392071493165831,
+            "min": 8.180459053392143,
+            "max": 10.669986587080029
+          },
+          "processTreeCpuPercent": {
+            "mean": 30.97880404388963,
+            "min": 28.964009235223685,
+            "max": 32.411686894248014
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 4597.593348712033,
+            "min": 4514.340265239482,
+            "max": 4744.219047931623
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 34.24659308890072,
+            "min": 32.264628075615,
+            "max": 38.38744374365898
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 859996160,
+            "pssBytes": 714809344,
+            "privateBytes": 681975808,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 49913856,
+            "gpuResidentGttBytes": 830144512,
+            "activeChildren": 3,
+            "threads": 83,
+            "elapsedSeconds": 1.0378947409999455,
+            "intervalSeconds": 1.0378947409999455,
+            "cpuPercent": 28.904665198608587,
+            "mainThreadCpuPercent": 8.671399559582577,
+            "processTreeCpuPercent": 30.83164287851583,
+            "contextSwitchesPerSecond": 4744.219047931623,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/322/drm-engine-gfx": 32.264628075615,
+              "0000:c4:00.0/322/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 32.264628075615
+          },
+          {
+            "rssBytes": 858206208,
+            "pssBytes": 715116544,
+            "privateBytes": 682283008,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 49913856,
+            "gpuResidentGttBytes": 830144512,
+            "activeChildren": 3,
+            "threads": 82,
+            "elapsedSeconds": 2.0158349700000144,
+            "intervalSeconds": 0.9779402290000689,
+            "cpuPercent": 28.63160668687251,
+            "mainThreadCpuPercent": 8.180459053392143,
+            "processTreeCpuPercent": 30.676721450220533,
+            "contextSwitchesPerSecond": 4532.996872960922,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/322/drm-engine-gfx": 33.06184206478505,
+              "0000:c4:00.0/322/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 33.06184206478505
+          },
+          {
+            "rssBytes": 858669056,
+            "pssBytes": 715579392,
+            "privateBytes": 682745856,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 49913856,
+            "gpuResidentGttBytes": 830144512,
+            "activeChildren": 3,
+            "threads": 82,
+            "elapsedSeconds": 3.046764101000008,
+            "intervalSeconds": 1.0309291309999935,
+            "cpuPercent": 30.069962199952805,
+            "mainThreadCpuPercent": 10.669986587080029,
+            "processTreeCpuPercent": 32.00995976124009,
+            "contextSwitchesPerSecond": 4589.064231225056,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/322/drm-engine-gfx": 33.679612842369295,
+              "0000:c4:00.0/322/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 33.679612842369295
+          },
+          {
+            "rssBytes": 858472448,
+            "pssBytes": 715382784,
+            "privateBytes": 682549248,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 49913856,
+            "gpuResidentGttBytes": 828047360,
+            "activeChildren": 3,
+            "threads": 82,
+            "elapsedSeconds": 4.034062296999764,
+            "intervalSeconds": 0.987298195999756,
+            "cpuPercent": 30.385956463357516,
+            "mainThreadCpuPercent": 10.128652154452505,
+            "processTreeCpuPercent": 32.411686894248014,
+            "contextSwitchesPerSecond": 4514.340265239482,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/322/drm-engine-gfx": 33.83943871807526,
+              "0000:c4:00.0/322/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 33.83943871807526
+          },
+          {
+            "rssBytes": 858472448,
+            "pssBytes": 715382784,
+            "privateBytes": 682549248,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 49913856,
+            "gpuResidentGttBytes": 828047360,
+            "activeChildren": 3,
+            "threads": 82,
+            "elapsedSeconds": 5.0007792930000505,
+            "intervalSeconds": 0.9667169960002866,
+            "cpuPercent": 27.9295803339657,
+            "mainThreadCpuPercent": 9.3098601113219,
+            "processTreeCpuPercent": 28.964009235223685,
+            "contextSwitchesPerSecond": 4607.346326203082,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/322/drm-engine-gfx": 38.38744374365898,
+              "0000:c4:00.0/322/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 38.38744374365898
+          }
+        ],
+        "actions": 10,
+        "threadCpu": [
+          {
+            "tid": 44636,
+            "name": "qs",
+            "ticks": 47,
+            "cpuSeconds": 0.47,
+            "cpuPercent": 9.39853515746821
+          },
+          {
+            "tid": 45182,
+            "name": "QSGRenderThread",
+            "ticks": 25,
+            "cpuSeconds": 0.25,
+            "cpuPercent": 4.999220828440538
+          },
+          {
+            "tid": 44902,
+            "name": "QSGRenderThread",
+            "ticks": 20,
+            "cpuSeconds": 0.2,
+            "cpuPercent": 3.9993766627524305
+          },
+          {
+            "tid": 44694,
+            "name": "qs:cs0",
+            "ticks": 11,
+            "cpuSeconds": 0.11,
+            "cpuPercent": 2.1996571645138365
+          },
+          {
+            "tid": 45166,
+            "name": "QSGRenderThread",
+            "ticks": 8,
+            "cpuSeconds": 0.08,
+            "cpuPercent": 1.599750665100972
+          },
+          {
+            "tid": 45184,
+            "name": "qs:gdrv0",
+            "ticks": 6,
+            "cpuSeconds": 0.06,
+            "cpuPercent": 1.199812998825729
+          },
+          {
+            "tid": 44658,
+            "name": "QDBusConnection",
+            "ticks": 5,
+            "cpuSeconds": 0.05,
+            "cpuPercent": 0.9998441656881076
+          },
+          {
+            "tid": 44907,
+            "name": "qs:gdrv0",
+            "ticks": 5,
+            "cpuSeconds": 0.05,
+            "cpuPercent": 0.9998441656881076
+          },
+          {
+            "tid": 44659,
+            "name": "WaylandEventThr",
+            "ticks": 4,
+            "cpuSeconds": 0.04,
+            "cpuPercent": 0.799875332550486
+          },
+          {
+            "tid": 44660,
+            "name": "WaylandEventThr",
+            "ticks": 4,
+            "cpuSeconds": 0.04,
+            "cpuPercent": 0.799875332550486
+          },
+          {
+            "tid": 44656,
+            "name": "QThread",
+            "ticks": 2,
+            "cpuSeconds": 0.02,
+            "cpuPercent": 0.399937666275243
+          },
+          {
+            "tid": 44661,
+            "name": "QQmlDebugServer",
+            "ticks": 2,
+            "cpuSeconds": 0.02,
+            "cpuPercent": 0.399937666275243
+          },
+          {
+            "tid": 45169,
+            "name": "qs:gdrv0",
+            "ticks": 2,
+            "cpuSeconds": 0.02,
+            "cpuPercent": 0.399937666275243
+          },
+          {
+            "tid": 44894,
+            "name": "inir-core",
+            "ticks": 1,
+            "cpuSeconds": 0.01,
+            "cpuPercent": 0.1999688331376215
+          },
+          {
+            "tid": 44655,
+            "name": "jemalloc_bg_thd",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44657,
+            "name": "jemalloc_bg_thd",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44695,
+            "name": "qs:disk$0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44696,
+            "name": "qs:sh0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44697,
+            "name": "qs:sh_opt0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44698,
+            "name": "QQmlThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44718,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44719,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44750,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44751,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44752,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44753,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44760,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44761,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44762,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44763,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44764,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44766,
+            "name": "QQuickPixmapRea",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44816,
+            "name": "jemalloc_bg_thd",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44817,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44818,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44819,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44870,
+            "name": "QNetworkAccessM",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44871,
+            "name": "pool-spawner",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44872,
+            "name": "gmain",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44873,
+            "name": "gdbus",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44874,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44895,
+            "name": "tokio-rt-worker",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44896,
+            "name": "tokio-rt-worker",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44897,
+            "name": "tokio-rt-worker",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44906,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44909,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44910,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44911,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44912,
+            "name": "qs:sh1",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 44913,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45167,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45172,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45173,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45183,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45185,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45186,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45192,
+            "name": "QQuickContext2D",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45194,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45264,
+            "name": "PWDevMon",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45265,
+            "name": "QAudioContext",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45271,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45272,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45273,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45274,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45275,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45280,
+            "name": "qs:sh2",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45281,
+            "name": "qs:sh3",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45392,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45393,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45394,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45395,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45396,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45401,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45402,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45403,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45404,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45405,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45410,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45411,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45412,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45413,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45414,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 45458,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          }
+        ],
+        "compositorObservations": [
+          {
+            "elapsedSeconds": 0,
+            "workspaceId": 2,
+            "activeWindowId": null
+          },
+          {
+            "elapsedSeconds": 1.0378947409999455,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 2.0158349700000144,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 3.046764101000008,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 4.034062296999764,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 5.0007792930000505,
+            "workspaceId": 2,
+            "activeWindowId": null
+          }
+        ],
+        "threadCpuNotes": "Matched thread identities between samples; short-lived or newly observed threads can be undercounted.",
+        "durationSeconds": 5.03373389699982,
+        "spawnsByName": {
+          "cava": 1,
+          "udevadm": 1,
+          "python3": 1
+        },
+        "qmlTrace": "1-rust-baseline.qtd.gz",
+        "presentation": {
+          "variant": "baseline",
+          "animationsEnabled": true,
+          "effectsEnabled": true,
+          "barOpen": true,
+          "stopWorkspaceAnimations": false,
+          "disableWallpaperBlur": false,
+          "hideMediaWidget": false,
+          "style": "material",
+          "motionProfile": "classic",
+          "mediaPlaying": true
+        },
+        "ownershipBefore": {
+          "requested": true,
+          "available": true,
+          "typedBridge": true,
+          "desktopActive": true,
+          "idleInhibited": true,
+          "gameMode": false,
+          "selectedNativeDomains": "network,brightness,niri",
+          "ui": {
+            "overviewOpen": false,
+            "mediaControlsOpen": false,
+            "sidebarLeftOpen": false,
+            "sidebarRightOpen": false,
+            "controlPanelOpen": false,
+            "dashboardOpen": false,
+            "mediaPlaying": true
+          },
+          "nativeFocus": {
+            "workspaceId": 2,
+            "workspaceIndex": 1,
+            "windowId": -1
+          },
+          "niri": {
+            "owner": "rust",
+            "nativeReady": true,
+            "nativeApplyCalls": 11,
+            "fallbackLoaded": false,
+            "fallback": null,
+            "windows": 3,
+            "workspaces": 2,
+            "focusedWorkspaceId": "2"
+          },
+          "network": {
+            "owner": "rust",
+            "nativeReady": true,
+            "monitorRunning": false,
+            "acquisitionProcessesRunning": 0
+          },
+          "brightness": {
+            "owner": "rust",
+            "nativeReady": true,
+            "backlightDetectRunning": false,
+            "monitors": [
+              {
+                "isDdc": false,
+                "initRunning": false,
+                "readbackRunning": false,
+                "writeRunning": false
+              }
+            ]
+          },
+          "keyboard": {
+            "owner": "python",
+            "wanted": true,
+            "nativeReady": false,
+            "pending": false,
+            "source": "evdev",
+            "probeRunning": false,
+            "monitorRunning": true,
+            "caps": false,
+            "num": false,
+            "devices": 0
+          },
+          "nativePowerReady": false,
+          "models": {
+            "niri": {
+              "count": 3,
+              "applyCalls": 11,
+              "applyTotalUs": 8235.937,
+              "applyMaxUs": 2127.278
+            },
+            "workspaces": {
+              "count": 2,
+              "applyCalls": 5,
+              "applyTotalUs": 9794.451,
+              "applyMaxUs": 3395.775
+            }
+          }
+        },
+        "ownershipAfter": {
+          "requested": true,
+          "available": true,
+          "typedBridge": true,
+          "desktopActive": true,
+          "idleInhibited": true,
+          "gameMode": false,
+          "selectedNativeDomains": "network,brightness,niri",
+          "ui": {
+            "overviewOpen": false,
+            "mediaControlsOpen": false,
+            "sidebarLeftOpen": false,
+            "sidebarRightOpen": false,
+            "controlPanelOpen": false,
+            "dashboardOpen": false,
+            "mediaPlaying": true
+          },
+          "nativeFocus": {
+            "workspaceId": 2,
+            "workspaceIndex": 1,
+            "windowId": -1
+          },
+          "niri": {
+            "owner": "rust",
+            "nativeReady": true,
+            "nativeApplyCalls": 26,
+            "fallbackLoaded": false,
+            "fallback": null,
+            "windows": 3,
+            "workspaces": 2,
+            "focusedWorkspaceId": "2"
+          },
+          "network": {
+            "owner": "rust",
+            "nativeReady": true,
+            "monitorRunning": false,
+            "acquisitionProcessesRunning": 0
+          },
+          "brightness": {
+            "owner": "rust",
+            "nativeReady": true,
+            "backlightDetectRunning": false,
+            "monitors": [
+              {
+                "isDdc": false,
+                "initRunning": false,
+                "readbackRunning": false,
+                "writeRunning": false
+              }
+            ]
+          },
+          "keyboard": {
+            "owner": "python",
+            "wanted": true,
+            "nativeReady": false,
+            "pending": false,
+            "source": "evdev",
+            "probeRunning": false,
+            "monitorRunning": true,
+            "caps": false,
+            "num": false,
+            "devices": 0
+          },
+          "nativePowerReady": false,
+          "models": {
+            "niri": {
+              "count": 3,
+              "applyCalls": 26,
+              "applyTotalUs": 18921.657000000003,
+              "applyMaxUs": 2127.278
+            },
+            "workspaces": {
+              "count": 2,
+              "applyCalls": 15,
+              "applyTotalUs": 24280.977999999996,
+              "applyMaxUs": 3395.775
+            }
+          }
+        }
+      },
+      "wifiRescans": null,
+      "workspaceVariants": {
+        "baseline": {
+          "summary": {
+            "rssBytes": {
+              "mean": 858763264.0,
+              "min": 858206208,
+              "max": 859996160
+            },
+            "pssBytes": {
+              "mean": 715254169.6,
+              "min": 714809344,
+              "max": 715579392
+            },
+            "privateBytes": {
+              "mean": 682420633.6,
+              "min": 681975808,
+              "max": 682745856
+            },
+            "swapBytes": {
+              "mean": 0.0,
+              "min": 0,
+              "max": 0
+            },
+            "gpuResidentVramBytes": {
+              "mean": 49913856.0,
+              "min": 49913856,
+              "max": 49913856
+            },
+            "gpuResidentGttBytes": {
+              "mean": 829305651.2,
+              "min": 828047360,
+              "max": 830144512
+            },
+            "activeChildren": {
+              "mean": 3.0,
+              "min": 3,
+              "max": 3
+            },
+            "threads": {
+              "mean": 82.2,
+              "min": 82,
+              "max": 83
+            },
+            "cpuPercent": {
+              "mean": 29.184354176551427,
+              "min": 27.9295803339657,
+              "max": 30.385956463357516
+            },
+            "mainThreadCpuPercent": {
+              "mean": 9.392071493165831,
+              "min": 8.180459053392143,
+              "max": 10.669986587080029
+            },
+            "processTreeCpuPercent": {
+              "mean": 30.97880404388963,
+              "min": 28.964009235223685,
+              "max": 32.411686894248014
+            },
+            "contextSwitchesPerSecond": {
+              "mean": 4597.593348712033,
+              "min": 4514.340265239482,
+              "max": 4744.219047931623
+            },
+            "gpuBusiestEnginePercent": {
+              "mean": 34.24659308890072,
+              "min": 32.264628075615,
+              "max": 38.38744374365898
+            }
+          },
+          "samples": [
+            {
+              "rssBytes": 859996160,
+              "pssBytes": 714809344,
+              "privateBytes": 681975808,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 49913856,
+              "gpuResidentGttBytes": 830144512,
+              "activeChildren": 3,
+              "threads": 83,
+              "elapsedSeconds": 1.0378947409999455,
+              "intervalSeconds": 1.0378947409999455,
+              "cpuPercent": 28.904665198608587,
+              "mainThreadCpuPercent": 8.671399559582577,
+              "processTreeCpuPercent": 30.83164287851583,
+              "contextSwitchesPerSecond": 4744.219047931623,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/322/drm-engine-gfx": 32.264628075615,
+                "0000:c4:00.0/322/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 32.264628075615
+            },
+            {
+              "rssBytes": 858206208,
+              "pssBytes": 715116544,
+              "privateBytes": 682283008,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 49913856,
+              "gpuResidentGttBytes": 830144512,
+              "activeChildren": 3,
+              "threads": 82,
+              "elapsedSeconds": 2.0158349700000144,
+              "intervalSeconds": 0.9779402290000689,
+              "cpuPercent": 28.63160668687251,
+              "mainThreadCpuPercent": 8.180459053392143,
+              "processTreeCpuPercent": 30.676721450220533,
+              "contextSwitchesPerSecond": 4532.996872960922,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/322/drm-engine-gfx": 33.06184206478505,
+                "0000:c4:00.0/322/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 33.06184206478505
+            },
+            {
+              "rssBytes": 858669056,
+              "pssBytes": 715579392,
+              "privateBytes": 682745856,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 49913856,
+              "gpuResidentGttBytes": 830144512,
+              "activeChildren": 3,
+              "threads": 82,
+              "elapsedSeconds": 3.046764101000008,
+              "intervalSeconds": 1.0309291309999935,
+              "cpuPercent": 30.069962199952805,
+              "mainThreadCpuPercent": 10.669986587080029,
+              "processTreeCpuPercent": 32.00995976124009,
+              "contextSwitchesPerSecond": 4589.064231225056,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/322/drm-engine-gfx": 33.679612842369295,
+                "0000:c4:00.0/322/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 33.679612842369295
+            },
+            {
+              "rssBytes": 858472448,
+              "pssBytes": 715382784,
+              "privateBytes": 682549248,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 49913856,
+              "gpuResidentGttBytes": 828047360,
+              "activeChildren": 3,
+              "threads": 82,
+              "elapsedSeconds": 4.034062296999764,
+              "intervalSeconds": 0.987298195999756,
+              "cpuPercent": 30.385956463357516,
+              "mainThreadCpuPercent": 10.128652154452505,
+              "processTreeCpuPercent": 32.411686894248014,
+              "contextSwitchesPerSecond": 4514.340265239482,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/322/drm-engine-gfx": 33.83943871807526,
+                "0000:c4:00.0/322/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 33.83943871807526
+            },
+            {
+              "rssBytes": 858472448,
+              "pssBytes": 715382784,
+              "privateBytes": 682549248,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 49913856,
+              "gpuResidentGttBytes": 828047360,
+              "activeChildren": 3,
+              "threads": 82,
+              "elapsedSeconds": 5.0007792930000505,
+              "intervalSeconds": 0.9667169960002866,
+              "cpuPercent": 27.9295803339657,
+              "mainThreadCpuPercent": 9.3098601113219,
+              "processTreeCpuPercent": 28.964009235223685,
+              "contextSwitchesPerSecond": 4607.346326203082,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/322/drm-engine-gfx": 38.38744374365898,
+                "0000:c4:00.0/322/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 38.38744374365898
+            }
+          ],
+          "actions": 10,
+          "threadCpu": [
+            {
+              "tid": 44636,
+              "name": "qs",
+              "ticks": 47,
+              "cpuSeconds": 0.47,
+              "cpuPercent": 9.39853515746821
+            },
+            {
+              "tid": 45182,
+              "name": "QSGRenderThread",
+              "ticks": 25,
+              "cpuSeconds": 0.25,
+              "cpuPercent": 4.999220828440538
+            },
+            {
+              "tid": 44902,
+              "name": "QSGRenderThread",
+              "ticks": 20,
+              "cpuSeconds": 0.2,
+              "cpuPercent": 3.9993766627524305
+            },
+            {
+              "tid": 44694,
+              "name": "qs:cs0",
+              "ticks": 11,
+              "cpuSeconds": 0.11,
+              "cpuPercent": 2.1996571645138365
+            },
+            {
+              "tid": 45166,
+              "name": "QSGRenderThread",
+              "ticks": 8,
+              "cpuSeconds": 0.08,
+              "cpuPercent": 1.599750665100972
+            },
+            {
+              "tid": 45184,
+              "name": "qs:gdrv0",
+              "ticks": 6,
+              "cpuSeconds": 0.06,
+              "cpuPercent": 1.199812998825729
+            },
+            {
+              "tid": 44658,
+              "name": "QDBusConnection",
+              "ticks": 5,
+              "cpuSeconds": 0.05,
+              "cpuPercent": 0.9998441656881076
+            },
+            {
+              "tid": 44907,
+              "name": "qs:gdrv0",
+              "ticks": 5,
+              "cpuSeconds": 0.05,
+              "cpuPercent": 0.9998441656881076
+            },
+            {
+              "tid": 44659,
+              "name": "WaylandEventThr",
+              "ticks": 4,
+              "cpuSeconds": 0.04,
+              "cpuPercent": 0.799875332550486
+            },
+            {
+              "tid": 44660,
+              "name": "WaylandEventThr",
+              "ticks": 4,
+              "cpuSeconds": 0.04,
+              "cpuPercent": 0.799875332550486
+            },
+            {
+              "tid": 44656,
+              "name": "QThread",
+              "ticks": 2,
+              "cpuSeconds": 0.02,
+              "cpuPercent": 0.399937666275243
+            },
+            {
+              "tid": 44661,
+              "name": "QQmlDebugServer",
+              "ticks": 2,
+              "cpuSeconds": 0.02,
+              "cpuPercent": 0.399937666275243
+            },
+            {
+              "tid": 45169,
+              "name": "qs:gdrv0",
+              "ticks": 2,
+              "cpuSeconds": 0.02,
+              "cpuPercent": 0.399937666275243
+            },
+            {
+              "tid": 44894,
+              "name": "inir-core",
+              "ticks": 1,
+              "cpuSeconds": 0.01,
+              "cpuPercent": 0.1999688331376215
+            },
+            {
+              "tid": 44655,
+              "name": "jemalloc_bg_thd",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44657,
+              "name": "jemalloc_bg_thd",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44695,
+              "name": "qs:disk$0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44696,
+              "name": "qs:sh0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44697,
+              "name": "qs:sh_opt0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44698,
+              "name": "QQmlThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44718,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44719,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44750,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44751,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44752,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44753,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44760,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44761,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44762,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44763,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44764,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44766,
+              "name": "QQuickPixmapRea",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44816,
+              "name": "jemalloc_bg_thd",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44817,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44818,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44819,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44870,
+              "name": "QNetworkAccessM",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44871,
+              "name": "pool-spawner",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44872,
+              "name": "gmain",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44873,
+              "name": "gdbus",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44874,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44895,
+              "name": "tokio-rt-worker",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44896,
+              "name": "tokio-rt-worker",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44897,
+              "name": "tokio-rt-worker",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44906,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44909,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44910,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44911,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44912,
+              "name": "qs:sh1",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 44913,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45167,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45172,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45173,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45183,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45185,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45186,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45192,
+              "name": "QQuickContext2D",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45194,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45264,
+              "name": "PWDevMon",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45265,
+              "name": "QAudioContext",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45271,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45272,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45273,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45274,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45275,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45280,
+              "name": "qs:sh2",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45281,
+              "name": "qs:sh3",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45392,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45393,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45394,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45395,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45396,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45401,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45402,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45403,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45404,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45405,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45410,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45411,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45412,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45413,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45414,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 45458,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            }
+          ],
+          "compositorObservations": [
+            {
+              "elapsedSeconds": 0,
+              "workspaceId": 2,
+              "activeWindowId": null
+            },
+            {
+              "elapsedSeconds": 1.0378947409999455,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 2.0158349700000144,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 3.046764101000008,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 4.034062296999764,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 5.0007792930000505,
+              "workspaceId": 2,
+              "activeWindowId": null
+            }
+          ],
+          "threadCpuNotes": "Matched thread identities between samples; short-lived or newly observed threads can be undercounted.",
+          "durationSeconds": 5.03373389699982,
+          "spawnsByName": {
+            "cava": 1,
+            "udevadm": 1,
+            "python3": 1
+          },
+          "qmlTrace": "1-rust-baseline.qtd.gz",
+          "presentation": {
+            "variant": "baseline",
+            "animationsEnabled": true,
+            "effectsEnabled": true,
+            "barOpen": true,
+            "stopWorkspaceAnimations": false,
+            "disableWallpaperBlur": false,
+            "hideMediaWidget": false,
+            "style": "material",
+            "motionProfile": "classic",
+            "mediaPlaying": true
+          },
+          "ownershipBefore": {
+            "requested": true,
+            "available": true,
+            "typedBridge": true,
+            "desktopActive": true,
+            "idleInhibited": true,
+            "gameMode": false,
+            "selectedNativeDomains": "network,brightness,niri",
+            "ui": {
+              "overviewOpen": false,
+              "mediaControlsOpen": false,
+              "sidebarLeftOpen": false,
+              "sidebarRightOpen": false,
+              "controlPanelOpen": false,
+              "dashboardOpen": false,
+              "mediaPlaying": true
+            },
+            "nativeFocus": {
+              "workspaceId": 2,
+              "workspaceIndex": 1,
+              "windowId": -1
+            },
+            "niri": {
+              "owner": "rust",
+              "nativeReady": true,
+              "nativeApplyCalls": 11,
+              "fallbackLoaded": false,
+              "fallback": null,
+              "windows": 3,
+              "workspaces": 2,
+              "focusedWorkspaceId": "2"
+            },
+            "network": {
+              "owner": "rust",
+              "nativeReady": true,
+              "monitorRunning": false,
+              "acquisitionProcessesRunning": 0
+            },
+            "brightness": {
+              "owner": "rust",
+              "nativeReady": true,
+              "backlightDetectRunning": false,
+              "monitors": [
+                {
+                  "isDdc": false,
+                  "initRunning": false,
+                  "readbackRunning": false,
+                  "writeRunning": false
+                }
+              ]
+            },
+            "keyboard": {
+              "owner": "python",
+              "wanted": true,
+              "nativeReady": false,
+              "pending": false,
+              "source": "evdev",
+              "probeRunning": false,
+              "monitorRunning": true,
+              "caps": false,
+              "num": false,
+              "devices": 0
+            },
+            "nativePowerReady": false,
+            "models": {
+              "niri": {
+                "count": 3,
+                "applyCalls": 11,
+                "applyTotalUs": 8235.937,
+                "applyMaxUs": 2127.278
+              },
+              "workspaces": {
+                "count": 2,
+                "applyCalls": 5,
+                "applyTotalUs": 9794.451,
+                "applyMaxUs": 3395.775
+              }
+            }
+          },
+          "ownershipAfter": {
+            "requested": true,
+            "available": true,
+            "typedBridge": true,
+            "desktopActive": true,
+            "idleInhibited": true,
+            "gameMode": false,
+            "selectedNativeDomains": "network,brightness,niri",
+            "ui": {
+              "overviewOpen": false,
+              "mediaControlsOpen": false,
+              "sidebarLeftOpen": false,
+              "sidebarRightOpen": false,
+              "controlPanelOpen": false,
+              "dashboardOpen": false,
+              "mediaPlaying": true
+            },
+            "nativeFocus": {
+              "workspaceId": 2,
+              "workspaceIndex": 1,
+              "windowId": -1
+            },
+            "niri": {
+              "owner": "rust",
+              "nativeReady": true,
+              "nativeApplyCalls": 26,
+              "fallbackLoaded": false,
+              "fallback": null,
+              "windows": 3,
+              "workspaces": 2,
+              "focusedWorkspaceId": "2"
+            },
+            "network": {
+              "owner": "rust",
+              "nativeReady": true,
+              "monitorRunning": false,
+              "acquisitionProcessesRunning": 0
+            },
+            "brightness": {
+              "owner": "rust",
+              "nativeReady": true,
+              "backlightDetectRunning": false,
+              "monitors": [
+                {
+                  "isDdc": false,
+                  "initRunning": false,
+                  "readbackRunning": false,
+                  "writeRunning": false
+                }
+              ]
+            },
+            "keyboard": {
+              "owner": "python",
+              "wanted": true,
+              "nativeReady": false,
+              "pending": false,
+              "source": "evdev",
+              "probeRunning": false,
+              "monitorRunning": true,
+              "caps": false,
+              "num": false,
+              "devices": 0
+            },
+            "nativePowerReady": false,
+            "models": {
+              "niri": {
+                "count": 3,
+                "applyCalls": 26,
+                "applyTotalUs": 18921.657000000003,
+                "applyMaxUs": 2127.278
+              },
+              "workspaces": {
+                "count": 2,
+                "applyCalls": 15,
+                "applyTotalUs": 24280.977999999996,
+                "applyMaxUs": 3395.775
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "1-qml",
+      "mode": "qml",
+      "pid": 46167,
+      "ownershipBefore": {
+        "requested": false,
+        "available": false,
+        "typedBridge": false,
+        "desktopActive": false,
+        "idleInhibited": true,
+        "gameMode": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "ui": {
+          "overviewOpen": false,
+          "mediaControlsOpen": false,
+          "sidebarLeftOpen": false,
+          "sidebarRightOpen": false,
+          "controlPanelOpen": false,
+          "dashboardOpen": false,
+          "mediaPlaying": true
+        },
+        "nativeFocus": null,
+        "niri": {
+          "owner": "qml",
+          "nativeReady": false,
+          "nativeApplyCalls": 0,
+          "fallbackLoaded": true,
+          "fallback": {
+            "loaded": true,
+            "eventSocketConnected": true,
+            "actionSocketConnected": true,
+            "eventsRead": 21,
+            "outputsProcessRunning": false,
+            "windowsTimerRunning": false
+          },
+          "windows": 3,
+          "workspaces": 2,
+          "focusedWorkspaceId": "1"
+        },
+        "network": {
+          "owner": "qml",
+          "nativeReady": false,
+          "monitorRunning": true,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "qml",
+          "nativeReady": false,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "keyboard": {
+          "owner": "python",
+          "wanted": true,
+          "nativeReady": false,
+          "pending": false,
+          "source": "evdev",
+          "probeRunning": false,
+          "monitorRunning": true,
+          "caps": false,
+          "num": false,
+          "devices": 0
+        },
+        "nativePowerReady": false,
+        "models": null
+      },
+      "ownershipAfter": {
+        "requested": false,
+        "available": false,
+        "typedBridge": false,
+        "desktopActive": false,
+        "idleInhibited": true,
+        "gameMode": false,
+        "selectedNativeDomains": "network,brightness,niri",
+        "ui": {
+          "overviewOpen": false,
+          "mediaControlsOpen": false,
+          "sidebarLeftOpen": false,
+          "sidebarRightOpen": false,
+          "controlPanelOpen": false,
+          "dashboardOpen": false,
+          "mediaPlaying": true
+        },
+        "nativeFocus": null,
+        "niri": {
+          "owner": "qml",
+          "nativeReady": false,
+          "nativeApplyCalls": 0,
+          "fallbackLoaded": true,
+          "fallback": {
+            "loaded": true,
+            "eventSocketConnected": true,
+            "actionSocketConnected": true,
+            "eventsRead": 50,
+            "outputsProcessRunning": false,
+            "windowsTimerRunning": false
+          },
+          "windows": 3,
+          "workspaces": 2,
+          "focusedWorkspaceId": "1"
+        },
+        "network": {
+          "owner": "qml",
+          "nativeReady": false,
+          "monitorRunning": true,
+          "acquisitionProcessesRunning": 0
+        },
+        "brightness": {
+          "owner": "qml",
+          "nativeReady": false,
+          "backlightDetectRunning": false,
+          "monitors": [
+            {
+              "isDdc": false,
+              "initRunning": false,
+              "readbackRunning": false,
+              "writeRunning": false
+            }
+          ]
+        },
+        "keyboard": {
+          "owner": "python",
+          "wanted": true,
+          "nativeReady": false,
+          "pending": false,
+          "source": "evdev",
+          "probeRunning": false,
+          "monitorRunning": true,
+          "caps": false,
+          "num": false,
+          "devices": 0
+        },
+        "nativePowerReady": false,
+        "models": null
+      },
+      "niriEventsDuringActivity": 27,
+      "idle": null,
+      "workspaceSwitches": {
+        "summary": {
+          "rssBytes": {
+            "mean": 851482214.4,
+            "min": 850980864,
+            "max": 852738048
+          },
+          "pssBytes": {
+            "mean": 707703193.6,
+            "min": 707543040,
+            "max": 707877888
+          },
+          "privateBytes": {
+            "mean": 674737356.8,
+            "min": 674574336,
+            "max": 674938880
+          },
+          "swapBytes": {
+            "mean": 0.0,
+            "min": 0,
+            "max": 0
+          },
+          "gpuResidentVramBytes": {
+            "mean": 46235648.0,
+            "min": 46235648,
+            "max": 46235648
+          },
+          "gpuResidentGttBytes": {
+            "mean": 839791411.2,
+            "min": 836435968,
+            "max": 846921728
+          },
+          "activeChildren": {
+            "mean": 4.0,
+            "min": 4,
+            "max": 4
+          },
+          "threads": {
+            "mean": 79.4,
+            "min": 79,
+            "max": 80
+          },
+          "cpuPercent": {
+            "mean": 28.85274093810505,
+            "min": 24.196602974066035,
+            "max": 31.75366758445188
+          },
+          "mainThreadCpuPercent": {
+            "mean": 10.211006530565424,
+            "min": 8.710777070663772,
+            "max": 12.291742290755565
+          },
+          "processTreeCpuPercent": {
+            "mean": 30.863977477884127,
+            "min": 26.132331211991318,
+            "max": 33.801728148176196
+          },
+          "contextSwitchesPerSecond": {
+            "mean": 4673.420784166641,
+            "min": 4520.28822742536,
+            "max": 4834.481274218394
+          },
+          "gpuBusiestEnginePercent": {
+            "mean": 35.40050132471883,
+            "min": 32.55462557826241,
+            "max": 37.941123865001146
+          }
+        },
+        "samples": [
+          {
+            "rssBytes": 852738048,
+            "pssBytes": 707726336,
+            "privateBytes": 674787328,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 46235648,
+            "gpuResidentGttBytes": 838533120,
+            "activeChildren": 4,
+            "threads": 80,
+            "elapsedSeconds": 1.0275656489998255,
+            "intervalSeconds": 1.0275656489998255,
+            "cpuPercent": 28.22204112041597,
+            "mainThreadCpuPercent": 10.704912149123299,
+            "processTreeCpuPercent": 29.19521495215445,
+            "contextSwitchesPerSecond": 4605.058571786496,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/334/drm-engine-gfx": 35.59546957958519,
+              "0000:c4:00.0/334/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 35.59546957958519
+          },
+          {
+            "rssBytes": 851316736,
+            "pssBytes": 707877888,
+            "privateBytes": 674938880,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 46235648,
+            "gpuResidentGttBytes": 838533120,
+            "activeChildren": 4,
+            "threads": 80,
+            "elapsedSeconds": 2.003847093999866,
+            "intervalSeconds": 0.9762814450000405,
+            "cpuPercent": 29.70454897870029,
+            "mainThreadCpuPercent": 9.21865313132078,
+            "processTreeCpuPercent": 33.801728148176196,
+            "contextSwitchesPerSecond": 4779.35950119364,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/334/drm-engine-gfx": 36.142519025339595,
+              "0000:c4:00.0/334/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 36.142519025339595
+          },
+          {
+            "rssBytes": 850980864,
+            "pssBytes": 707543040,
+            "privateBytes": 674603008,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 46235648,
+            "gpuResidentGttBytes": 838533120,
+            "activeChildren": 4,
+            "threads": 79,
+            "elapsedSeconds": 3.0370499789996757,
+            "intervalSeconds": 1.0332028849998096,
+            "cpuPercent": 24.196602974066035,
+            "mainThreadCpuPercent": 8.710777070663772,
+            "processTreeCpuPercent": 26.132331211991318,
+            "contextSwitchesPerSecond": 4834.481274218394,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/334/drm-engine-gfx": 34.76876857540581,
+              "0000:c4:00.0/334/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 34.76876857540581
+          },
+          {
+            "rssBytes": 851083264,
+            "pssBytes": 707579904,
+            "privateBytes": 674574336,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 46235648,
+            "gpuResidentGttBytes": 846921728,
+            "activeChildren": 4,
+            "threads": 79,
+            "elapsedSeconds": 4.024319336999724,
+            "intervalSeconds": 0.9872693580000487,
+            "cpuPercent": 30.38684403289109,
+            "mainThreadCpuPercent": 10.128948010963699,
+            "processTreeCpuPercent": 32.41263363508383,
+            "contextSwitchesPerSecond": 4627.916346209314,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/334/drm-engine-gfx": 37.941123865001146,
+              "0000:c4:00.0/334/drm-engine-compute": 0.003642065836302217
+            },
+            "gpuBusiestEnginePercent": 37.941123865001146
+          },
+          {
+            "rssBytes": 851292160,
+            "pssBytes": 707788800,
+            "privateBytes": 674783232,
+            "swapBytes": 0,
+            "gpuResidentVramBytes": 46235648,
+            "gpuResidentGttBytes": 836435968,
+            "activeChildren": 4,
+            "threads": 79,
+            "elapsedSeconds": 5.000584516999879,
+            "intervalSeconds": 0.9762651800001549,
+            "cpuPercent": 31.75366758445188,
+            "mainThreadCpuPercent": 12.291742290755565,
+            "processTreeCpuPercent": 32.777979442014846,
+            "contextSwitchesPerSecond": 4520.28822742536,
+            "gpuEnginePercent": {
+              "0000:c4:00.0/334/drm-engine-gfx": 32.55462557826241,
+              "0000:c4:00.0/334/drm-engine-compute": 0.0
+            },
+            "gpuBusiestEnginePercent": 32.55462557826241
+          }
+        ],
+        "actions": 10,
+        "threadCpu": [
+          {
+            "tid": 46167,
+            "name": "qs",
+            "ticks": 50,
+            "cpuSeconds": 0.5,
+            "cpuPercent": 9.998831102648316
+          },
+          {
+            "tid": 46686,
+            "name": "QSGRenderThread",
+            "ticks": 23,
+            "cpuSeconds": 0.23,
+            "cpuPercent": 4.599462307218226
+          },
+          {
+            "tid": 46427,
+            "name": "QSGRenderThread",
+            "ticks": 20,
+            "cpuSeconds": 0.2,
+            "cpuPercent": 3.9995324410593267
+          },
+          {
+            "tid": 46209,
+            "name": "qs:cs0",
+            "ticks": 10,
+            "cpuSeconds": 0.1,
+            "cpuPercent": 1.9997662205296634
+          },
+          {
+            "tid": 46677,
+            "name": "QSGRenderThread",
+            "ticks": 8,
+            "cpuSeconds": 0.08,
+            "cpuPercent": 1.5998129764237305
+          },
+          {
+            "tid": 46173,
+            "name": "QDBusConnection",
+            "ticks": 7,
+            "cpuSeconds": 0.07,
+            "cpuPercent": 1.3998363543707644
+          },
+          {
+            "tid": 46174,
+            "name": "WaylandEventThr",
+            "ticks": 5,
+            "cpuSeconds": 0.05,
+            "cpuPercent": 0.9998831102648317
+          },
+          {
+            "tid": 46429,
+            "name": "qs:gdrv0",
+            "ticks": 5,
+            "cpuSeconds": 0.05,
+            "cpuPercent": 0.9998831102648317
+          },
+          {
+            "tid": 46688,
+            "name": "qs:gdrv0",
+            "ticks": 5,
+            "cpuSeconds": 0.05,
+            "cpuPercent": 0.9998831102648317
+          },
+          {
+            "tid": 46171,
+            "name": "QThread",
+            "ticks": 4,
+            "cpuSeconds": 0.04,
+            "cpuPercent": 0.7999064882118653
+          },
+          {
+            "tid": 46175,
+            "name": "WaylandEventThr",
+            "ticks": 4,
+            "cpuSeconds": 0.04,
+            "cpuPercent": 0.7999064882118653
+          },
+          {
+            "tid": 46176,
+            "name": "QQmlDebugServer",
+            "ticks": 3,
+            "cpuSeconds": 0.03,
+            "cpuPercent": 0.599929866158899
+          },
+          {
+            "tid": 46679,
+            "name": "qs:gdrv0",
+            "ticks": 2,
+            "cpuSeconds": 0.02,
+            "cpuPercent": 0.39995324410593264
+          },
+          {
+            "tid": 46743,
+            "name": "QQuickContext2D",
+            "ticks": 2,
+            "cpuSeconds": 0.02,
+            "cpuPercent": 0.39995324410593264
+          },
+          {
+            "tid": 46170,
+            "name": "jemalloc_bg_thd",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46172,
+            "name": "jemalloc_bg_thd",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46210,
+            "name": "qs:disk$0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46211,
+            "name": "qs:sh0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46212,
+            "name": "qs:sh_opt0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46213,
+            "name": "QQmlThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46232,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46233,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46264,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46265,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46266,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46267,
+            "name": "FileInfoThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46276,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46277,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46278,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46279,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46280,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46282,
+            "name": "QQuickPixmapRea",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46284,
+            "name": "jemalloc_bg_thd",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46285,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46286,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46287,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46393,
+            "name": "QNetworkAccessM",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46394,
+            "name": "pool-spawner",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46395,
+            "name": "gmain",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46396,
+            "name": "gdbus",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46397,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46428,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46430,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46431,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46432,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46434,
+            "name": "qs:sh1",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46435,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46678,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46680,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46681,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46687,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46689,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46690,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46691,
+            "name": "qs:sh2",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46746,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46841,
+            "name": "PWDevMon",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46842,
+            "name": "QAudioContext",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46847,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46848,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46849,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46850,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46851,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46853,
+            "name": "qs:sh3",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46970,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46971,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46972,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46973,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46974,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46979,
+            "name": "qs:sh4",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46980,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46981,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46983,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46984,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46985,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46990,
+            "name": "QSGRenderThread",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46991,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46992,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46993,
+            "name": "qs:traceq0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 46994,
+            "name": "qs:gdrv0",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          },
+          {
+            "tid": 47038,
+            "name": "Thread (pooled)",
+            "ticks": 0,
+            "cpuSeconds": 0.0,
+            "cpuPercent": 0.0
+          }
+        ],
+        "compositorObservations": [
+          {
+            "elapsedSeconds": 0,
+            "workspaceId": 2,
+            "activeWindowId": null
+          },
+          {
+            "elapsedSeconds": 1.0275656489998255,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 2.003847093999866,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 3.0370499789996757,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 4.024319336999724,
+            "workspaceId": 1,
+            "activeWindowId": 7
+          },
+          {
+            "elapsedSeconds": 5.000584516999879,
+            "workspaceId": 2,
+            "activeWindowId": null
+          }
+        ],
+        "threadCpuNotes": "Matched thread identities between samples; short-lived or newly observed threads can be undercounted.",
+        "durationSeconds": 5.024493374000031,
+        "spawnsByName": {
+          "cava": 1,
+          "nmcli": 1,
+          "python3": 1,
+          "udevadm": 1
+        },
+        "qmlTrace": "1-qml-baseline.qtd.gz",
+        "presentation": {
+          "variant": "baseline",
+          "animationsEnabled": true,
+          "effectsEnabled": true,
+          "barOpen": true,
+          "stopWorkspaceAnimations": false,
+          "disableWallpaperBlur": false,
+          "hideMediaWidget": false,
+          "style": "material",
+          "motionProfile": "classic",
+          "mediaPlaying": true
+        },
+        "ownershipBefore": {
+          "requested": false,
+          "available": false,
+          "typedBridge": false,
+          "desktopActive": false,
+          "idleInhibited": true,
+          "gameMode": false,
+          "selectedNativeDomains": "network,brightness,niri",
+          "ui": {
+            "overviewOpen": false,
+            "mediaControlsOpen": false,
+            "sidebarLeftOpen": false,
+            "sidebarRightOpen": false,
+            "controlPanelOpen": false,
+            "dashboardOpen": false,
+            "mediaPlaying": true
+          },
+          "nativeFocus": null,
+          "niri": {
+            "owner": "qml",
+            "nativeReady": false,
+            "nativeApplyCalls": 0,
+            "fallbackLoaded": true,
+            "fallback": {
+              "loaded": true,
+              "eventSocketConnected": true,
+              "actionSocketConnected": true,
+              "eventsRead": 23,
+              "outputsProcessRunning": false,
+              "windowsTimerRunning": false
+            },
+            "windows": 3,
+            "workspaces": 2,
+            "focusedWorkspaceId": "2"
+          },
+          "network": {
+            "owner": "qml",
+            "nativeReady": false,
+            "monitorRunning": true,
+            "acquisitionProcessesRunning": 0
+          },
+          "brightness": {
+            "owner": "qml",
+            "nativeReady": false,
+            "backlightDetectRunning": false,
+            "monitors": [
+              {
+                "isDdc": false,
+                "initRunning": false,
+                "readbackRunning": false,
+                "writeRunning": false
+              }
+            ]
+          },
+          "keyboard": {
+            "owner": "python",
+            "wanted": true,
+            "nativeReady": false,
+            "pending": false,
+            "source": "evdev",
+            "probeRunning": false,
+            "monitorRunning": true,
+            "caps": false,
+            "num": false,
+            "devices": 0
+          },
+          "nativePowerReady": false,
+          "models": null
+        },
+        "ownershipAfter": {
+          "requested": false,
+          "available": false,
+          "typedBridge": false,
+          "desktopActive": false,
+          "idleInhibited": true,
+          "gameMode": false,
+          "selectedNativeDomains": "network,brightness,niri",
+          "ui": {
+            "overviewOpen": false,
+            "mediaControlsOpen": false,
+            "sidebarLeftOpen": false,
+            "sidebarRightOpen": false,
+            "controlPanelOpen": false,
+            "dashboardOpen": false,
+            "mediaPlaying": true
+          },
+          "nativeFocus": null,
+          "niri": {
+            "owner": "qml",
+            "nativeReady": false,
+            "nativeApplyCalls": 0,
+            "fallbackLoaded": true,
+            "fallback": {
+              "loaded": true,
+              "eventSocketConnected": true,
+              "actionSocketConnected": true,
+              "eventsRead": 48,
+              "outputsProcessRunning": false,
+              "windowsTimerRunning": false
+            },
+            "windows": 3,
+            "workspaces": 2,
+            "focusedWorkspaceId": "2"
+          },
+          "network": {
+            "owner": "qml",
+            "nativeReady": false,
+            "monitorRunning": true,
+            "acquisitionProcessesRunning": 0
+          },
+          "brightness": {
+            "owner": "qml",
+            "nativeReady": false,
+            "backlightDetectRunning": false,
+            "monitors": [
+              {
+                "isDdc": false,
+                "initRunning": false,
+                "readbackRunning": false,
+                "writeRunning": false
+              }
+            ]
+          },
+          "keyboard": {
+            "owner": "python",
+            "wanted": true,
+            "nativeReady": false,
+            "pending": false,
+            "source": "evdev",
+            "probeRunning": false,
+            "monitorRunning": true,
+            "caps": false,
+            "num": false,
+            "devices": 0
+          },
+          "nativePowerReady": false,
+          "models": null
+        }
+      },
+      "wifiRescans": null,
+      "workspaceVariants": {
+        "baseline": {
+          "summary": {
+            "rssBytes": {
+              "mean": 851482214.4,
+              "min": 850980864,
+              "max": 852738048
+            },
+            "pssBytes": {
+              "mean": 707703193.6,
+              "min": 707543040,
+              "max": 707877888
+            },
+            "privateBytes": {
+              "mean": 674737356.8,
+              "min": 674574336,
+              "max": 674938880
+            },
+            "swapBytes": {
+              "mean": 0.0,
+              "min": 0,
+              "max": 0
+            },
+            "gpuResidentVramBytes": {
+              "mean": 46235648.0,
+              "min": 46235648,
+              "max": 46235648
+            },
+            "gpuResidentGttBytes": {
+              "mean": 839791411.2,
+              "min": 836435968,
+              "max": 846921728
+            },
+            "activeChildren": {
+              "mean": 4.0,
+              "min": 4,
+              "max": 4
+            },
+            "threads": {
+              "mean": 79.4,
+              "min": 79,
+              "max": 80
+            },
+            "cpuPercent": {
+              "mean": 28.85274093810505,
+              "min": 24.196602974066035,
+              "max": 31.75366758445188
+            },
+            "mainThreadCpuPercent": {
+              "mean": 10.211006530565424,
+              "min": 8.710777070663772,
+              "max": 12.291742290755565
+            },
+            "processTreeCpuPercent": {
+              "mean": 30.863977477884127,
+              "min": 26.132331211991318,
+              "max": 33.801728148176196
+            },
+            "contextSwitchesPerSecond": {
+              "mean": 4673.420784166641,
+              "min": 4520.28822742536,
+              "max": 4834.481274218394
+            },
+            "gpuBusiestEnginePercent": {
+              "mean": 35.40050132471883,
+              "min": 32.55462557826241,
+              "max": 37.941123865001146
+            }
+          },
+          "samples": [
+            {
+              "rssBytes": 852738048,
+              "pssBytes": 707726336,
+              "privateBytes": 674787328,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 46235648,
+              "gpuResidentGttBytes": 838533120,
+              "activeChildren": 4,
+              "threads": 80,
+              "elapsedSeconds": 1.0275656489998255,
+              "intervalSeconds": 1.0275656489998255,
+              "cpuPercent": 28.22204112041597,
+              "mainThreadCpuPercent": 10.704912149123299,
+              "processTreeCpuPercent": 29.19521495215445,
+              "contextSwitchesPerSecond": 4605.058571786496,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/334/drm-engine-gfx": 35.59546957958519,
+                "0000:c4:00.0/334/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 35.59546957958519
+            },
+            {
+              "rssBytes": 851316736,
+              "pssBytes": 707877888,
+              "privateBytes": 674938880,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 46235648,
+              "gpuResidentGttBytes": 838533120,
+              "activeChildren": 4,
+              "threads": 80,
+              "elapsedSeconds": 2.003847093999866,
+              "intervalSeconds": 0.9762814450000405,
+              "cpuPercent": 29.70454897870029,
+              "mainThreadCpuPercent": 9.21865313132078,
+              "processTreeCpuPercent": 33.801728148176196,
+              "contextSwitchesPerSecond": 4779.35950119364,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/334/drm-engine-gfx": 36.142519025339595,
+                "0000:c4:00.0/334/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 36.142519025339595
+            },
+            {
+              "rssBytes": 850980864,
+              "pssBytes": 707543040,
+              "privateBytes": 674603008,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 46235648,
+              "gpuResidentGttBytes": 838533120,
+              "activeChildren": 4,
+              "threads": 79,
+              "elapsedSeconds": 3.0370499789996757,
+              "intervalSeconds": 1.0332028849998096,
+              "cpuPercent": 24.196602974066035,
+              "mainThreadCpuPercent": 8.710777070663772,
+              "processTreeCpuPercent": 26.132331211991318,
+              "contextSwitchesPerSecond": 4834.481274218394,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/334/drm-engine-gfx": 34.76876857540581,
+                "0000:c4:00.0/334/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 34.76876857540581
+            },
+            {
+              "rssBytes": 851083264,
+              "pssBytes": 707579904,
+              "privateBytes": 674574336,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 46235648,
+              "gpuResidentGttBytes": 846921728,
+              "activeChildren": 4,
+              "threads": 79,
+              "elapsedSeconds": 4.024319336999724,
+              "intervalSeconds": 0.9872693580000487,
+              "cpuPercent": 30.38684403289109,
+              "mainThreadCpuPercent": 10.128948010963699,
+              "processTreeCpuPercent": 32.41263363508383,
+              "contextSwitchesPerSecond": 4627.916346209314,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/334/drm-engine-gfx": 37.941123865001146,
+                "0000:c4:00.0/334/drm-engine-compute": 0.003642065836302217
+              },
+              "gpuBusiestEnginePercent": 37.941123865001146
+            },
+            {
+              "rssBytes": 851292160,
+              "pssBytes": 707788800,
+              "privateBytes": 674783232,
+              "swapBytes": 0,
+              "gpuResidentVramBytes": 46235648,
+              "gpuResidentGttBytes": 836435968,
+              "activeChildren": 4,
+              "threads": 79,
+              "elapsedSeconds": 5.000584516999879,
+              "intervalSeconds": 0.9762651800001549,
+              "cpuPercent": 31.75366758445188,
+              "mainThreadCpuPercent": 12.291742290755565,
+              "processTreeCpuPercent": 32.777979442014846,
+              "contextSwitchesPerSecond": 4520.28822742536,
+              "gpuEnginePercent": {
+                "0000:c4:00.0/334/drm-engine-gfx": 32.55462557826241,
+                "0000:c4:00.0/334/drm-engine-compute": 0.0
+              },
+              "gpuBusiestEnginePercent": 32.55462557826241
+            }
+          ],
+          "actions": 10,
+          "threadCpu": [
+            {
+              "tid": 46167,
+              "name": "qs",
+              "ticks": 50,
+              "cpuSeconds": 0.5,
+              "cpuPercent": 9.998831102648316
+            },
+            {
+              "tid": 46686,
+              "name": "QSGRenderThread",
+              "ticks": 23,
+              "cpuSeconds": 0.23,
+              "cpuPercent": 4.599462307218226
+            },
+            {
+              "tid": 46427,
+              "name": "QSGRenderThread",
+              "ticks": 20,
+              "cpuSeconds": 0.2,
+              "cpuPercent": 3.9995324410593267
+            },
+            {
+              "tid": 46209,
+              "name": "qs:cs0",
+              "ticks": 10,
+              "cpuSeconds": 0.1,
+              "cpuPercent": 1.9997662205296634
+            },
+            {
+              "tid": 46677,
+              "name": "QSGRenderThread",
+              "ticks": 8,
+              "cpuSeconds": 0.08,
+              "cpuPercent": 1.5998129764237305
+            },
+            {
+              "tid": 46173,
+              "name": "QDBusConnection",
+              "ticks": 7,
+              "cpuSeconds": 0.07,
+              "cpuPercent": 1.3998363543707644
+            },
+            {
+              "tid": 46174,
+              "name": "WaylandEventThr",
+              "ticks": 5,
+              "cpuSeconds": 0.05,
+              "cpuPercent": 0.9998831102648317
+            },
+            {
+              "tid": 46429,
+              "name": "qs:gdrv0",
+              "ticks": 5,
+              "cpuSeconds": 0.05,
+              "cpuPercent": 0.9998831102648317
+            },
+            {
+              "tid": 46688,
+              "name": "qs:gdrv0",
+              "ticks": 5,
+              "cpuSeconds": 0.05,
+              "cpuPercent": 0.9998831102648317
+            },
+            {
+              "tid": 46171,
+              "name": "QThread",
+              "ticks": 4,
+              "cpuSeconds": 0.04,
+              "cpuPercent": 0.7999064882118653
+            },
+            {
+              "tid": 46175,
+              "name": "WaylandEventThr",
+              "ticks": 4,
+              "cpuSeconds": 0.04,
+              "cpuPercent": 0.7999064882118653
+            },
+            {
+              "tid": 46176,
+              "name": "QQmlDebugServer",
+              "ticks": 3,
+              "cpuSeconds": 0.03,
+              "cpuPercent": 0.599929866158899
+            },
+            {
+              "tid": 46679,
+              "name": "qs:gdrv0",
+              "ticks": 2,
+              "cpuSeconds": 0.02,
+              "cpuPercent": 0.39995324410593264
+            },
+            {
+              "tid": 46743,
+              "name": "QQuickContext2D",
+              "ticks": 2,
+              "cpuSeconds": 0.02,
+              "cpuPercent": 0.39995324410593264
+            },
+            {
+              "tid": 46170,
+              "name": "jemalloc_bg_thd",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46172,
+              "name": "jemalloc_bg_thd",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46210,
+              "name": "qs:disk$0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46211,
+              "name": "qs:sh0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46212,
+              "name": "qs:sh_opt0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46213,
+              "name": "QQmlThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46232,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46233,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46264,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46265,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46266,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46267,
+              "name": "FileInfoThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46276,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46277,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46278,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46279,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46280,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46282,
+              "name": "QQuickPixmapRea",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46284,
+              "name": "jemalloc_bg_thd",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46285,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46286,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46287,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46393,
+              "name": "QNetworkAccessM",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46394,
+              "name": "pool-spawner",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46395,
+              "name": "gmain",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46396,
+              "name": "gdbus",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46397,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46428,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46430,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46431,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46432,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46434,
+              "name": "qs:sh1",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46435,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46678,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46680,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46681,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46687,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46689,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46690,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46691,
+              "name": "qs:sh2",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46746,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46841,
+              "name": "PWDevMon",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46842,
+              "name": "QAudioContext",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46847,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46848,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46849,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46850,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46851,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46853,
+              "name": "qs:sh3",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46970,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46971,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46972,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46973,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46974,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46979,
+              "name": "qs:sh4",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46980,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46981,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46983,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46984,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46985,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46990,
+              "name": "QSGRenderThread",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46991,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46992,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46993,
+              "name": "qs:traceq0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 46994,
+              "name": "qs:gdrv0",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            },
+            {
+              "tid": 47038,
+              "name": "Thread (pooled)",
+              "ticks": 0,
+              "cpuSeconds": 0.0,
+              "cpuPercent": 0.0
+            }
+          ],
+          "compositorObservations": [
+            {
+              "elapsedSeconds": 0,
+              "workspaceId": 2,
+              "activeWindowId": null
+            },
+            {
+              "elapsedSeconds": 1.0275656489998255,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 2.003847093999866,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 3.0370499789996757,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 4.024319336999724,
+              "workspaceId": 1,
+              "activeWindowId": 7
+            },
+            {
+              "elapsedSeconds": 5.000584516999879,
+              "workspaceId": 2,
+              "activeWindowId": null
+            }
+          ],
+          "threadCpuNotes": "Matched thread identities between samples; short-lived or newly observed threads can be undercounted.",
+          "durationSeconds": 5.024493374000031,
+          "spawnsByName": {
+            "cava": 1,
+            "nmcli": 1,
+            "python3": 1,
+            "udevadm": 1
+          },
+          "qmlTrace": "1-qml-baseline.qtd.gz",
+          "presentation": {
+            "variant": "baseline",
+            "animationsEnabled": true,
+            "effectsEnabled": true,
+            "barOpen": true,
+            "stopWorkspaceAnimations": false,
+            "disableWallpaperBlur": false,
+            "hideMediaWidget": false,
+            "style": "material",
+            "motionProfile": "classic",
+            "mediaPlaying": true
+          },
+          "ownershipBefore": {
+            "requested": false,
+            "available": false,
+            "typedBridge": false,
+            "desktopActive": false,
+            "idleInhibited": true,
+            "gameMode": false,
+            "selectedNativeDomains": "network,brightness,niri",
+            "ui": {
+              "overviewOpen": false,
+              "mediaControlsOpen": false,
+              "sidebarLeftOpen": false,
+              "sidebarRightOpen": false,
+              "controlPanelOpen": false,
+              "dashboardOpen": false,
+              "mediaPlaying": true
+            },
+            "nativeFocus": null,
+            "niri": {
+              "owner": "qml",
+              "nativeReady": false,
+              "nativeApplyCalls": 0,
+              "fallbackLoaded": true,
+              "fallback": {
+                "loaded": true,
+                "eventSocketConnected": true,
+                "actionSocketConnected": true,
+                "eventsRead": 23,
+                "outputsProcessRunning": false,
+                "windowsTimerRunning": false
+              },
+              "windows": 3,
+              "workspaces": 2,
+              "focusedWorkspaceId": "2"
+            },
+            "network": {
+              "owner": "qml",
+              "nativeReady": false,
+              "monitorRunning": true,
+              "acquisitionProcessesRunning": 0
+            },
+            "brightness": {
+              "owner": "qml",
+              "nativeReady": false,
+              "backlightDetectRunning": false,
+              "monitors": [
+                {
+                  "isDdc": false,
+                  "initRunning": false,
+                  "readbackRunning": false,
+                  "writeRunning": false
+                }
+              ]
+            },
+            "keyboard": {
+              "owner": "python",
+              "wanted": true,
+              "nativeReady": false,
+              "pending": false,
+              "source": "evdev",
+              "probeRunning": false,
+              "monitorRunning": true,
+              "caps": false,
+              "num": false,
+              "devices": 0
+            },
+            "nativePowerReady": false,
+            "models": null
+          },
+          "ownershipAfter": {
+            "requested": false,
+            "available": false,
+            "typedBridge": false,
+            "desktopActive": false,
+            "idleInhibited": true,
+            "gameMode": false,
+            "selectedNativeDomains": "network,brightness,niri",
+            "ui": {
+              "overviewOpen": false,
+              "mediaControlsOpen": false,
+              "sidebarLeftOpen": false,
+              "sidebarRightOpen": false,
+              "controlPanelOpen": false,
+              "dashboardOpen": false,
+              "mediaPlaying": true
+            },
+            "nativeFocus": null,
+            "niri": {
+              "owner": "qml",
+              "nativeReady": false,
+              "nativeApplyCalls": 0,
+              "fallbackLoaded": true,
+              "fallback": {
+                "loaded": true,
+                "eventSocketConnected": true,
+                "actionSocketConnected": true,
+                "eventsRead": 48,
+                "outputsProcessRunning": false,
+                "windowsTimerRunning": false
+              },
+              "windows": 3,
+              "workspaces": 2,
+              "focusedWorkspaceId": "2"
+            },
+            "network": {
+              "owner": "qml",
+              "nativeReady": false,
+              "monitorRunning": true,
+              "acquisitionProcessesRunning": 0
+            },
+            "brightness": {
+              "owner": "qml",
+              "nativeReady": false,
+              "backlightDetectRunning": false,
+              "monitors": [
+                {
+                  "isDdc": false,
+                  "initRunning": false,
+                  "readbackRunning": false,
+                  "writeRunning": false
+                }
+              ]
+            },
+            "keyboard": {
+              "owner": "python",
+              "wanted": true,
+              "nativeReady": false,
+              "pending": false,
+              "source": "evdev",
+              "probeRunning": false,
+              "monitorRunning": true,
+              "caps": false,
+              "num": false,
+              "devices": 0
+            },
+            "nativePowerReady": false,
+            "models": null
+          }
+        }
+      }
+    }
+  ],
+  "originalWorkspaceId": 1,
+  "alternateWorkspaceId": 2,
+  "output": "eDP-1",
+  "logicalCpus": 20,
+  "rounds": 1,
+  "durationSeconds": 5.0,
+  "warmupSeconds": 15.0,
+  "scenarios": [
+    "workspaceSwitching"
+  ],
+  "nativeDomains": [
+    "network",
+    "brightness",
+    "niri"
+  ],
+  "commonServices": "Quickshell audio, battery, Bluetooth, media and power profiles remain identical in both modes.",
+  "workspaceVariants": [
+    "baseline"
+  ],
+  "qmlProfilerEnabled": true,
+  "notes": [
+    "CPU 100% means one fully occupied core; main-thread CPU is counted separately.",
+    "GPU usage is per-shell DRM client engine time, not whole-device utilization.",
+    "Driver-reported resident VRAM/GTT can include shared buffers; do not add them to RSS.",
+    "Process-tree CPU includes reaped helper ticks; sampled process starts can miss short-lived helpers.",
+    "spawnsByName counts child processes seen at 0.5 s sampling; very short helpers can be missed.",
+    "nativeApplyCalls (Rust) counts coalesced publications; fallbackEventsRead (QML) counts raw Niri events. The two are not the same unit.",
+    "Context switches are not scheduler wakeups; no frame-time or latency claims."
+  ],
+  "windowCount": 3,
+  "outputs": {
+    "eDP-1": {
+      "name": "eDP-1",
+      "make": "Samsung Display Corp.",
+      "model": "ATNA60CL10-0 ",
+      "serial": null,
+      "physical_size": [
+        340,
+        220
+      ],
+      "modes": [
+        {
+          "width": 2880,
+          "height": 1800,
+          "refresh_rate": 120000,
+          "is_preferred": true
+        },
+        {
+          "width": 2880,
+          "height": 1800,
+          "refresh_rate": 60001,
+          "is_preferred": true
+        },
+        {
+          "width": 1920,
+          "height": 1200,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1920,
+          "height": 1080,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1600,
+          "height": 1200,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1680,
+          "height": 1050,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1280,
+          "height": 1024,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1440,
+          "height": 900,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1280,
+          "height": 800,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1280,
+          "height": 720,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 1024,
+          "height": 768,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 800,
+          "height": 600,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        },
+        {
+          "width": 640,
+          "height": 480,
+          "refresh_rate": 120000,
+          "is_preferred": false
+        }
+      ],
+      "current_mode": 0,
+      "is_custom_mode": false,
+      "vrr_supported": true,
+      "vrr_enabled": false,
+      "logical": {
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 1200,
+        "scale": 1.5,
+        "transform": "Normal"
+      }
+    }
+  },
+  "mediaFixture": {
+    "busName": "org.mpris.MediaPlayer2.inir_perf_fixture",
+    "synthetic": true,
+    "producesAudio": false
+  }
+}
