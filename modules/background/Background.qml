@@ -16,6 +16,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 import qs.modules.background.widgets
+import qs.modules.background.effects
 import qs.modules.background.widgets.clock
 import qs.modules.background.widgets.mediaControls
 import qs.modules.background.widgets.weather
@@ -1421,15 +1422,22 @@ Scope {
                     && !bgRoot.wallpaperIsVideo
                     && !bgRoot.externalMainWallpaperActive
                 readonly property bool showInternalStaticWallpaper: !bgRoot.externalMainWallpaperActive
-                readonly property bool localBlurNeedsStaticTexture: Appearance.effectsEnabled
-                    && bgRoot.blurProgress > 0
+                readonly property bool staticWallpaperAvailable: bgRoot._familyOwnsScreen
+                    && !bgRoot.webWallpaperActive && !bgRoot.wallpaperSafetyTriggered
+                    && !bgRoot.backdropActive && !bgRoot.wallpaperIsGif && !bgRoot.wallpaperIsVideo
+                    && !Wallpapers.isVideoFile(bgRoot.wallpaperPath)
+                    && bgRoot.wallpaperPath !== ""
+                // Retain the current texture even on an empty workspace. Focus
+                // only fades the blur; it must not clear/redecode the wallpaper.
+                readonly property bool localBlurNeedsStaticTexture: staticWallpaperAvailable
+                    && Appearance.effectsEnabled
+                    && !NativeBackend.benchmarkDisableWallpaperBlur
                     && (bgRoot.effectsOptions.enableBlur ?? false)
                     && !Config.options?.performance?.lowPower
                     && (bgRoot.effectsOptions.blurRadius ?? 0) > 0
                 readonly property bool lockBlurNeedsStaticTexture: (bgRoot.lockBlurOptions.enable ?? false)
                     && (GlobalStates.screenLocked || scaleAnim.running)
-                readonly property bool needsStaticTexture: !bgRoot.backdropActive
-                    && !bgRoot.wallpaperIsGif && !bgRoot.wallpaperIsVideo
+                readonly property bool needsStaticTexture: staticWallpaperAvailable
                     && (showInternalStaticWallpaper || localBlurNeedsStaticTexture
                         || lockBlurNeedsStaticTexture
                         || bgRoot.internalShaderTransitionRequested)
@@ -1649,33 +1657,22 @@ Scope {
                 }
             }
 
-            // Always-on wallpaper blur — reads from crossfader texture (works with both QML and awww rendering; disabled for GIFs/videos)
-            Loader {
+            // One retained blur per output. Empty-workspace and lock fades do
+            // not destroy it; feature/type/family changes still release it.
+            RetainedWallpaperBlur {
                 id: blurAlwaysLoader
                 z: 1
-                active: Appearance.effectsEnabled
-                        && !bgRoot.webWallpaperActive
-                        && (bgRoot.blurProgress > 0)
-                        && (bgRoot.effectsOptions.enableBlur ?? false)
-                        && !Config.options?.performance?.lowPower
-                        && (bgRoot.effectsOptions.blurRadius ?? 0) > 0
-                        && !blurLoader.active
-                        && !bgRoot.backdropActive
-                        && !bgRoot.wallpaperIsGif
-                        && !bgRoot.wallpaperIsVideo
                 anchors.fill: wallpaperContainer
-                sourceComponent: Item {
-                    anchors.fill: parent
-                    opacity: bgRoot.blurProgress
-
-                    GaussianBlur {
-                        anchors.fill: parent
-                        source: wallpaper
-                        radius: bgRoot.effectsOptions.blurRadius ?? 32
-                        // See #159 — cap samples to bound fragment shader cost
-                        samples: Math.min(33, radius * 2 + 1)
-                    }
-                }
+                retain: wallpaperContainer.localBlurNeedsStaticTexture
+                visible: !blurLoader.active
+                sourceItem: wallpaper
+                radius: bgRoot.effectsOptions.blurRadius ?? 32
+                fadeProgress: bgRoot.blurProgress
+                // Animated wallpapers bypass this path entirely. Disable output
+                // caching for crossfades and moving/resizing static sources too.
+                sourceAnimating: wallpaper.transitionBusy
+                    || wallpaperContainer.useParallax || bgRoot.effectiveHasPan
+                    || bgRoot._awwwRevealOpacity < 1
             }
 
             Loader {
@@ -2871,7 +2868,7 @@ Scope {
                 }
 
                 FadeLoader {
-                    shown: bgRoot._widgetEnabled("mediaControls", false)
+                    shown: bgRoot._widgetEnabled("mediaControls", false) && !NativeBackend.benchmarkHideMediaWidget
                     z: item?.desktopStackZ ?? 0
                     containmentMask: GlobalStates.widgetEditMode ? _hitMask3 : null
                     WidgetInputMask { id: _hitMask3; loader: parent }
