@@ -1,4 +1,5 @@
 import qs.modules.common
+import qs.services
 import "layouts.js" as Layouts
 import QtQuick
 import QtQuick.Layouts
@@ -48,30 +49,21 @@ Item {
 
     onRequestedLayoutChanged: generate()
     Component.onCompleted: generate()
+    property string _labelJob: ""
+    property int _labelGeneration: 0
+    Component.onDestruction: if (root._labelJob) Utilities.cancel(root._labelJob)
     function generate(): void {
+        const generation = ++root._labelGeneration
+        if (root._labelJob) Utilities.cancel(root._labelJob)
+        root._labelJob = ""
         root.generatedLayout = null
         if (root.handMade || root.requestedLayout.length === 0)
             return
-        labelProc.running = false
-        labelProc.command = ["/usr/bin/env", "python3", Quickshell.shellPath("scripts/osk-layout-labels.py"), root.requestedLayout]
-        labelProc.running = true
-    }
-
-    Process {
-        id: labelProc
-        stdout: StdioCollector {
-            onStreamFinished: {
-                if (text.trim().length === 0)
-                    return // stopped for a newer layout
-                try {
-                    const labels = JSON.parse(text)
-                    if (labels.keys)
-                        root.generatedLayout = root.relabel(labels)
-                } catch (e) {
-                    console.warn("[OSK] could not read key labels for", root.requestedLayout, e)
-                }
-            }
-        }
+        root._labelJob = Utilities.request("input.layoutLabels", { description: root.requestedLayout }, (success, labels, error) => {
+            if (generation !== root._labelGeneration) return
+            root._labelJob = ""
+            if (success && labels.keys) root.generatedLayout = root.relabel(labels)
+        })
     }
 
     Component {

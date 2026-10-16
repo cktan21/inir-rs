@@ -103,6 +103,11 @@ case "${SKIP_QUICKSHELL}" in
     II_SOURCE="${REPO_ROOT}"
     II_TARGET="${XDG_CONFIG_HOME}/quickshell/inir"
 
+    # Build before replacing any installed QML. Runtime processes never compile
+    # code or fall back to a Python interpreter when the binary is missing.
+    log_info "Building production Rust utilities..."
+    bash "${REPO_ROOT}/scripts/build-helpers.sh" || return 1
+
     v mkdir -p "$II_TARGET"
 
     # Create backup before update (if this is an update)
@@ -114,6 +119,8 @@ case "${SKIP_QUICKSHELL}" in
     # Generate manifest BEFORE syncing (to know what should exist)
     log_info "Generating file manifest..."
     generate_manifest "$II_SOURCE" "${II_TARGET}/.inir-manifest.new" || return 1
+    _helper_checksum=$(sha256sum "${REPO_ROOT}/scripts/bin/inir-helper")
+    printf 'scripts/bin/inir-helper:%s\n' "${_helper_checksum%% *}" >> "${II_TARGET}/.inir-manifest.new"
 
     # Copy all .qml files from root (auto-detect, no manual list needed)
     for qml_file in "${II_SOURCE}"/*.qml; do
@@ -151,6 +158,12 @@ case "${SKIP_QUICKSHELL}" in
       log_info "Cleaning up orphan files..."
       cleanup_orphans "$II_TARGET" "${II_TARGET}/.inir-manifest" || return 1
     fi
+
+    # Generated executables are excluded from the source payload. Replace by
+    # rename so an existing watcher can finish on its original executable inode.
+    mkdir -p "${II_TARGET}/scripts/bin"
+    install -m755 "${REPO_ROOT}/scripts/bin/inir-helper" "${II_TARGET}/scripts/bin/.inir-helper.new-$$" || return 1
+    mv -f "${II_TARGET}/scripts/bin/.inir-helper.new-$$" "${II_TARGET}/scripts/bin/inir-helper" || return 1
 
     # Fix script permissions
     log_info "Setting script permissions..."

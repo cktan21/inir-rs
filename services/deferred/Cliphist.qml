@@ -65,7 +65,7 @@ Singleton {
     // hold it, and they outlive the fix — so clean on the way out as well. The
     // filter forwards anything that is not a browser text/html payload byte for
     // byte, which keeps images intact.
-    readonly property string _markupFilter: `'${Directories.scriptsPath}/clipboard-store.py' --filter`
+    readonly property string _markupFilter: `'${StringUtils.shellSingleQuoteEscape(Directories.utilityHelperPath)}' clipboard filter`
 
     function decodeCommand(entry): string {
         if (root.cliphistBinary.includes("cliphist")) {
@@ -225,7 +225,7 @@ Singleton {
     // Two wrappers mark a text/html payload: Firefox's content-type meta tag and
     // the CF_HTML fragment markers Chromium and Electron apps emit. They are the
     // only reliable sign that the content is markup rather than text that happens
-    // to contain tags. Kept in sync with scripts/clipboard-store.py.
+    // to contain tags. Kept in sync with the Rust clipboard filter.
     function isBrowserMarkup(str): bool {
         return str.startsWith('<meta http-equiv="content-type" content="text/html')
             || str.indexOf("<!--StartFragment-->") !== -1

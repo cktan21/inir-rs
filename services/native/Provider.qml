@@ -12,8 +12,8 @@ Item {
     readonly property var network: Native.NativeNetwork
     readonly property var brightness: Native.NativeBrightness
     readonly property var power: Native.NativePower
-    // Lease is owned by KeyboardIndicators, which knows whether a caps/num
-    // indicator is actually enabled; exposed here only so NativeBackend can reach it.
+    // Lease is owned by KeyboardIndicators through Utilities. This compatibility
+    // alias observes the same singleton and never starts another input worker.
     readonly property var keyboard: selected("keyboard") ? Native.NativeKeyboard : null
     function selected(name) {
         const domains = Quickshell.env("INIR_NATIVE_DOMAINS") || "network,brightness,niri,keyboard"

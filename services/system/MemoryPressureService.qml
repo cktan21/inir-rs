@@ -78,8 +78,14 @@ Singleton {
     }
 
     function _checkMemoryPressure(): void {
-        if (!root.enabled) return
-        _mapsReader.running = true
+        if (!root.enabled || root._mapsJob) return
+        root._mapsJob = Utilities.request("system.memoryMaps", { pid: Quickshell.processId }, (success, result, error) => {
+            root._mapsJob = ""
+            if (!success || !root.enabled) return
+            root.currentDeletedMappings = result.deleted
+            root.currentTotalMappings = result.total
+            if (root.currentDeletedMappings >= root.deletedMappingsThreshold) root._notifyUser()
+        })
     }
 
     function _notifyUser(): void {
@@ -108,34 +114,9 @@ Singleton {
         onTriggered: root._checkMemoryPressure()
     }
 
-    // ── Maps reader ───────────────────────────────────────────────────────
-    Process {
-        id: _mapsReader
-        // /proc/$PPID, not /proc/self: this runs in an sh child of the shell, so
-        // /proc/self is that sh process (zero JSGCHeap mappings) and the counter
-        // always read 0 — the threshold could never trip. $PPID is the shell.
-        command: ["sh", "-c", "grep -c 'JSGCHeap.*deleted' /proc/$PPID/maps 2>/dev/null || echo 0; grep -c JSGCHeap /proc/$PPID/maps 2>/dev/null || echo 0"]
-        stdout: SplitParser {
-            property int lineNum: 0
-            onRead: line => {
-                const val = parseInt(line.trim()) || 0
-                if (lineNum === 0) {
-                    root.currentDeletedMappings = val
-                } else {
-                    root.currentTotalMappings = val
-                }
-                lineNum++
-            }
-        }
-        onExited: (code, status) => {
-            _mapsReader.stdout.lineNum = 0
-            
-            if (root.currentDeletedMappings >= root.deletedMappingsThreshold) {
-                _log("threshold exceeded:", root.currentDeletedMappings, ">=", root.deletedMappingsThreshold)
-                root._notifyUser()
-            }
-        }
-    }
+    // Pass the shell's PID explicitly: a helper's /proc/self is the helper.
+    property string _mapsJob: ""
+    Component.onDestruction: if (root._mapsJob) Utilities.cancel(root._mapsJob)
 
     // ── IPC ───────────────────────────────────────────────────────────────
     IpcHandler {

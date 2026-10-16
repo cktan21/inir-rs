@@ -19,6 +19,8 @@ depends=(
   jq
   kirigami
   libnotify
+  libxkbcommon
+  systemd-libs
   networkmanager
   niri
   noto-fonts-emoji
@@ -108,7 +110,7 @@ source=(
 )
 sha256sums=('SKIP')
 
-makedepends=(rust cargo cmake gcc clang pkgconf libpipewire qt6-base qt6-declarative)
+makedepends=(rust cargo cmake gcc clang pkgconf libpipewire libxkbcommon systemd qt6-base qt6-declarative)
 
 build() {
   cmake -S "${srcdir}/iNiR-${pkgver}/rust" -B "${srcdir}/native-build" \
@@ -117,7 +119,7 @@ build() {
 }
 
 check() {
-  cargo test --manifest-path "${srcdir}/iNiR-${pkgver}/rust/Cargo.toml" -p inir-core -p inir-types --locked
+  cargo test --manifest-path "${srcdir}/iNiR-${pkgver}/rust/Cargo.toml" -p inir-core -p inir-types -p inir-utils --locked
   ctest --test-dir "${srcdir}/native-build" --output-on-failure
 }
 

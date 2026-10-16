@@ -1,4 +1,5 @@
 # ── Editor / IDE ──────────────────────────────────────────────
+/scripts/bin/inir-helper
 .idea/
 .zed/
 .vscode/

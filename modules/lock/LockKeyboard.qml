@@ -79,7 +79,13 @@ Rectangle {
 
     onXkbLayoutChanged: loadLayout()
     Component.onCompleted: loadLayout()
+    property string _labelJob: ""
+    property int _labelGeneration: 0
+    Component.onDestruction: if (kbd._labelJob) Utilities.cancel(kbd._labelJob)
     function loadLayout(): void {
+        const generation = ++kbd._labelGeneration
+        if (kbd._labelJob) Utilities.cancel(kbd._labelJob)
+        kbd._labelJob = ""
         kbd.xkbKeys = ({})
         kbd.xkbCombine = ({})
         kbd.xkbLetters = []
@@ -87,30 +93,15 @@ Rectangle {
         kbd.pendingMark = ""
         if (kbd.xkbLayout.length === 0)
             return
-        labelProc.running = false
-        labelProc.command = ["/usr/bin/env", "python3", Quickshell.shellPath("scripts/osk-layout-labels.py"), kbd.xkbLayout]
-        labelProc.running = true
-    }
-
-    Process {
-        id: labelProc
-        stdout: StdioCollector {
-            onStreamFinished: {
-                if (text.trim().length === 0)
-                    return // stopped for a newer layout
-                try {
-                    const labels = JSON.parse(text)
-                    if (!labels.keys)
-                        return
-                    kbd.xkbKeys = labels.keys
-                    kbd.xkbCombine = labels.combine ?? ({})
-                    kbd.xkbLetters = labels.letters ?? []
-                    kbd.xkbLayoutShort = String(labels.layout ?? "").toUpperCase()
-                } catch (e) {
-                    console.warn("[LockKeyboard] could not read key labels for", kbd.xkbLayout, e)
-                }
-            }
-        }
+        kbd._labelJob = Utilities.request("input.layoutLabels", { description: kbd.xkbLayout }, (success, labels, error) => {
+            if (generation !== kbd._labelGeneration) return
+            kbd._labelJob = ""
+            if (!success || !labels.keys) return
+            kbd.xkbKeys = labels.keys
+            kbd.xkbCombine = labels.combine ?? ({})
+            kbd.xkbLetters = labels.letters ?? []
+            kbd.xkbLayoutShort = String(labels.layout ?? "").toUpperCase()
+        })
     }
 
     // Theme properties — defaults are ii (Appearance). Override for waffle (Looks).

@@ -203,7 +203,7 @@ Singleton {
 
     Process {
         running: Quickshell.watchFiles
-        command: ["python3", Quickshell.shellPath("scripts/daemon/dev_hot_reload.py"), Quickshell.shellDir,
+        command: [Directories.utilityHelperPath, "dev", "watch", Quickshell.shellDir,
             String(Quickshell.processId)]
     }
 

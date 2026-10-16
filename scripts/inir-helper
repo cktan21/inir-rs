@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Source checkout / installed-runtime resolver. Never builds or invokes Python.
+set -euo pipefail
+helper_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+helper_self="$(readlink -f -- "${BASH_SOURCE[0]}")"
+helper_candidates=(
+    "${INIR_HELPER_BIN:-}"
+    "$helper_root/scripts/bin/inir-helper"
+    "$helper_root/rust/build/bin/inir-helper"
+    "$helper_root/rust/target/release/inir-helper"
+    "$helper_root/rust/target/debug/inir-helper"
+    "/usr/local/bin/inir-helper"
+    "/usr/bin/inir-helper"
+    "$(command -v inir-helper || true)"
+)
+for helper_candidate in "${helper_candidates[@]}"; do
+    if [[ -n "$helper_candidate" && -f "$helper_candidate" && -x "$helper_candidate" && "$(readlink -f -- "$helper_candidate")" != "$helper_self" ]]; then
+        exec "$helper_candidate" "$@"
+    fi
+done
+printf '%s\n' 'iNiR utility binary unavailable. Install the matching inir-helper package or build the Rust workspace.' >&2
+exit 127

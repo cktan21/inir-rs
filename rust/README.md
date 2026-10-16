@@ -11,6 +11,8 @@ remaining acceptance gates; the complete service rewrite is not finished.
 | `inir-types` | Qt-independent state, configuration types and settings metadata. |
 | `inir-core` | Shared Tokio runtime, typed domain reducers, NetworkManager/BlueZ/UPower/power-profile/MPRIS D-Bus services, Niri sockets, PipeWire, sysfs/procfs/NSS and configuration persistence. |
 | `inir-qt` | CXX-Qt SystemInfo, ConfigService, DesktopServices and incremental collection models, registered in qs.services.native. |
+| `inir-utils` | Qt-independent clipboard, device, input, system-reading and cancellable HTTP utilities. |
+| `inir-helper` | Compiled command-line fallback and occasional utility commands; never starts Python. |
 | `inir-backend` | Earlier Audio/Battery/Brightness interface contracts. Not included in the runtime plugin. |
 
 ## Build and verify
@@ -25,6 +27,21 @@ are pinned in Cargo.lock.
 make build-native
 make test-native
 ```
+
+The Qt-independent helper can also be built and tested on its own:
+
+```bash
+make build-helpers
+make test-helpers
+```
+
+CMake installs `bin/inir-helper` alongside the QML plugin. Source installation
+builds it before updating QML and delivers it under `scripts/bin/`. Runtime
+resolution never compiles code. Utilities load independently of
+`INIR_RUST_BACKEND`; missing plugins use the matching compiled CLI. Requires
+libudev and xkbcommon development files in addition to the Rust toolchain.
+The remaining production-Python migration scope is tracked in
+[PRODUCTION_UTILITIES_RUST.md](../docs/plans/PRODUCTION_UTILITIES_RUST.md).
 
 CMake builds `rust/build/libinir_qt.so` and stages the importable module at
 `rust/build/qml/qs/services/native/`, including qmldir, plugin.qmltypes and

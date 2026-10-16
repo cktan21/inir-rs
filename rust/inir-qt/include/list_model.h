@@ -13,6 +13,13 @@ inline QVariant commandVariant(const QVariant &value) {
         ? value.value<QJSValue>().toVariant() : value;
 }
 
+class UtilityJobsBase : public QObject {
+    Q_OBJECT
+public:
+    using QObject::QObject;
+    Q_INVOKABLE QJSValue jsValue(const QVariant &value) { return scriptValue(this, value); }
+};
+
 // Qt notification trampoline only. No rows, snapshots, diffing or JSON here.
 class ListModelBase : public QAbstractListModel {
     Q_OBJECT

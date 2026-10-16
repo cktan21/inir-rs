@@ -1,5 +1,6 @@
 pub mod config;
 pub mod bluetooth_control;
+pub mod utility_jobs;
 pub mod keyboard;
 pub mod niri;
 pub mod workspaces;

@@ -155,7 +155,7 @@ pkgs.stdenv.mkDerivation {
     pkgs.qt6.wrapQtAppsHook
     pkgs.rustPlatform.bindgenHook
   ];
-  buildInputs = [ pkgs.qt6.qtbase pkgs.qt6.qtdeclarative pkgs.pipewire ];
+  buildInputs = [ pkgs.qt6.qtbase pkgs.qt6.qtdeclarative pkgs.pipewire pkgs.udev pkgs.libxkbcommon ];
   dontWrapQtApps = true;
   doCheck = true;
   checkPhase = ''
@@ -201,6 +201,7 @@ pkgs.stdenv.mkDerivation {
       --prefix QT_PLUGIN_PATH : "${lib.makeSearchPath "lib/qt-6/plugins" qmlDeps}" \
       ${materialSymbolsWrapperArg}
       --set-default INIR_SYSTEM_RUNTIME_DIR "$runtime" \
+      --set-default INIR_HELPER_BIN "$out/bin/inir-helper" \
       --set-default INIR_FALLBACK_SYSTEM_RUNTIME_DIR "$runtime"
 
     runHook postInstall

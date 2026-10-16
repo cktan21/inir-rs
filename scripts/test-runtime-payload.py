@@ -36,6 +36,7 @@ class DistributionTests(unittest.TestCase):
         self.put('VERSION', '2.30.0\n')
         # Public runtime consumers and same-name nested product directories survive.
         self.required = ['shell.qml', 'scripts/inir', 'scripts/ai/discover-provider-models.py',
+                         'scripts/inir-helper', 'services/Utilities.qml', 'services/native/UtilityProvider.qml',
                          'scripts/setup/spotify.sh', 'scripts/setup/_scan.sh',
                          'scripts/lib/ipc-registry.sh', 'scripts/colors/opencode/theme_generator.py',
                          'modules/panel/tools/control.qml', 'modules/Live.qml',
@@ -49,6 +50,7 @@ class DistributionTests(unittest.TestCase):
         for name in self.required:
             self.put(name, 'runtime fixture\n')
         self.forbidden = ['modules/AGENTS.md', 'scripts/GEMINI.md.local', 'services/.crush/session.json',
+                          'scripts/bin/inir-helper', 'scripts/build-helpers.sh', 'scripts/test-production-helpers.py',
                           'scripts/.agents/skills/example/SKILL.md', 'modules/.env.local',
                           'scripts/node_modules/example.js', 'scripts/release.sh',
                           'sdata/dist-arch/inir-deps/pkg/staged-helper',

@@ -10,11 +10,13 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 inir-core = { path = "../inir-core" }
 inir-types = { path = "../inir-types" }
+inir-utils = { path = "../inir-utils" }
 cxx = "1.0"
 cxx-qt = "=0.10.0"
 cxx-qt-lib = "=0.10.0"
 serde_json.workspace = true
 tokio.workspace = true
+tokio-util.workspace = true
 tracing.workspace = true
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 

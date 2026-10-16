@@ -136,10 +136,21 @@ Singleton {
         root.readRates()
     }
     function readRates(): void {
-        if (!root.details || root.watchers === 0 || root.watchedInterfaces.length === 0 || ratesProc.running) return
-        ratesProc.exec(["bash", "-c", 'for d in "$@"; do [ -r "/sys/class/net/$d/statistics/rx_bytes" ] || continue; '
-            + 'echo "$d $(cat /sys/class/net/$d/statistics/rx_bytes) $(cat /sys/class/net/$d/statistics/tx_bytes)"; done',
-            "_", ...root.watchedInterfaces])
+        if (!root.details || root.watchers === 0 || root.watchedInterfaces.length === 0 || root._ratesJob) return
+        root._ratesJob = Utilities.request("system.networkCounters", { interfaces: root.watchedInterfaces }, (success, result, error) => {
+            root._ratesJob = ""
+            if (!success || !root.details || root.watchers === 0) return
+            const now = Date.now(), bytes = {}, rates = {}
+            for (const dev of Object.keys(result)) {
+                bytes[dev] = { rx: Number(result[dev].rx), tx: Number(result[dev].tx), at: now }
+                const before = root.lastBytes[dev]
+                const span = before ? (now - before.at) / 1000 : 0
+                rates[dev] = span > 0.2 ? { down: Math.max(0, (bytes[dev].rx - before.rx) / span), up: Math.max(0, (bytes[dev].tx - before.tx) / span) }
+                    : (root.rates[dev] ?? { down: 0, up: 0 })
+            }
+            root.lastBytes = bytes
+            root.rates = rates
+        })
     }
 
     function setProfile(uuid: string, up: bool): void {
@@ -279,27 +290,8 @@ Singleton {
             }
         }
     }
-    Process {
-        id: ratesProc
-        running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const now = Date.now()
-                const bytes = {}, rates = {}
-                for (const line of text.split("\n")) {
-                    const [dev, rx, tx] = line.trim().split(" ")
-                    if (!dev || rx === undefined) continue
-                    bytes[dev] = { rx: Number(rx), tx: Number(tx), at: now }
-                    const before = root.lastBytes[dev]
-                    const span = before ? (now - before.at) / 1000 : 0
-                    rates[dev] = span > 0.2 ? { down: Math.max(0, (bytes[dev].rx - before.rx) / span), up: Math.max(0, (bytes[dev].tx - before.tx) / span) }
-                        : (root.rates[dev] ?? { down: 0, up: 0 })
-                }
-                root.lastBytes = bytes
-                root.rates = rates
-            }
-        }
-    }
+    property string _ratesJob: ""
+    Component.onDestruction: if (root._ratesJob) Utilities.cancel(root._ratesJob)
 
     Component.onCompleted: { root.refresh(); editorProbe.running = true }
     Process {

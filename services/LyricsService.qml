@@ -32,6 +32,8 @@ Singleton {
     property var _pendingRequest: null
     property string _runningRequestId: ""
     property string _runningTrackKey: ""
+    property string _utilityJob: ""
+    property bool _requestInFlight: false
 
     function subscribe(): void {
         root.subscribers++;
@@ -89,8 +91,16 @@ Singleton {
         root._requestSerial++;
         root._latestRequestId = String(root._requestSerial);
         root._pendingRequest = null;
-        if (lyricsProc.running)
-            lyricsProc.running = false;
+        root._cancelRequest();
+    }
+
+    function _cancelRequest(): void {
+        const job = root._utilityJob;
+        root._utilityJob = "";
+        root._runningRequestId = "";
+        root._runningTrackKey = "";
+        root._requestInFlight = false;
+        if (job) Utilities.cancel(job);
     }
 
     function scheduleRefresh(): void {
@@ -109,7 +119,7 @@ Singleton {
         const snapshot = root._snapshot();
         const settled = root.status === "ok" || root.status === "not_found"
             || root.status === "no_info" || root.status === "error";
-        const inFlight = lyricsProc.running || root._pendingRequest !== null;
+        const inFlight = root._requestInFlight || root._pendingRequest !== null;
         if (snapshot.key === root._latestTrackKey && (settled || inFlight))
             return;
 
@@ -123,13 +133,13 @@ Singleton {
 
         if (!snapshot.title || !snapshot.artist) {
             root._pendingRequest = null;
-            if (lyricsProc.running)
-                lyricsProc.running = false;
+            root._cancelRequest();
             root._publishFailure(requestId, "no_info");
             return;
         }
         if (!Network.online) {
             root._pendingRequest = null;
+            root._cancelRequest();
             root._latestTrackKey = "";
             root._publishFailure(requestId, "offline");
             return;
@@ -145,14 +155,12 @@ Singleton {
         };
         root.status = "loading";
 
-        if (lyricsProc.running)
-            lyricsProc.running = false;
-        else
-            root._startPendingRequest();
+        root._cancelRequest();
+        root._startPendingRequest();
     }
 
     function _startPendingRequest(): void {
-        if (!root.active || root._pendingRequest === null || lyricsProc.running)
+        if (!root.active || root._pendingRequest === null || root._requestInFlight)
             return;
 
         const request = root._pendingRequest;
@@ -164,16 +172,28 @@ Singleton {
         root._pendingRequest = null;
         root._runningRequestId = request.requestId;
         root._runningTrackKey = request.trackKey;
-        lyricsProc.command = [
-            "python3",
-            `${Directories.scriptsPath}/lyrics/lyrics.py`,
-            request.title,
-            request.artist,
-            request.album,
-            String(Math.floor(request.duration)),
-            request.requestId
-        ];
-        lyricsProc.running = true;
+        root._requestInFlight = true;
+        root._utilityJob = Utilities.request("lyrics.fetch", {
+            title: request.title, artist: request.artist, album: request.album,
+            duration: Math.floor(request.duration), requestId: request.requestId
+        }, (success, payload, error) => {
+            if (request.requestId !== root._runningRequestId) return;
+            root._utilityJob = "";
+            root._requestInFlight = false;
+            root._runningRequestId = "";
+            root._runningTrackKey = "";
+            if (!root.active || request.requestId !== root._latestRequestId) return;
+            if (!success || payload?.status !== "ok") {
+                root._publishFailure(request.requestId, !success || payload?.status === "error" ? "error"
+                    : payload?.status === "no_info" ? "no_info" : "not_found");
+            } else {
+                const lines = (payload.lines ?? []).filter(line => typeof line.t === "number")
+                    .map(line => ({ time: line.t, text: line.text ?? "" }));
+                if (lines.length) root._publishSuccess(request.requestId, lines);
+                else root._publishFailure(request.requestId, "not_found");
+            }
+            Qt.callLater(root._startPendingRequest);
+        }, 180000);
     }
 
     function _publishFailure(requestId: string, nextStatus: string): void {
@@ -266,63 +286,7 @@ Singleton {
         }
     }
 
-    Process {
-        id: lyricsProc
-        running: false
-
-        stdout: StdioCollector {
-            id: lyricsCollector
-            onStreamFinished: {
-                const raw = lyricsCollector.text.trim();
-                if (raw.length === 0)
-                    return;
-
-                let payload;
-                try {
-                    payload = JSON.parse(raw);
-                } catch (e) {
-                    if (root._runningRequestId !== ""
-                            && root._runningRequestId === root._latestRequestId)
-                        console.log("LyricsService: unparseable output from lyrics.py:", raw.slice(0, 200));
-                    return;
-                }
-
-                const requestId = String(payload.requestId ?? "");
-                if (requestId === "" || requestId !== root._runningRequestId
-                        || requestId !== root._latestRequestId)
-                    return;
-
-                if (payload.status !== "ok") {
-                    if (payload.status === "error")
-                        console.log("LyricsService:", payload.message ?? "unknown error");
-                    root._publishFailure(requestId,
-                        payload.status === "no_info" ? "no_info"
-                            : payload.status === "error" ? "error" : "not_found");
-                    return;
-                }
-
-                const lines = (payload.lines ?? [])
-                    .filter(line => typeof line.t === "number")
-                    .map(line => ({
-                        time: line.t,
-                        text: line.text ?? ""
-                    }));
-
-                if (lines.length === 0) {
-                    root._publishFailure(requestId, "not_found");
-                    return;
-                }
-
-                root._publishSuccess(requestId, lines);
-            }
-        }
-
-        onExited: {
-            root._runningRequestId = "";
-            root._runningTrackKey = "";
-            Qt.callLater(root._startPendingRequest);
-        }
-    }
+    Component.onDestruction: root._cancelRequest()
 
     Connections {
         target: root.activePlayer

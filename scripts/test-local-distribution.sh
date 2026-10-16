@@ -41,7 +41,7 @@ python3 -B "$runtime_root/scripts/test-backend-profile.py"
 # shell-only checkout.
 if command -v cargo &>/dev/null && [[ "${INIR_BUILD_RUST:-0}" == "1" ]]; then
     step "native core and dynamic QML bridge"
-    cargo test --manifest-path "$runtime_root/rust/Cargo.toml" -p inir-core -p inir-types --locked
+    cargo test --manifest-path "$runtime_root/rust/Cargo.toml" -p inir-core -p inir-types -p inir-utils --locked
     cmake -S "$runtime_root/rust" -B "$runtime_root/rust/build" -DCMAKE_BUILD_TYPE=Debug
     cmake --build "$runtime_root/rust/build" --parallel 2
     ctest --test-dir "$runtime_root/rust/build" --output-on-failure
@@ -1900,7 +1900,7 @@ if [[ ! -x "$preview_image_store" ]] \
 fi
 clipboard_startup="$runtime_root/defaults/niri/config.d/50-startup.kdl"
 clipboard_newline_migration="$runtime_root/sdata/migrations/042-cliphist-no-synthetic-newline.sh"
-if ! grep -Fq 'wl-paste --no-newline --type text --watch ~/.config/quickshell/inir/scripts/clipboard-store.py' "$clipboard_startup" \
+if ! grep -Fq 'wl-paste --no-newline --type text --watch ~/.config/quickshell/inir/scripts/inir-helper clipboard store' "$clipboard_startup" \
         || [[ ! -f "$clipboard_newline_migration" ]] \
         || ! grep -Fq 'wl-paste --no-newline ' "$clipboard_newline_migration"; then
     printf 'FAIL: clipboard text watcher can synthesize trailing newlines and bypass cliphist dedupe\n' >&2

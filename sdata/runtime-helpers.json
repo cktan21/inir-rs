@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "description": "First-party production Python migration inventory. Ported is not cut over; legacy callers remain until parity and delivery gates pass.",
+  "groups": [
+    {"id":"clipboard","status":"ported","sources":["scripts/clipboard-store.py"],"replacement":"inir-helper clipboard filter|store"},
+    {"id":"devices-sensors","status":"ported","sources":["scripts/devices/usb-snapshot.py","scripts/detect_sensors.py"],"replacement":"devices.snapshot, system.sensors"},
+    {"id":"lyrics","status":"ported","sources":["scripts/lyrics/lyrics.py"],"replacement":"lyrics.fetch"},
+    {"id":"input-locks","status":"ported","sources":["scripts/daemon/keyboard_lock_state_daemon.py"],"replacement":"shared input_locks worker; inir-helper input locks [--once]"},
+    {"id":"osk","status":"ported","sources":["scripts/osk-layout-labels.py"],"replacement":"input.layoutLabels"},
+    {"id":"development-watch","status":"ported","sources":["scripts/daemon/dev_hot_reload.py"],"replacement":"inir-helper dev watch ROOT PID"},
+    {"id":"super-key","status":"legacy","sources":["scripts/daemon/inir_super_overview_daemon.py"],"replacement":"shared input infrastructure / managed unit migration"},
+    {"id":"config","status":"legacy","sources":["scripts/niri-config.py","scripts/parse_niri_keybinds.py","scripts/hyprland/get_keybinds.py","scripts/systemd/suspend_with_lock.py","scripts/bluetooth-manager.py"],"replacement":"config, input and Bluetooth utility operations"},
+    {"id":"online","status":"legacy","sources":["scripts/voiceSearch/transcribe-audio.py","scripts/ai/discover-provider-models.py","scripts/add-plugin.py","scripts/scan-plugins.py","scripts/japanese-dictionary.py","scripts/study-decks.py"],"replacement":"shared HTTP, archive and SQLite operations"},
+    {"id":"images-media","status":"legacy","sources":["scripts/images/find_regions.py","scripts/images/least_busy_region.py","scripts/thumbnails/thumbgen.py","scripts/cava/extract_cover_colors.py","scripts/cava/resolve_audio_source.py","scripts/videos/compress-discord.py"],"replacement":"isolated imaging worker / media operations"},
+    {"id":"theme","status":"legacy","sources":["scripts/colors/generate_colors_material.py","scripts/colors/scheme_for_image.py","scripts/colors/generate_terminal_configs.py","scripts/colors/claude_code_theme.py","scripts/colors/list-targets.py","scripts/colors/system24_palette.py","scripts/colors/vscode/theme_generator.py","scripts/colors/zed/theme_generator.py","scripts/colors/opencode/theme_generator.py","scripts/kvantum/adwsvg.py","scripts/kvantum/adwsvgDark.py","scripts/kvantum/changeAdwColors.py","scripts/sddm/sync-pixel-sddm.py"],"replacement":"theme operations / prebuilt Go generators"}
+  ],
+  "inlineCallers": [
+    "services/IconThemeService.qml", "modules/iris/settings/IrisThemes.qml",
+    "services/deferred/MpvIpc.qml", "services/deferred/AnimeWatch.qml", "services/ShellUpdates.qml",
+    "scripts/colors/apply-spicetify-theme.sh", "scripts/colors/sync-system-fonts.sh",
+    "scripts/colors/modules/85-limusic.sh", "scripts/colors/modules/90-cava.sh", "scripts/audio/easyeffects-eq.sh"
+  ],
+  "compiledGo": ["scripts/colors/vscode_themegen","scripts/colors/zed_themegen","scripts/colors/opencode_themegen"],
+  "exceptions": {
+    "youtubeMusic": ["services/YtMusic.qml","scripts/innertube.py","scripts/ytmusic_auth.py","scripts/ytmusic_oauth_setup.py","scripts/ytmusic_rate.py","scripts/colors/pear-css-inject.py"],
+    "development": ["scripts/analyze-workspace-profile.py","scripts/compare-backends.py","scripts/profile-backend.py","scripts/profile-bluetooth.py","scripts/summarize-qml-trace.py","scripts/generate-settings-search-index.py","scripts/lib/generate-ipc-registry.py"],
+    "installer": ["scripts/lib/mascot-pack.py"],
+    "prefixes": ["scripts/test-","scripts/fixtures/","sdata/","translations/tools/"]
+  }
+}

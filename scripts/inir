@@ -4004,6 +4004,10 @@ command_name="${1:-help}"
 shift || true
 
 case "$command_name" in
+    helper)
+        resolve_config_dir
+        exec bash "$config_dir/scripts/inir-helper" "$@"
+        ;;
     bluetooth)
         require_qs
         resolve_config_dir

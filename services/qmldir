@@ -45,6 +45,7 @@ singleton MascotChaos 1.0 MascotChaos.qml
 singleton MascotMood 1.0 MascotMood.qml
 singleton MprisController 1.0 media/MprisController.qml
 singleton NativeBackend 1.0 NativeBackend.qml
+singleton Utilities 1.0 Utilities.qml
 singleton Network 1.0 network/Network.qml
 singleton NiriAnimationPresets 1.0 compositor/NiriAnimationPresets.qml
 singleton NiriService 1.0 compositor/NiriService.qml

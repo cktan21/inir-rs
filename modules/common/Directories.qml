@@ -37,6 +37,7 @@ Singleton {
     property string assetsPath: Quickshell.shellPath("assets")
     property string scriptPath: Quickshell.shellPath("scripts")
     property string scriptsPath: FileUtils.trimFileProtocol(scriptPath)
+    readonly property string utilityHelperPath: Quickshell.env("INIR_HELPER_BIN") || `${scriptsPath}/inir-helper`
     property string stateUserPath: `${Directories.statePath}/user`
     property string wallpapersPath: Config.options?.wallpapers?.directory || `${Directories.picturesPath}/Wallpapers`
     property string screenshotsPath: Config.options?.regionSelector?.savePath || `${Directories.picturesPath}/Screenshots`

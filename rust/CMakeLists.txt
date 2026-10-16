@@ -19,6 +19,14 @@ cxx_qt_import_qml_module(inir_native_qml
     URI "qs.services.native" SOURCE_CRATE inir_qt
     OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/qml")
 
+# Utility commands are Qt-independent and available with either backend mode.
+corrosion_import_crate(
+    MANIFEST_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Cargo.toml"
+    CRATES inir-helper LOCKED)
+set_target_properties(inir-helper PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+install(PROGRAMS "$<TARGET_FILE:inir-helper>" DESTINATION "${CMAKE_INSTALL_BINDIR}")
+
 # Also refresh the staged module after every Cargo build, including incremental
 # builds: upstream's copy rule only checks whether qmldir exists.
 get_target_property(INIR_CXX_QT_EXPORT_DIR inir_qt CXX_QT_EXPORT_DIR)
@@ -38,6 +46,11 @@ install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/qml/qs"
 if(BUILD_TESTING)
     find_package(Qt6 REQUIRED COMPONENTS Test)
     set(CMAKE_AUTOMOC ON)
+    add_executable(inir_utility_jobs tests/utility_jobs.cpp)
+    target_link_libraries(inir_utility_jobs PRIVATE Qt6::Core Qt6::Qml)
+    add_dependencies(inir_utility_jobs inir_native_stage)
+    add_test(NAME utility_jobs COMMAND inir_utility_jobs "${CMAKE_CURRENT_BINARY_DIR}/qml")
+    set_tests_properties(utility_jobs PROPERTIES TIMEOUT 30)
     find_package(Qt6 REQUIRED COMPONENTS Gui)
     find_package(Qt6 REQUIRED COMPONENTS Widgets)
     # A static real Wayland window whose title can be churned by the live A/B

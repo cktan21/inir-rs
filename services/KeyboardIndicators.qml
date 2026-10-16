@@ -21,7 +21,6 @@ Singleton {
     property bool _initialized: false
     property bool _numLockReliable: false
     property var _lastRawNumLockState: null
-    property string lockStateDaemonPath: Quickshell.shellPath("scripts/daemon/keyboard_lock_state_daemon.py")
 
     property bool capsLock: false
     property bool numLock: false
@@ -56,14 +55,13 @@ Singleton {
     readonly property string currentLayoutCodeInline: root.abbreviateLayoutCode(root.currentLayoutCode, " ").toUpperCase()
     readonly property bool usingEvdev: root._lockSource === "evdev" || root._lockSource === "native"
 
-    // Native caps/num lock worker (Rust evdev). Used in place of the Python daemon
-    // when the native backend is active; QML mode keeps the daemon + sysfs fallback.
-    readonly property var backendKeyboard: NativeBackend.keyboard
+    // Input is a production utility, independent of the desktop-backend toggle.
+    // Missing plugins use the same Rust evdev worker via the helper, then sysfs.
+    readonly property var backendKeyboard: Utilities.keyboard
     readonly property bool nativeKeyboardReady: root.lockIndicatorsWanted
-        && NativeBackend.typedBridge && (backendKeyboard?.ready ?? false)
+        && (backendKeyboard?.ready ?? false)
     readonly property bool nativeKeyboardPending: root.lockIndicatorsWanted
-        && NativeBackend.requested && NativeBackend.typedBridge
-        && (NativeBackend.loading || (root.backendKeyboard !== null
+        && (Utilities.loading || (root.backendKeyboard !== null
             && !root.nativeKeyboardReady && root.backendKeyboard.error.length === 0))
     readonly property bool sysfsActive: root.lockIndicatorsWanted
         && root._lockSource === "sysfs" && !root.nativeKeyboardPending && !root.nativeKeyboardReady
@@ -79,7 +77,7 @@ Singleton {
     function backendDiagnostics(): var {
         return { owner: !root.lockIndicatorsWanted ? "off"
                 : root.nativeKeyboardReady ? "rust"
-                : root._lockSource === "evdev" ? "python" : root._lockSource,
+                : root._lockSource === "evdev" ? "rust-cli" : root._lockSource,
             wanted: root.lockIndicatorsWanted, nativeReady: root.nativeKeyboardReady,
             pending: root.nativeKeyboardPending, source: root._lockSource,
             probeRunning: evdevProbeProc.running, monitorRunning: evdevMonitorProc.running,
@@ -129,7 +127,7 @@ Singleton {
     }
 
     function _handleEvdevOutput(rawLine) {
-        if (!root._pythonAllowed()) return;
+        if (!root._helperAllowed()) return;
         const trimmed = String(rawLine).trim();
         if (!trimmed.length)
             return;
@@ -146,7 +144,7 @@ Singleton {
     }
 
     function _enableSysfsFallback() {
-        if (!root._pythonAllowed())
+        if (!root._helperAllowed())
             return;
 
         root._lockSource = "sysfs";
@@ -295,7 +293,7 @@ Singleton {
     Process {
         id: evdevProbeProc
         running: false
-        command: ["/usr/bin/python3", root.lockStateDaemonPath, "--once"]
+        command: [Directories.utilityHelperPath, "input", "locks", "--once"]
 
         stdout: SplitParser {
             onRead: line => root._handleEvdevOutput(line)
@@ -308,7 +306,7 @@ Singleton {
         onExited: (exitCode, exitStatus) => {
             // A stopped probe may deliver onExited after demand changed or the
             // native owner became ready. It must never restart a second owner.
-            if (!root._pythonAllowed()) return;
+            if (!root._helperAllowed()) return;
             if (exitCode === 0) {
                 if (!evdevMonitorProc.running)
                     evdevMonitorProc.running = true;
@@ -326,7 +324,7 @@ Singleton {
         running: false
         repeat: false
         onTriggered: {
-            if (root._pythonAllowed() && !evdevMonitorProc.running)
+            if (root._helperAllowed() && !evdevMonitorProc.running)
                 evdevMonitorProc.running = true;
         }
     }
@@ -334,7 +332,7 @@ Singleton {
     Process {
         id: evdevMonitorProc
         running: false
-        command: ["/usr/bin/python3", "-u", root.lockStateDaemonPath]
+        command: [Directories.utilityHelperPath, "input", "locks"]
 
         stdout: SplitParser {
             onRead: line => root._handleEvdevOutput(line)
@@ -345,13 +343,13 @@ Singleton {
         }
 
         onExited: (exitCode, exitStatus) => {
-            if (!root._pythonAllowed())
+            if (!root._helperAllowed())
                 return;
 
             root._log("evdev monitor exited", exitCode, exitStatus);
             root._enableSysfsFallback();
             // A device/permission failure uses sysfs until demand or ownership
-            // changes; do not respawn a failing interpreter every second.
+            // changes; do not respawn a failing helper every second.
             if (exitCode === 0) evdevRestartTimer.restart();
         }
     }
@@ -451,13 +449,13 @@ Singleton {
     }
 
     // Chooses the lock-state source: nothing when no caps/num indicator is enabled,
-    // the native Rust worker when the backend is active, else the Python daemon.
-    function _pythonAllowed(): bool {
+    // the native Rust worker when available, else the standalone Rust command.
+    function _helperAllowed(): bool {
         return root._initialized && !root._destroying && root.lockIndicatorsWanted
             && !root.nativeKeyboardReady && !root.nativeKeyboardPending;
     }
 
-    function _stopPython(): void {
+    function _stopHelper(): void {
         evdevRestartTimer.stop();
         evdevProbeProc.running = false;
         evdevMonitorProc.running = false;
@@ -473,10 +471,12 @@ Singleton {
         if (!root._initialized || root._destroying)
             return;
 
+        Utilities.setKeyboardEnabled(root.lockIndicatorsWanted);
+
         if (!root.lockIndicatorsWanted) {
             if (root.backendKeyboard)
                 root.backendKeyboard.setEnabled(false);
-            root._stopPython();
+            root._stopHelper();
             ledDiscoveryProc.running = false;
             root._lockSource = "disabled";
             root.capsLockPaths = [];
@@ -490,18 +490,18 @@ Singleton {
             return;
         }
 
-        const preferNative = NativeBackend.typedBridge && root.backendKeyboard !== null;
+        const preferNative = root.backendKeyboard !== null;
         if (preferNative) {
             root.backendKeyboard.setEnabled(true);
             if (root.nativeKeyboardReady) {
-                root._stopPython();
+                root._stopHelper();
                 ledDiscoveryProc.running = false;
                 root._setNativeState(false);
                 return;
             }
         }
         if (root.nativeKeyboardPending) {
-            root._stopPython();
+            root._stopHelper();
             ledDiscoveryProc.running = false;
             root._lockSource = "pending";
             return;
@@ -535,7 +535,7 @@ Singleton {
 
     Component.onDestruction: {
         root._destroying = true;
-        if (root.backendKeyboard)
-            root.backendKeyboard.setEnabled(false);
+        root._stopHelper();
+        Utilities.setKeyboardEnabled(false);
     }
 }

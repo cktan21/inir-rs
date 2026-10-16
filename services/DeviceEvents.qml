@@ -210,58 +210,62 @@ Singleton {
         input: { label: Translation.tr("Input device"), icon: "keyboard_alt", fluentIcon: "keyboard" },
         device: { label: Translation.tr("USB device"), icon: "usb", fluentIcon: "drive-removable-media-symbolic" }
     })
-    property bool udevAvailable: false
+    readonly property bool _watchUsb: root.allows("usb")
+    readonly property bool _watchDrives: root.allows("drives")
+    readonly property bool _watchDevices: root._watchUsb || root._watchDrives
+    on_WatchUsbChanged: {
+        root._shownUsb = null
+        if (root._watchUsb && root.udevAvailable) root._readUsb()
+        else { usbSettle.stop(); root._usbQueued = false }
+    }
+    on_WatchDrivesChanged: {
+        root._shownDrives = null
+        if (root._watchDrives && root.udevAvailable) drivesRead.running = true
+        else drivesSettle.stop()
+    }
+    readonly property bool udevAvailable: Utilities.deviceEventsReady
     property var _shownUsb: null
     property var _shownDrives: null
-    // A monitor left by a previous shell instance or a reload keeps running on its own.
-    Process {
-        id: udevCleanup
-        running: root.allows("usb") || root.allows("drives")
-        command: ["pkill", "-f", "^(/usr/bin/)?udevadm monitor --udev --subsystem-match=usb/usb_device --subsystem-match=block$"]
-        onExited: udevProbe.running = true
+    on_WatchDevicesChanged: Utilities.setDeviceEventsEnabled("connections", root._watchDevices)
+    Component.onCompleted: Utilities.setDeviceEventsEnabled("connections", root._watchDevices)
+    Component.onDestruction: {
+        root._utilityDestroying = true
+        Utilities.setDeviceEventsEnabled("connections", false)
+        if (root._usbJob) Utilities.cancel(root._usbJob)
     }
-    Component.onDestruction: udevMonitor.running = false
-    Process {
-        id: udevProbe
-        command: ["sh", "-c", "command -v udevadm >/dev/null && command -v lsblk >/dev/null"]
-        onExited: code => {
-            root.udevAvailable = code === 0
-            if (!root.udevAvailable) return
-            usbRead.running = true
-            drivesRead.running = true
+    onUdevAvailableChanged: if (root.udevAvailable) {
+        if (root.allows("usb")) root._readUsb()
+        if (root.allows("drives")) drivesRead.running = true
+    }
+    Connections {
+        target: Utilities
+        function onDevicesChanged(kind): void {
+            if (kind === "usb" && root.allows("usb")) usbSettle.restart()
+            else if (kind === "block" && root.allows("drives")) drivesSettle.restart()
         }
     }
-    Process {
-        id: udevMonitor
-        running: root.udevAvailable && (root.allows("usb") || root.allows("drives"))
-        command: ["udevadm", "monitor", "--udev", "--subsystem-match=usb/usb_device", "--subsystem-match=block"]
-        stdout: SplitParser {
-            onRead: line => {
-                if (!/\s(add|remove)\s/.test(line)) return
-                if (/\(usb\)\s*$/.test(line)) usbSettle.restart()
-                else if (/\(block\)\s*$/.test(line)) drivesSettle.restart()
-            }
-        }
-    }
-    Timer { id: usbSettle; interval: 700; onTriggered: usbRead.running = true }
-    Process {
-        id: usbRead
-        command: ["python3", Directories.scriptsPath + "/devices/usb-snapshot.py"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                let list = []
-                try { list = JSON.parse(text).devices ?? [] } catch (e) { return }
+    Timer { id: usbSettle; interval: 700; onTriggered: root._readUsb() }
+    property string _usbJob: ""
+    property bool _usbQueued: false
+    property bool _utilityDestroying: false
+    function _readUsb(): void {
+        if (!root.allows("usb")) return
+        if (root._usbJob) { root._usbQueued = true; return }
+        root._usbJob = Utilities.request("devices.snapshot", {}, (success, result, error) => {
+            root._usbJob = ""
+            if (root._utilityDestroying) return
+            if (success && root.allows("usb")) {
                 const now = {}
-                list.forEach(device => now[device.id] = device)
+                for (const device of result.devices ?? []) now[device.id] = device
                 const before = root._shownUsb
                 root._shownUsb = now
-                if (before === null || !root.warm) return
-                const added = Object.keys(now).filter(id => !(id in before)).map(id => now[id])
-                const removed = Object.keys(before).filter(id => !(id in now)).map(id => before[id])
-                root._announceUsb(added, true)
-                root._announceUsb(removed, false)
+                if (before !== null && root.warm) {
+                    root._announceUsb(Object.keys(now).filter(id => !(id in before)).map(id => now[id]), true)
+                    root._announceUsb(Object.keys(before).filter(id => !(id in now)).map(id => before[id]), false)
+                }
             }
-        }
+            if (root._usbQueued) { root._usbQueued = false; Qt.callLater(root._readUsb) }
+        })
     }
     function _announceUsb(devices: var, connected: bool): void {
         if (devices.length === 0) return

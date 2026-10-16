@@ -190,7 +190,7 @@ Singleton {
         root._runningRequested = true;
         if (!root._initRequested) {
             root._initRequested = true;
-            detectTempSensors.running = true;
+            root._detectTempSensors();
             findCpuMaxFreqProc.running = true;
         }
         if (root._persistentConsumers === 0)
@@ -322,8 +322,13 @@ Singleton {
     }
 
     function _pollDisk(): void {
-        if (!diskProc.running)
-            diskProc.running = true;
+        if (root._diskJob) return;
+        root._diskJob = Utilities.request("system.disk", { path: "/" }, (success, result, error) => {
+            root._diskJob = "";
+            if (!success) return;
+            root.diskTotal = result.total || 1;
+            root.diskUsed = result.used || 0;
+        });
     }
 
     Timer {
@@ -420,25 +425,31 @@ Singleton {
         // Lazy: only start monitoring when a panel/widget requests it.
     }
 
-    Process {
-        id: detectTempSensors
-        command: ["python3", Quickshell.shellPath("scripts/detect_sensors.py")]
-        stdout: SplitParser {
-            onRead: line => {
-                const split = line.indexOf(":");
-                if (split < 0) return;
-                const key = line.slice(0, split), value = line.slice(split + 1);
-                if (key === "cpu") root._cpuTempPath = value;
-                else if (key === "gpu") root._gpuTempPath = value;
-                else if (key === "gpuDevice") root._gpuDevice = value;
-                else if (key === "gpuVendor") root._gpuVendor = value;
-                else if (key === "gpuCard") root._gpuCard = value;
-                else if (key === "gpuRuntime") root._dGpuRuntimeStatusPath = value;
-                else if (key === "cpuLabel") root.cpuSensorLabel = value;
-                else if (key === "gpuLabel") root.gpuSensorLabel = value;
+    property string _sensorJob: ""
+    property string _diskJob: ""
+    property bool _utilityDestroying: false
+    function _detectTempSensors(): void {
+        root._sensorJob = Utilities.request("system.sensors", {}, (success, result, error) => {
+            root._sensorJob = "";
+            if (root._utilityDestroying) return;
+            if (success) {
+                root._cpuTempPath = result.cpu ?? "";
+                root._gpuTempPath = result.gpu ?? "";
+                root._gpuDevice = result.gpuDevice ?? "";
+                root._gpuVendor = result.gpuVendor ?? "";
+                root._gpuCard = result.gpuCard ?? "";
+                root._dGpuRuntimeStatusPath = result.gpuRuntime ?? "";
+                root.cpuSensorLabel = result.cpuLabel ?? "";
+                root.gpuSensorLabel = result.gpuLabel ?? "";
             }
-        }
-        onExited: { detectGpuUsageSource.running = true; }
+            detectGpuUsageSource.running = true;
+        });
+    }
+
+    Component.onDestruction: {
+        root._utilityDestroying = true;
+        if (root._sensorJob) Utilities.cancel(root._sensorJob);
+        if (root._diskJob) Utilities.cancel(root._diskJob);
     }
 
     Process {
@@ -462,22 +473,4 @@ Singleton {
         }
     }
 
-    Process {
-        id: diskProc
-        command: ["/usr/bin/df", "-B1", "/"]
-        running: false
-        stdout: StdioCollector {
-            id: diskCollector
-            onStreamFinished: {
-                const lines = diskCollector.text.trim().split("\n");
-                if (lines.length >= 2) {
-                    const parts = lines[1].split(/\s+/);
-                    if (parts.length >= 4) {
-                        root.diskTotal = parseInt(parts[1]) || 1;
-                        root.diskUsed = parseInt(parts[2]) || 0;
-                    }
-                }
-            }
-        }
-    }
 }

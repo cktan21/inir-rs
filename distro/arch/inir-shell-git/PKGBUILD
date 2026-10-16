@@ -17,6 +17,8 @@ depends=(
   jq
   kirigami
   libnotify
+  libxkbcommon
+  systemd-libs
   networkmanager
   niri
   noto-fonts-emoji
@@ -95,7 +97,7 @@ optdepends=(
   'python-ytmusicapi: YouTube Music browsing (InnerTube engine)'
   'millennium-bin: Steam theming via Millennium (requires steam)'
 )
-makedepends=(git rust cargo cmake gcc clang pkgconf libpipewire qt6-base qt6-declarative)
+makedepends=(git rust cargo cmake gcc clang pkgconf libpipewire libxkbcommon systemd qt6-base qt6-declarative)
 install=inir-shell-git.install
 provides=('inir-shell')
 conflicts=('inir-shell' 'noctalia-qs' 'noctalia-shell' 'cachyos-niri-noctalia')
@@ -118,7 +120,7 @@ build() {
 }
 
 check() {
-  cargo test --manifest-path "${srcdir}/inir/rust/Cargo.toml" -p inir-core -p inir-types --locked
+  cargo test --manifest-path "${srcdir}/inir/rust/Cargo.toml" -p inir-core -p inir-types -p inir-utils --locked
   ctest --test-dir "${srcdir}/native-build" --output-on-failure
 }
 

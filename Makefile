@@ -10,7 +10,7 @@ SYSTEMD_USER_DIR ?= $(DESTDIR)$(PREFIX)/lib/systemd/user
 NATIVE_BUILD_DIR ?= rust/build
 NATIVE_BUILD_TYPE ?= Release
 
-.PHONY: all build build-native test-native test-local install install-native install-bin install-shell install-systemd install-icon install-desktop install-docs uninstall uninstall-native uninstall-bin uninstall-shell uninstall-systemd uninstall-icon uninstall-desktop uninstall-docs
+.PHONY: all build build-native build-helpers test-helpers test-native test-local install install-native install-bin install-shell install-systemd install-icon install-desktop install-docs uninstall uninstall-native uninstall-bin uninstall-shell uninstall-systemd uninstall-icon uninstall-desktop uninstall-docs
 
 all: build
 
@@ -24,8 +24,16 @@ build-native:
 	cmake -S rust -B "$(NATIVE_BUILD_DIR)" -DCMAKE_BUILD_TYPE=$(NATIVE_BUILD_TYPE) -DCMAKE_INSTALL_PREFIX="$(PREFIX)" -DCMAKE_INSTALL_LIBDIR=lib
 	cmake --build "$(NATIVE_BUILD_DIR)" --parallel 2
 
+build-helpers:
+	bash scripts/build-helpers.sh
+
+test-helpers:
+	cargo test --manifest-path rust/Cargo.toml -p inir-utils --locked
+	cargo build --manifest-path rust/Cargo.toml -p inir-helper --locked
+	python3 scripts/test-production-helpers.py
+
 test-native:
-	cargo test --manifest-path rust/Cargo.toml -p inir-core -p inir-types --locked
+	cargo test --manifest-path rust/Cargo.toml -p inir-core -p inir-types -p inir-utils --locked
 	cmake -S rust -B "$(NATIVE_BUILD_DIR)" -DCMAKE_BUILD_TYPE=$(NATIVE_BUILD_TYPE) -DBUILD_TESTING=ON
 	cmake --build "$(NATIVE_BUILD_DIR)" --parallel 2
 	ctest --test-dir "$(NATIVE_BUILD_DIR)" --output-on-failure
@@ -69,6 +77,7 @@ install-docs:
 install: build install-native install-bin install-shell install-systemd install-icon install-desktop install-docs
 
 uninstall-native:
+	@rm -f $(BINDIR)/inir-helper
 	@rm -rf "$(DESTDIR)$(PREFIX)/lib/qt-6/qml/qs/services/native"
 
 uninstall-bin:

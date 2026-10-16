@@ -17,6 +17,7 @@ fn main() {
         "src/qobjects/power.rs",
         "src/qobjects/keyboard.rs",
         "src/qobjects/bluetooth_control.rs",
+        "src/qobjects/utility_jobs.rs",
     ]);
     // Rust cdylibs hide C++ symbols. Rename Qt's generated entry points so
     // exported Rust trampolines can keep them visible to QPluginLoader.

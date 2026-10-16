@@ -30,6 +30,8 @@ CONSUMERS = {
     "services/network/Hotspot.qml": {"backendNetwork": "network.rs"},
     "services/native/BluetoothProvider.qml": {"controller": "bluetooth_control.rs"},
     "services/network/BluetoothStatus.qml": {"controller": "bluetooth_control.rs"},
+    "services/Utilities.qml": {"controller": "utility_jobs.rs", "keyboard": "keyboard.rs"},
+    "services/native/UtilityProvider.qml": {"controller": "utility_jobs.rs", "keyboard": "keyboard.rs"},
 }
 
 # Members inherited from QAbstractListModel/QObject or from the shared list_model.h
@@ -43,6 +45,7 @@ PROVIDED_TYPES = {
     "NativeKeyboard": "keyboard.rs",
     "SystemInfo": "system_info.rs", "ConfigService": "config.rs",
     "NativeBluetoothController": "bluetooth_control.rs",
+    "NativeUtilityJobs": "utility_jobs.rs",
 }
 
 QPROPERTY = re.compile(r"#\[qproperty\(\s*[^,]+,\s*(\w+)\s*\)\]")
